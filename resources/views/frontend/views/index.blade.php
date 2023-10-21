@@ -21,11 +21,19 @@
             <div class="">
 
                 <div class="row justify-content-center mt-3">
-                    <div class="col-lg-12 text-center">
-                        <div class="card shadow-lg " style="margin-top: -60px; z-index: 100; border-radius: 15px">
+                    <div class="col-lg-12">
+                        <div class="card shadow-lg" style="margin-top: -60px; z-index: 100; border-radius: 15px">
                             <div class="card-body">
-                                <h3>Search </h3>
+                                <h3>Search</h3>
 
+                                <form class="form-inline">
+                                   
+                                  
+                                    <input type="text" class="form-control col-md-11 mr-2" id="" placeholder="col-form-label">
+                                  
+                                    <button type="submit" class="btn btn-primary my-1">Search</button>
+                                  </form>
+                               
                             </div>
                         </div>
                     </div>
@@ -168,7 +176,8 @@
                             </h6>
                         </div>
                         <div>
-                            <img src="https://www.livinginsider.com/assets18/images/property_new/Condo_new.png" alt="">
+                            <img src="https://www.livinginsider.com/assets18/images/property_new/Condo_new.png"
+                                alt="">
                         </div>
                     </div>
 
