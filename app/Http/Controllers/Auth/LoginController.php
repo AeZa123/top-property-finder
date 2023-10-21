@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
@@ -37,4 +38,30 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except('logout');
     }
+
+
+    public function authenticated(Request $request, $user)
+    {
+
+        // dd($user);
+        // ตรวจสอบบทบาทของผู้ใช้
+        if ($user->role == '1') {
+            // ถ้าเป็นบทบาท 'admin' ให้ redirect ไปที่ URL สำหรับ admin
+            // echo 'admin';
+            return redirect('/dashboard');
+        } elseif ($user->hasRole('user')) {
+            // ถ้าเป็นบทบาท 'user' ให้ redirect ไปที่ URL สำหรับ user
+            return redirect('/user/dashboard');
+        } else {
+            // ถ้าไม่มีบทบาทหรือบทบาทอื่น ๆ ที่คุณต้องการจัดการ
+            return redirect($this->redirectTo);
+        }
+    }
+
+
+
+
+
+
+
 }

@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    @include('frontend.inc.header')
+    {{-- @include('backend.inc.header') --}}
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -14,30 +14,37 @@
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
-    @include('frontend.inc.link')
+    @include('backend.inc.header')
 
     <!-- Scripts -->
     {{-- @vite(['resources/sass/app.scss', 'resources/js/app.js']) --}}
 </head>
 
-<body class="hold-transition layout-top-nav" style="background-color: #ebf6ff">
+<body class="hold-transition sidebar-mini layout-fixed">
 
     <div class="wrapper">
 
         {{-- @include('frontend.inc.navbar') --}}
-        @if(request()->path() !== 'login' && request()->path() !== 'register')
-            @include('frontend.inc.navbar')
-        @endif
+        {{-- @if(request()->path() !== 'login' && request()->path() !== 'register')
+        @endif --}}
+        @include('backend.inc.navbar')
+        
+        @include('backend.inc.sidebar')
 
+        <div class="content-wrapper">
+            @yield('content')
+        </div>
+       
         {{-- @yield('carousel') --}}
-        @yield('content')
     
      
-        @include('frontend.inc.script')
+        @include('backend.inc.footer')
     </div>
 
     
 
+
+    @include('backend.inc.script')
 </body>
 
 </html>
