@@ -23,7 +23,51 @@ class UserController extends Controller
 
     public function create(){
 
-        return view('backend.views.users.create');
+        $genders = DB::table('genders')->select('*')->where('status', 'open')->get();
+        $roles = DB::table('roles')->select('*')->where('status', 'open')->get();
+
+        return view('backend.views.users.create', compact('genders','roles'));
+
+    }
+
+    public function edit($id){
+
+        $data = User::find($id);
+        $genders = DB::table('genders')->select('*')->where('status', 'open')->get();
+        $roles = DB::table('roles')->select('*')->where('status', 'open')->get();
+
+        $genders_count = count($genders);
+        $roles_count = count($roles);
+
+        $data_html_gender = '';
+        for($i=0; $i<$genders_count; $i++){
+           $data_html_gender .= '<option value="'.$genders[$i]->id.'"';
+           $data_html_gender .= ($data->gender == $genders[$i]->id) ? 'selected' : '';
+           $data_html_gender .= '>'.$genders[$i]->gender_name.'</option>';
+        }
+
+        $data_html_role = '';
+        for($i=0; $i<$roles_count; $i++){
+           $data_html_role .= '<option value="'.$roles[$i]->id.'"';
+           $data_html_role .= ($data->role == $roles[$i]->id) ? 'selected' : '';
+           $data_html_role .= '>'.$roles[$i]->role_name.'</option>';
+
+
+        }
+
+        // $data_html_role = str_replace('"', '', $data_html_role);
+        // $data_html_role = trim($data_html_role, '"');
+
+        // ทำการแสดงผล
+        // echo $data_html_role;
+
+        // dd($data_html_role);
+
+
+
+        
+
+        return view('backend.views.users.edit', compact('data', 'data_html_gender', 'data_html_role'));
     }
 
 

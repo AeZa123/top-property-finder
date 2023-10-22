@@ -40,11 +40,15 @@ Route::get('/', [IndexController::class, 'index'])->name('home');
 *********************************/
 Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
 
+
 // for user
 Route::get('/users', [UserController::class, 'index'])->name('users');
+Route::get('/users/search',[UserController::class, 'search']);
 Route::get('/user/create', [UserController::class, 'create'])->name('user.create');
 Route::post('/user/storage', [UserController::class, 'storage'])->name('user.storage');
-Route::get('/users/search',[UserController::class, 'search']);
+Route::get('/user/edit/{id}',[UserController::class, 'edit']);
+
+
 
 
 

@@ -12,19 +12,16 @@
 
                         <div class="card-header">
                             <h3 class="card-title">Manage Users</h3>
-
                             <a href="{{ route('user.create') }}" class="btn btn-success btn-sm float-right">Create user</a>
                         </div>
 
                     
                         <div class="card-body">
-
                             <h5 class="header-title mt-2" style="float: left">รายชื่อผู้ใช้งานทั้งหมด</h5>
                             <div class="search-box float-right" style="margin-top: -3px;">
                                 <form action="#">
                                     <input style="width: 380px; height: 35px;" class="form-control" type="text" id="search" name="search" placeholder="Search..." required>
                                     <i class="ti-search"></i>
-                                    {{-- <input type="text" id="search" name="search"> --}}
                                 </form>
                             </div>
                            
@@ -57,8 +54,8 @@
                                                             <i class="ti-pencil-alt pr-3 text-warning" title="Edit"></i>
                                                         </a> --}}
                                                        
-                                                            {{-- <a href="{{url('blog/laravel/edit/'.$blog->id)}}"> --}}
-                                                            <a href="#">
+                                                            <a href="{{ url('user/edit/'.$user->id)}}">
+                                                            {{-- <a href="#"> --}}
                                                                 <i class="btn btn-warning ti-pencil-alt pr-3 text-dark" title="Edit">Edit</i>
                                                             </a>
                                                             {{-- <a href="#" data-id="{{ $blog->id }}" id="deleteBtn">

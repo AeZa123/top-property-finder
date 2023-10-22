@@ -1,15 +1,13 @@
 @extends('backend.layouts.app')
 
 @section('content')
+
+<style>
+    .star-req{
+        color: red;
+    }
+</style>
     <!-- Main content -->
-
-    <style>
-        .star-req{
-            color: red;
-        }
-    </style>
-
-
     <section class="content">
         <div class="container-fluid">
 
@@ -19,11 +17,10 @@
 
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title">Create User</h3>
+                            <h3 class="card-title">Edit User</h3>
                         </div>
 
                         <form id="form" method="POST" action="{{ route('user.storage') }}" enctype="multipart/form-data">
-                            {{-- <form id="form" method="POST" action="" enctype="multipart/form-data"> --}}
                             <div class="card-body">
                                 @csrf
                                 <div class="row justify-content-center">
@@ -31,9 +28,9 @@
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <label for="fname">ชื่อ <span class="star-req">*</span></label>
+                                                    <label for="fname">ชื่อ<span class="star-req">*</span></label>
                                                     <input type="text" class="form-control" name="fname" id="fname"
-                                                        placeholder="ชื่อ">
+                                                        placeholder="ชื่อ" value="{{$data->fname}}">
                                                     <span class="text-danger font-danger error-text fname_error"></span>
                                                 </div>
                                             </div>
@@ -43,7 +40,7 @@
                                                 <div class="form-group">
                                                     <label for="lname">นามสกุล<span class="star-req">*</span></label>
                                                     <input type="text" class="form-control" name="lname" id="lname"
-                                                        placeholder="นามสกุล">
+                                                        placeholder="นามสกุล" value="{{$data->lname}}">
                                                     <span class="text-danger font-danger error-text lname_error"></span>
                                                 </div>
                                             </div>
@@ -52,48 +49,45 @@
                                                 <div class="form-group">
                                                     <label for="email">อีเมล<span class="star-req">*</span></label>
                                                     <input type="email" class="form-control" name="email" id="email"
-                                                        placeholder="อีเมล">
+                                                        placeholder="อีเมล" value="{{$data->email}}">
                                                     <span class="text-danger font-danger error-text email_error"></span>
                                                 </div>
                                             </div>
 
-                                            <div class="col-md-6">
+                                            {{-- <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <label for="password">รหัสผ่าน<span class="star-req">*</span></label>
+                                                    <label for="password">รหัสผ่าน</label>
                                                     <input type="password" class="form-control" name="password"
-                                                        id="password" placeholder="รหัสผ่าน">
+                                                        id="password" placeholder="รหัสผ่าน" >
                                                     <span class="text-danger font-danger error-text password_error"></span>
                                                 </div>
-                                            </div>
+                                            </div> --}}
 
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label for="tel">เบอร์โทร<span class="star-req">*</span></label>
                                                     <input type="text" class="form-control" name="tel" id="tel"
-                                                        placeholder="เบอร์โทร">
+                                                        placeholder="เบอร์โทร" value="{{$data->tel}}">
                                                     <span class="text-danger font-danger error-text tel_error"></span>
                                                 </div>
                                             </div>
 
-                                            <div class="col-md-6">
+                                            {{-- <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <label for="password_confirmation">ยืนยันรหัสผ่าน<span class="star-req">*</span></label>
+                                                    <label for="password_confirmation">ยืนยันรหัสผ่าน</label>
                                                     <input type="password" class="form-control" name="password_confirmation"
                                                         id="password_confirmation" placeholder="ยืนยันรหัสผ่าน">
                                                     <span
                                                         class="text-danger font-danger error-text password_confirmation_error"></span>
                                                 </div>
-                                            </div>
+                                            </div> --}}
 
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label>เพศ</label>
                                                     <select class="form-control" name="gender">
-                                                        <option value="">เลือกเพศ</option>
-                                                        @foreach ($genders as $gender)
-                                                            <option value="{{ $gender->id }}">{{ $gender->gender_name }}</option>
-                                                        @endforeach
-                                                        
+                                                        {{-- {{ echo $data_html_gender }} --}}
+                                                        <?php echo $data_html_gender ?>
                                                     </select>
                                                     <span class="text-danger font-danger error-text gender_error"></span>
                                                 </div>
@@ -103,10 +97,7 @@
                                                 <div class="form-group">
                                                     <label>สิทธิ์การใช้งาน<span class="star-req">*</span></label>
                                                     <select class="form-control" name="role">
-                                                        <option value="">เลือกสิทธิ์การใช้งาน</option>
-                                                        @foreach ($roles as $role)
-                                                            <option value="{{ $role->id }}">{{ $role->role_name }}</option>
-                                                        @endforeach
+                                                       <?php echo $data_html_role ?>
                                                     </select>
                                                     <span class="text-danger font-danger error-text role_error"></span>
                                                 </div>
@@ -138,7 +129,7 @@
                             </div>
 
                             <div class="text-center mb-3">
-                                <button type="submit" class="btn btn-primary">Create</button>
+                                <button type="submit" class="btn btn-primary">Update</button>
                             </div>
                         </form>
                     </div>
