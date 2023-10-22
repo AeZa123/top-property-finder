@@ -49,7 +49,7 @@ class LoginController extends Controller
             // ถ้าเป็นบทบาท 'admin' ให้ redirect ไปที่ URL สำหรับ admin
             // echo 'admin';
             return redirect('/dashboard');
-        } elseif ($user->hasRole('user')) {
+        } elseif ($user->role == '2') {
             // ถ้าเป็นบทบาท 'user' ให้ redirect ไปที่ URL สำหรับ user
             return redirect('/user/dashboard');
         } else {
