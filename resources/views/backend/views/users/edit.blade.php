@@ -1,12 +1,11 @@
 @extends('backend.layouts.app')
 
 @section('content')
-
-<style>
-    .star-req{
-        color: red;
-    }
-</style>
+    <style>
+        .star-req {
+            color: red;
+        }
+    </style>
     <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
@@ -20,7 +19,8 @@
                             <h3 class="card-title">Edit User</h3>
                         </div>
 
-                        <form id="form" method="POST" action="{{ route('user.storage') }}" enctype="multipart/form-data">
+                        <form id="form" method="POST" action="{{ url('user/update/' . $data->id) }}"
+                            enctype="multipart/form-data">
                             <div class="card-body">
                                 @csrf
                                 <div class="row justify-content-center">
@@ -30,7 +30,7 @@
                                                 <div class="form-group">
                                                     <label for="fname">ชื่อ<span class="star-req">*</span></label>
                                                     <input type="text" class="form-control" name="fname" id="fname"
-                                                        placeholder="ชื่อ" value="{{$data->fname}}">
+                                                        placeholder="ชื่อ" value="{{ $data->fname }}">
                                                     <span class="text-danger font-danger error-text fname_error"></span>
                                                 </div>
                                             </div>
@@ -40,7 +40,7 @@
                                                 <div class="form-group">
                                                     <label for="lname">นามสกุล<span class="star-req">*</span></label>
                                                     <input type="text" class="form-control" name="lname" id="lname"
-                                                        placeholder="นามสกุล" value="{{$data->lname}}">
+                                                        placeholder="นามสกุล" value="{{ $data->lname }}">
                                                     <span class="text-danger font-danger error-text lname_error"></span>
                                                 </div>
                                             </div>
@@ -49,7 +49,7 @@
                                                 <div class="form-group">
                                                     <label for="email">อีเมล<span class="star-req">*</span></label>
                                                     <input type="email" class="form-control" name="email" id="email"
-                                                        placeholder="อีเมล" value="{{$data->email}}">
+                                                        placeholder="อีเมล" value="{{ $data->email }}">
                                                     <span class="text-danger font-danger error-text email_error"></span>
                                                 </div>
                                             </div>
@@ -67,7 +67,7 @@
                                                 <div class="form-group">
                                                     <label for="tel">เบอร์โทร<span class="star-req">*</span></label>
                                                     <input type="text" class="form-control" name="tel" id="tel"
-                                                        placeholder="เบอร์โทร" value="{{$data->tel}}">
+                                                        placeholder="เบอร์โทร" value="{{ $data->tel }}">
                                                     <span class="text-danger font-danger error-text tel_error"></span>
                                                 </div>
                                             </div>
@@ -87,7 +87,7 @@
                                                     <label>เพศ</label>
                                                     <select class="form-control" name="gender">
                                                         {{-- {{ echo $data_html_gender }} --}}
-                                                        <?php echo $data_html_gender ?>
+                                                        <?php echo $data_html_gender; ?>
                                                     </select>
                                                     <span class="text-danger font-danger error-text gender_error"></span>
                                                 </div>
@@ -97,7 +97,7 @@
                                                 <div class="form-group">
                                                     <label>สิทธิ์การใช้งาน<span class="star-req">*</span></label>
                                                     <select class="form-control" name="role">
-                                                       <?php echo $data_html_role ?>
+                                                        <?php echo $data_html_role; ?>
                                                     </select>
                                                     <span class="text-danger font-danger error-text role_error"></span>
                                                 </div>
@@ -168,37 +168,18 @@
                                 $(form).find('span.' + prefix + '_error').text(val[0]);
                             });
                         } else {
-                            // $(form)[0].reset();
 
 
                             Swal.fire({
-                                title: 'บันทึกสําเร็จ',
+                                title: 'แก้ไขสำเร็จ',
                                 text: data.msg,
                                 icon: 'success',
                                 confirmButtonText: 'OK',
-                                
-                                }).then((result) => {
-                               
+                            }).then((result) => {
                                 if (result.isConfirmed) {
-                                    document.location.href="{!! route('users') !!}"
-                                } 
+                                    document.location.href = "{!! route('users') !!}"
+                                }
                             });
-
-
-                            // Swal.fire({
-                            //     title: data.msg,
-                            //     icon: 'success',
-                            //     confirmButtonText: 'OK'
-                           
-                            // }).then((result) => {
-                                
-                            //     document.location.href="{!! route('users') !!}"
-                                
-                            // })
-
-
-                            //alert success
-                            // swal.fire("สำเร็จ", data.msg, "success");
 
                         }
 

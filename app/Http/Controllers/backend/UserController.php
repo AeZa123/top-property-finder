@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
+
 
 class UserController extends Controller
 {
@@ -115,8 +117,6 @@ class UserController extends Controller
 
         // DB::table('blogs')->insert($data);
         User::create($data);
-
-
         // return redirect('table/laravel');
         return response()->json(['code'=>1,'msg'=>'ได้ทำการเพิ่มข้อมูลเรียบร้อยแล้ว']);
 
@@ -125,6 +125,73 @@ class UserController extends Controller
 
 
 
+    public function update(Request $request, $id){
+
+
+        $validator = \Validator::make($request->all(),[
+            'fname' => 'required|string',
+            'lname' => 'required|string',
+            // 'email' => 'required|string|email|unique:users',
+            'email' => [
+                'required',
+                'string',
+                'email',
+                Rule::unique('users')->ignore($id),
+            ],
+           
+            'role' => 'required|string',
+            'tel' => 'required|string|min:10|max:10',
+        ],
+        [
+            'fname.required'=>'กรุณาระบุชื่อ',
+            'lname.required'=>'กรุณาระบุนามสกุล',
+            'email.required'=>'กรุณาระบุอีเมล',
+            'email.unique'=>'อีเมลนี้ถูกใช้งานแล้ว',
+            'email.email'=>'กรุณาใส่อีเมลให้ถูกต้อง',
+            'password.confirmed'=>'รหัสผ่านไม่ตรงกัน',
+            'role.required'=>'กรุณาระบุประเภทผู้ใช้งาน',
+            'tel.required'=>'กรุณาระบุเบอร์โทรศัพท์',
+            'tel.min'=>'เบอร์โทรศัพท์ต้องมี 10 หลัก',
+            'tel.max'=>'เบอร์โทรศัพท์ต้องมี 10 หลัก',
+        ]);
+
+         //ถ้า validate ไม่ผ่านให้ส่ง error ไป  แต่ถ้าผ่านให้ทำการบันทึกข้อมูลลง database
+         if(!$validator->passes()){
+            return response()->json(['code'=>0,'error'=>$validator->errors()->toArray()]);
+
+        }
+
+        $data = array(
+            'fname' => $request->fname,
+            'lname' => $request->lname,
+            'email' => $request->email,
+            'role' => $request->role,
+            'tel' => $request->tel,
+            'gender' => isset($request->gender) ? $request->gender : null,
+        );
+
+   
+
+        $updated = User::where('id',$id)->update($data);
+
+        return response()->json(['code'=>1,'msg'=>'ได้ทำการแก้ไขข้อมูลเรียบร้อยแล้ว']);
+
+
+    }
+
+
+
+
+    public function destroy(Request $request){
+
+        $data = User::where('id',$request->id)->delete();
+        if($data){
+            return response()->json(['code'=>1,'msg'=>'ได้ทำการลบข้อมูลเรียบร้อยแล้ว']);
+        }else{
+            return response()->json(['code'=>0,'msg'=>'ลบข้อมูลไม่สำเร็จ']);
+        }
+        
+    }
 
 
 

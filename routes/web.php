@@ -47,6 +47,8 @@ Route::get('/users/search',[UserController::class, 'search']);
 Route::get('/user/create', [UserController::class, 'create'])->name('user.create');
 Route::post('/user/storage', [UserController::class, 'storage'])->name('user.storage');
 Route::get('/user/edit/{id}',[UserController::class, 'edit']);
+Route::post('/user/update/{id}',[UserController::class, 'update']);
+Route::post('/user/destroy',[UserController::class, 'destroy'])->name('user.destroy');
 
 
 
