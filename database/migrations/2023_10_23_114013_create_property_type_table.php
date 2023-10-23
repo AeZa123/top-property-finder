@@ -13,10 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('genders', function (Blueprint $table) {
+        Schema::create('property_type', function (Blueprint $table) {
             $table->id()->autoIncrement();
-            $table->string('gender_name');
-            $table->string('status')->default('open');
+            $table->string('name_property_type');
             $table->timestamps();
         });
     }
@@ -28,6 +27,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('gender');
+        Schema::dropIfExists('property_type');
     }
 };

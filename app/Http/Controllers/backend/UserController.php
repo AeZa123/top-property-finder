@@ -7,13 +7,30 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Storage;
+
+
+
 
 class UserController extends Controller
 {
+
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+
+    
     public function index()
     {
         
-        $users = DB::table('users')->select('*')->paginate(10);
+        $users = DB::table('users')
+            ->join('roles', 'users.role', '=', 'roles.id', 'left')
+            ->select('users.*', 'roles.role_name')->paginate(10);
+
         return view('backend.views.users.list', compact('users'));
 
     }
@@ -38,6 +55,7 @@ class UserController extends Controller
 
         $genders_count = count($genders);
         $roles_count = count($roles);
+
 
         $data_html_gender = '';
         for($i=0; $i<$genders_count; $i++){
@@ -103,6 +121,8 @@ class UserController extends Controller
 
         }
 
+
+
         $data = array(
             'fname' => $request->fname,
             'lname' => $request->lname,
@@ -113,10 +133,39 @@ class UserController extends Controller
             'gender' => isset($request->gender) ? $request->gender : null,
         );
 
+
+        $file = $request->file('avatar');
+
+        if(!empty($file)){
+
+
+            $photo = $request->file('avatar'); // img = ชื่อ name ใน input
+            $photoname = time() . '.' . $photo->getClientOriginalExtension();
+            $request->avatar->move('storage/images/users', $photoname); // img = 'img' ตัวนี้
+
+            // resize_image
+
+            // $this->resize_image($photo, 200, 200);
+
+            // $img->move('storage/images/users', $photoname); // img = 'img' ตัวนี้
+            $data['avatar'] = $photoname;
+        }
+
+        // dd($file_name);
+
+
+        // if($upload){
+        //     Product::insert([
+        //         'product_name'=>$request->product_name,
+        //         'product_image'=>$file_name,
+        //     ]);
+        //     return response()->json(['code'=>1,'msg'=>'New product has been saved successfully']);
+        // }
+
+
+
         // DB::table('blogs')->insert($data);
         User::create($data);
-
-
         // return redirect('table/laravel');
         return response()->json(['code'=>1,'msg'=>'ได้ทำการเพิ่มข้อมูลเรียบร้อยแล้ว']);
 
@@ -125,6 +174,73 @@ class UserController extends Controller
 
 
 
+    public function update(Request $request, $id){
+
+
+        $validator = \Validator::make($request->all(),[
+            'fname' => 'required|string',
+            'lname' => 'required|string',
+            // 'email' => 'required|string|email|unique:users',
+            'email' => [
+                'required',
+                'string',
+                'email',
+                Rule::unique('users')->ignore($id),
+            ],
+           
+            'role' => 'required|string',
+            'tel' => 'required|string|min:10|max:10',
+        ],
+        [
+            'fname.required'=>'กรุณาระบุชื่อ',
+            'lname.required'=>'กรุณาระบุนามสกุล',
+            'email.required'=>'กรุณาระบุอีเมล',
+            'email.unique'=>'อีเมลนี้ถูกใช้งานแล้ว',
+            'email.email'=>'กรุณาใส่อีเมลให้ถูกต้อง',
+            'password.confirmed'=>'รหัสผ่านไม่ตรงกัน',
+            'role.required'=>'กรุณาระบุประเภทผู้ใช้งาน',
+            'tel.required'=>'กรุณาระบุเบอร์โทรศัพท์',
+            'tel.min'=>'เบอร์โทรศัพท์ต้องมี 10 หลัก',
+            'tel.max'=>'เบอร์โทรศัพท์ต้องมี 10 หลัก',
+        ]);
+
+         //ถ้า validate ไม่ผ่านให้ส่ง error ไป  แต่ถ้าผ่านให้ทำการบันทึกข้อมูลลง database
+         if(!$validator->passes()){
+            return response()->json(['code'=>0,'error'=>$validator->errors()->toArray()]);
+
+        }
+
+        $data = array(
+            'fname' => $request->fname,
+            'lname' => $request->lname,
+            'email' => $request->email,
+            'role' => $request->role,
+            'tel' => $request->tel,
+            'gender' => isset($request->gender) ? $request->gender : null,
+        );
+
+   
+
+        $updated = User::where('id',$id)->update($data);
+
+        return response()->json(['code'=>1,'msg'=>'ได้ทำการแก้ไขข้อมูลเรียบร้อยแล้ว']);
+
+
+    }
+
+
+
+
+    public function destroy(Request $request){
+
+        $data = User::where('id',$request->id)->delete();
+        if($data){
+            return response()->json(['code'=>1,'msg'=>'ได้ทำการลบข้อมูลเรียบร้อยแล้ว']);
+        }else{
+            return response()->json(['code'=>0,'msg'=>'ลบข้อมูลไม่สำเร็จ']);
+        }
+        
+    }
 
 
 
@@ -188,6 +304,33 @@ class UserController extends Controller
     }
 
 
+
+    function resize_image($file, $w, $h, $crop=FALSE) {
+        list($width, $height) = getimagesize($file);
+        $r = $width / $height;
+        if ($crop) {
+            if ($width > $height) {
+                $width = ceil($width-($width*abs($r-$w/$h)));
+            } else {
+                $height = ceil($height-($height*abs($r-$w/$h)));
+            }
+            $newwidth = $w;
+            $newheight = $h;
+        } else {
+            if ($w/$h > $r) {
+                $newwidth = $h*$r;
+                $newheight = $h;
+            } else {
+                $newheight = $w/$r;
+                $newwidth = $w;
+            }
+        }
+        $src = imagecreatefromjpeg($file);
+        $dst = imagecreatetruecolor($newwidth, $newheight);
+        imagecopyresampled($dst, $src, 0, 0, 0, 0, $newwidth, $newheight, $width, $height);
+    
+        return $dst;
+    }
 
 
 

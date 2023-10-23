@@ -11,13 +11,13 @@
                     <div class="card">
 
                         <div class="card-header">
-                            <h3 class="card-title">Manage Users</h3>
-                            <a href="{{ route('user.create') }}" class="btn btn-success btn-sm float-right">Create user</a>
+                            <h3 class="card-title">จัดการประกาศ</h3>
+                            <a href="{{ route('post.create') }}" class="btn btn-success btn-sm float-right">สร้างประกาศ</a>
                         </div>
 
 
                         <div class="card-body">
-                            <h5 class="header-title mt-2" style="float: left">รายชื่อผู้ใช้งานทั้งหมด</h5>
+                            <h5 class="header-title mt-2" style="float: left">รายชื่อประกาศทั้งหมด</h5>
                             <div class="search-box float-right" style="margin-top: -3px;">
                                 <form action="#">
                                     <input style="width: 380px; height: 35px;" class="form-control" type="text"
@@ -32,33 +32,34 @@
                                         <thead class="text-uppercase bg-danger">
                                             <tr class="text-white">
                                                 <th scope="col">ID</th>
-                                                <th scope="col">ชื่อ-นามสกุล</th>
-                                                <th scope="col">อีเมล</th>
-                                                <th scope="col">เบอร์โทร</th>
-                                                <th scope="col">status</th>
-                                                <th scope="col">created at</th>
+                                                <th scope="col">ชื่ออสังหา</th>
+                                                <th scope="col">หัวข้อประกาศ</th>
+                                                <th scope="col">ราคา</th>
+                                                <th scope="col">จำนวน</th>
+                                                <th scope="col">เจ้าของประกาศ</th>
                                                 <th scope="col">action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach ($users as $user)
+                                            @foreach ($datas as $data)
                                                 <tr>
-                                                    <th scope="row">{{ $user->id }}</th>
+                                                    <th scope="row">{{ $data->id }}</th>
                                                     {{-- <td><a href="{{url('showBlog/'.$user->id)}}" target="_bank">Test </a></td> --}}
-                                                    <td>{{ $user->fname }} {{ $user->lname }}</td>
-                                                    <td>{{ $user->email }}</td>
-                                                    <td>{{ $user->tel }}</td>
-                                                    <td>{{ $user->role_name }}</td>
-                                                    <td>{{ \Carbon\Carbon::parse($user->created_at)->format('d/m/Y') }}</td>
+                                                    <td>{{ $data->property_name }}</td>
+                                                    <td>{{ $data->title }}</td>
+                                                    <td>{{ $data->price }}</td>
+                                                    <td>{{ $data->amount }}</td>
+                                                    <td>{{ $data->user_id }}</td>
+                                                   
                                                     <td>
                                                         {{-- <a href="{{url('blog/laravel/edit/'.$blog->id)}}">
                                                             <i class="ti-pencil-alt pr-3 text-warning" title="Edit"></i>
                                                         </a> --}}
 
-                                                        <a href="{{ url('user/edit/' . $user->id) }}">
+                                                        <a href="{{ url('user/edit/' . $data->id) }}">
                                                             <i class="fas fa-edit btn btn-warning"></i>
                                                         </a>
-                                                        <a href="#" data-id="{{ $user->id }}" id="deleteBtn">
+                                                        <a href="#" data-id="{{ $data->id }}" id="deleteBtn">
                                                             <i class="fas fa-trash-alt btn btn-danger text-white"></i>
                                                         </a>
 
@@ -74,7 +75,7 @@
                                 </div>
                             </div>
                             <div style="float: right">
-                                {{ $users->links() }}
+                                {{ $datas->links() }}
                             </div>
                         </div>
                     </div>

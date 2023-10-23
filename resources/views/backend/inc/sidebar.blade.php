@@ -12,9 +12,9 @@
      <!-- Sidebar -->
      <div class="sidebar">
          <!-- Sidebar user panel (optional) -->
-         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-             <div class="image">
-                 <img src="{{ asset('assets/dist/img/user2-160x160.jpg') }}" class="img-circle elevation-2"
+         <div class=" mt-3 pb-3 mb-3 d-flex">
+             <div >
+                 <img class="rounded-circle" width="35px" height="35px" src="{{ asset('storage/images/users/'. Auth::user()->avatar) }}" class=" "
                      alt="User Image">
              </div>
              <div class="info">
@@ -45,6 +45,14 @@
                      <a href="{{ route('users') }}" class="nav-link">
                          <i class="nav-icon fas fa-users"></i>
                          <p>Users</p>
+                     </a>
+                 </li>
+                 <li class="nav-item">
+                     <a href="{{ route('posts') }}" class="nav-link">
+                         {{-- <i class="nav-icon fas fa-users"></i> --}}
+                         <i class="nav-icon fas fa-bullhorn"></i>
+                         {{-- <i class="nav-icon far fa-bullhorn"></i> --}}
+                         <p>Announce</p>
                      </a>
                  </li>
                  

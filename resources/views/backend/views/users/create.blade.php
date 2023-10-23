@@ -113,7 +113,7 @@
                                             </div>
 
 
-                                            {{-- <div class="col-md-6">
+                                            <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label for="avatar">รูปโปรไฟล์</label>
                                                     <div class="input-group">
@@ -125,7 +125,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div> --}}
+                                            </div>
 
 
                                         </div>
