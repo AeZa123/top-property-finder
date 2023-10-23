@@ -6,6 +6,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\frontend\IndexController;
 use App\Http\Controllers\backend\DashboardController;
 use App\Http\Controllers\backend\UserController;
+use App\Http\Controllers\backend\PostController;
 
 /*
 |--------------------------------------------------------------------------
@@ -51,10 +52,10 @@ Route::post('/user/update/{id}',[UserController::class, 'update']);
 Route::post('/user/destroy',[UserController::class, 'destroy'])->name('user.destroy');
 
 
-
-
-
-
+// for post
+Route::get('/posts', [PostController::class, 'index'])->name('posts');
+Route::get('/post/create', [PostController::class, 'create'])->name('post.create');
+Route::post('/post/storage', [PostController::class, 'storage'])->name('post.storage');
 
 
 

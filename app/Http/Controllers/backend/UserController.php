@@ -8,14 +8,29 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Storage;
+
+
 
 
 class UserController extends Controller
 {
+
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+
+    
     public function index()
     {
         
-        $users = DB::table('users')->select('*')->paginate(10);
+        $users = DB::table('users')
+            ->join('roles', 'users.role', '=', 'roles.id', 'left')
+            ->select('users.*', 'roles.role_name')->paginate(10);
+
         return view('backend.views.users.list', compact('users'));
 
     }
@@ -40,6 +55,7 @@ class UserController extends Controller
 
         $genders_count = count($genders);
         $roles_count = count($roles);
+
 
         $data_html_gender = '';
         for($i=0; $i<$genders_count; $i++){
@@ -105,6 +121,8 @@ class UserController extends Controller
 
         }
 
+
+
         $data = array(
             'fname' => $request->fname,
             'lname' => $request->lname,
@@ -114,6 +132,37 @@ class UserController extends Controller
             'tel' => $request->tel,
             'gender' => isset($request->gender) ? $request->gender : null,
         );
+
+
+        $file = $request->file('avatar');
+
+        if(!empty($file)){
+
+
+            $photo = $request->file('avatar'); // img = ชื่อ name ใน input
+            $photoname = time() . '.' . $photo->getClientOriginalExtension();
+            $request->avatar->move('storage/images/users', $photoname); // img = 'img' ตัวนี้
+
+            // resize_image
+
+            // $this->resize_image($photo, 200, 200);
+
+            // $img->move('storage/images/users', $photoname); // img = 'img' ตัวนี้
+            $data['avatar'] = $photoname;
+        }
+
+        // dd($file_name);
+
+
+        // if($upload){
+        //     Product::insert([
+        //         'product_name'=>$request->product_name,
+        //         'product_image'=>$file_name,
+        //     ]);
+        //     return response()->json(['code'=>1,'msg'=>'New product has been saved successfully']);
+        // }
+
+
 
         // DB::table('blogs')->insert($data);
         User::create($data);
@@ -255,6 +304,33 @@ class UserController extends Controller
     }
 
 
+
+    function resize_image($file, $w, $h, $crop=FALSE) {
+        list($width, $height) = getimagesize($file);
+        $r = $width / $height;
+        if ($crop) {
+            if ($width > $height) {
+                $width = ceil($width-($width*abs($r-$w/$h)));
+            } else {
+                $height = ceil($height-($height*abs($r-$w/$h)));
+            }
+            $newwidth = $w;
+            $newheight = $h;
+        } else {
+            if ($w/$h > $r) {
+                $newwidth = $h*$r;
+                $newheight = $h;
+            } else {
+                $newheight = $w/$r;
+                $newwidth = $w;
+            }
+        }
+        $src = imagecreatefromjpeg($file);
+        $dst = imagecreatetruecolor($newwidth, $newheight);
+        imagecopyresampled($dst, $src, 0, 0, 0, 0, $newwidth, $newheight, $width, $height);
+    
+        return $dst;
+    }
 
 
 
