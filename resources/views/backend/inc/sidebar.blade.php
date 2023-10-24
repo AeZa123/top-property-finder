@@ -14,10 +14,10 @@
          <!-- Sidebar user panel (optional) -->
          <div class=" mt-3 pb-3 mb-3 d-flex">
              <div >
-                 <img class="rounded-circle" width="35px" height="35px" src="{{ asset('storage/images/users/'. Auth::user()->avatar) }}" class=" "
+                 <img class="brand-image img-circle elevation-3" style="background-size:cover; background-position:center; opacity: .8" width="40px" height="40px" src="{{ asset('storage/images/users/'. Auth::user()->avatar) }}" 
                      alt="User Image">
              </div>
-             <div class="info">
+             <div class="info ml-2 mt-1">
                  <a href="#" class="d-block">{{ Auth::user()->fname }} {{ Auth::user()->lname }}</a>
              </div>
          </div>

@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Models\Post;
+use App\Models\Image;
+use App\Models\ImagePost;
 
 class PostController extends Controller
 {
@@ -41,6 +43,8 @@ class PostController extends Controller
 
     public function storage(Request $request){
 
+      
+        // dd($request->all());
         $validator = \Validator::make($request->all(),[
             'title' => 'required|string',
             'body' => 'required|string',
@@ -81,39 +85,76 @@ class PostController extends Controller
             'user_id' => Auth::user()->id,
         );
 
-
-        // $file = $request->file('avatar');
-
-        // if(!empty($file)){
-
-
-        //     $photo = $request->file('avatar'); // img = ชื่อ name ใน input
-        //     $photoname = time() . '.' . $photo->getClientOriginalExtension();
-        //     $request->avatar->move('storage/images/users', $photoname); // img = 'img' ตัวนี้
-
-        //     // resize_image
-
-        //     // $this->resize_image($photo, 200, 200);
-
-        //     // $img->move('storage/images/users', $photoname); // img = 'img' ตัวนี้
-        //     $data['avatar'] = $photoname;
-        // }
-
-        // dd($file_name);
-
-        // if($upload){
-        //     Product::insert([
-        //         'product_name'=>$request->product_name,
-        //         'product_image'=>$file_name,
-        //     ]);
-        //     return response()->json(['code'=>1,'msg'=>'New product has been saved successfully']);
-        // }
+        // create post
+       $createPost = Post::create($data);
+       $post_id = $createPost->id;
 
 
-        // DB::table('blogs')->insert($data);
-        Post::create($data);
+        $file = $request->file('images');
+
+        if(!empty($file)){
+
+            $count = count($file);
+
+            for($i=0; $i<$count; $i++){
+
+                $photo = $request->file('images')[$i]; // img = ชื่อ name ใน input
+                $photoname = $post_id.$i.date('Y-m-d').time() . '.' . $photo->getClientOriginalExtension();
+                $request->images[$i]->move('storage/images/property_image', $photoname); // img = 'img' ตัวนี้
+
+                $image['image_name'] = $photoname;
+
+                $createdImage = Image::create($image); // create image
+               
+                $imagePost['post_id'] = $post_id;
+                $imagePost['image_id'] = $createdImage->id;
+
+                ImagePost::create($imagePost); //create image post
+
+            }
+
+        }
+
+    
         // return redirect('table/laravel');
         return response()->json(['code'=>1,'msg'=>'ได้ทำการเพิ่มข้อมูลเรียบร้อยแล้ว']);
+
+    }
+
+
+
+
+    public function edit($id){
+
+
+
+        $data = Post::find($id);
+        $imagePosts = ImagePost::where('post_id', $id)
+                      ->join('images', 'image_posts.image_id', '=', 'images.id')
+                      ->select('images.id', 'images.image_name', 'post_id')
+                      ->get();
+        $property_type = DB::table('property_type')->select('*')->get();
+        $sales_type = DB::table('sales_type')->select('*')->get();
+
+        $count_property_type = count($property_type);
+        $count_sales_type = count($sales_type);
+
+        $data_html_proper_type = '';
+        for($i=0; $i<$count_property_type; $i++){
+           $data_html_proper_type .= '<option value="'.$property_type[$i]->id.'"';
+           $data_html_proper_type .= ($data->property_type_id == $property_type[$i]->id) ? 'selected' : '';
+           $data_html_proper_type .= '>'.$property_type[$i]->name_property_type.'</option>';
+        }
+
+        $data_html_sales_type = '';
+        for($i=0; $i<$count_sales_type; $i++){
+           $data_html_sales_type .= '<option value="'.$sales_type[$i]->id.'"';
+           $data_html_sales_type .= ($data->sale_type_id == $sales_type[$i]->id) ? 'selected' : '';
+           $data_html_sales_type .= '>'.$sales_type[$i]->name_sale_type.'</option>';
+        }
+
+
+        return view('backend.views.posts.edit',compact('data','data_html_sales_type','data_html_proper_type','imagePosts'));
 
     }
 
