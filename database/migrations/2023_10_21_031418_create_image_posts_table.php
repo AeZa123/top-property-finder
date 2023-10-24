@@ -13,10 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('image_post', function (Blueprint $table) {
+        Schema::create('image_posts', function (Blueprint $table) {
             $table->id()->autoIncrement();
             $table->integer('post_id');
-            $table->string('image');
+            $table->integer('image_id');
             $table->timestamps();
         });
     }

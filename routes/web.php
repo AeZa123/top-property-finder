@@ -56,6 +56,7 @@ Route::post('/user/destroy',[UserController::class, 'destroy'])->name('user.dest
 Route::get('/posts', [PostController::class, 'index'])->name('posts');
 Route::get('/post/create', [PostController::class, 'create'])->name('post.create');
 Route::post('/post/storage', [PostController::class, 'storage'])->name('post.storage');
+Route::get('/post/edit/{id}', [PostController::class, 'edit']);
 
 
 

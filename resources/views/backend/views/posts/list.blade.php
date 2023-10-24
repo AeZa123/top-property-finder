@@ -56,7 +56,7 @@
                                                             <i class="ti-pencil-alt pr-3 text-warning" title="Edit"></i>
                                                         </a> --}}
 
-                                                        <a href="{{ url('user/edit/' . $data->id) }}">
+                                                        <a href="{{ url('post/edit/' . $data->id) }}">
                                                             <i class="fas fa-edit btn btn-warning"></i>
                                                         </a>
                                                         <a href="#" data-id="{{ $data->id }}" id="deleteBtn">

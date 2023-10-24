@@ -39,12 +39,9 @@ class UserController extends Controller
 
 
     public function create(){
-
         $genders = DB::table('genders')->select('*')->where('status', 'open')->get();
         $roles = DB::table('roles')->select('*')->where('status', 'open')->get();
-
         return view('backend.views.users.create', compact('genders','roles'));
-
     }
 
     public function edit($id){
@@ -80,10 +77,6 @@ class UserController extends Controller
         // echo $data_html_role;
 
         // dd($data_html_role);
-
-
-
-        
 
         return view('backend.views.users.edit', compact('data', 'data_html_gender', 'data_html_role'));
     }
