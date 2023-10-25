@@ -131,8 +131,10 @@ class PostController extends Controller
         $data = Post::find($id);
         $imagePosts = ImagePost::where('post_id', $id)
                       ->join('images', 'image_posts.image_id', '=', 'images.id')
-                      ->select('images.id', 'images.image_name', 'post_id')
+                      ->select('images.id as image_id', 'images.image_name', 'post_id', 'image_posts.id as image_post_id')
                       ->get();
+
+        // dd($imagePosts);
         $property_type = DB::table('property_type')->select('*')->get();
         $sales_type = DB::table('sales_type')->select('*')->get();
 
@@ -155,6 +157,32 @@ class PostController extends Controller
 
 
         return view('backend.views.posts.edit',compact('data','data_html_sales_type','data_html_proper_type','imagePosts'));
+
+    }
+
+    public function delete_image($idPostImage, $imageId, $nameImage){
+
+
+        // $idImagePost = $request->input('idImagePost');
+        // $imageName = $request->input('imageName');
+
+        // dd($idPostImage, $nameImage,$imageId);
+
+
+        // ImagePost::
+        unlink('storage/images/property_image/'.$nameImage);
+        ImagePost::where('id',$idPostImage)->delete();
+        Image::where('id',$imageId)->delete();
+
+
+
+
+
+
+        // $data = Image::where('id',$imageId)->delete();
+
+
+
 
     }
 

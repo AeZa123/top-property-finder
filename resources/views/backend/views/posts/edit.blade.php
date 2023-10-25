@@ -71,12 +71,14 @@
             z-index: 1;
             cursor: pointer;
         }
+       
 
         .upload__img-close:after {
             content: '\2716';
             font-size: 14px;
             color: white;
         }
+    
 
         .img-bg {
             background-repeat: no-repeat;
@@ -86,6 +88,25 @@
             position: relative;
             padding-bottom: 100%;
         }
+
+
+        .upload__img-box {
+         position: relative;
+        }
+
+        .close-icon {
+            position: absolute;
+            top: 0;
+            right: 0;
+            padding: 5px;
+            background-color: #fff;
+            border-radius: 0 10px 0 0;
+            cursor: pointer;
+        }
+
+
+
+
     </style>
     <!-- Main content -->
     <section class="content">
@@ -210,33 +231,32 @@
                                                                 class="upload__inputfile">
                                                         </label>
                                                     </div>
-                                                    <div class="upload__img-wrap"></div>
+                                                    <div class="upload__img-wrap">
+                                                        @foreach ($imagePosts as $imagePost)
+                                                        <div class="upload__img-box">
+
+    
+                                                            <img data-id_image_post="{{ $imagePost->image_post_id }}" data-id_post="{{ $imagePost->post_id }}" width="200" height="200" style="background-image: cover; padding: 5px; border-radius: 10px;" src="{{ asset('storage/images/property_image/' . $imagePost->image_name) }}" alt="">
+                                                            {{-- <div class="upload__img-close"></div> --}}
+                                                            {{-- <div class="close-icon"></div> --}}
+                                                            <div class="upload__img-close delete_image" data-image-post-id="{{ $imagePost->image_post_id }}" data-image-id="{{ $imagePost->image_id }}" data-image-name="{{$imagePost->image_name}}"></div>
+                                                            
+            
+                                                        </div>
+                                                        @endforeach
+        
+
+                                                    </div>
                                                 </div>
                                             </div>
 
 
-                                            @foreach ($imagePosts as $imagePost)
-
-                                                <img data-id_image_post="{{ $imagePost->id }}" data-id_post="{{ $imagePost->post_id }}" width="200" height="200" style="background-image: cover; padding: 5px; border-radius: 10px;" src="{{ asset('storage/images/property_image/' . $imagePost->image_name) }}" alt="">
-
-                                            @endforeach
+                                         
 
 
 
 
-                                            {{-- <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label for="image">รูปอสังหา ค่อยมาใส่</label>
-                                                    <div class="input-group">
-                                                        <div class="custom-file">
-                                                            <input type="file" class="custom-file-input" name="image"
-                                                                id="image">
-                                                            <label class="custom-file-label" for="exampleInputFile">Choose
-                                                                file</label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div> --}}
+                                          
 
 
                                         </div>
@@ -270,47 +290,222 @@
 
     <!-- create data -->
     <script>
-        $(function() {
-            $('#form').on('submit', function(e) {
-                e.preventDefault();
 
-                var form = this;
-                $.ajax({
-                    url: $(form).attr('action'),
-                    method: $(form).attr('method'),
-                    data: new FormData(form),
-                    processData: false,
-                    dataType: 'json',
-                    contentType: false,
-                    beforeSend: function() {
-                        $(form).find('span.error-text').text('');
-                        // console.log('test');
-                    },
-                    success: function(data) {
-                        if (data.code == 0) {
-                            $.each(data.error, function(prefix, val) {
-                                $(form).find('span.' + prefix + '_error').text(val[0]);
-                            });
-                        } else {
+        $(document).ready(function() {
+
+            $(function() {
+                $('#form').on('submit', function(e) {
+                    e.preventDefault();
+
+                    var form = this;
+                    $.ajax({
+                        url: $(form).attr('action'),
+                        method: $(form).attr('method'),
+                        data: new FormData(form),
+                        processData: false,
+                        dataType: 'json',
+                        contentType: false,
+                        beforeSend: function() {
+                            $(form).find('span.error-text').text('');
+                            // console.log('test');
+                        },
+                        success: function(data) {
+                            if (data.code == 0) {
+                                $.each(data.error, function(prefix, val) {
+                                    $(form).find('span.' + prefix + '_error').text(val[0]);
+                                });
+                            } else {
 
 
-                            Swal.fire({
-                                title: 'แก้ไขสำเร็จ',
-                                text: data.msg,
-                                icon: 'success',
-                                confirmButtonText: 'OK',
-                            }).then((result) => {
-                                if (result.isConfirmed) {
-                                    document.location.href = "{!! route('users') !!}"
-                                }
-                            });
+                                Swal.fire({
+                                    title: 'แก้ไขสำเร็จ',
+                                    text: data.msg,
+                                    icon: 'success',
+                                    confirmButtonText: 'OK',
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        document.location.href = "{!! route('users') !!}"
+                                    }
+                                });
+
+                            }
 
                         }
+                    });
+                });
 
-                    }
+            });
+
+
+
+
+    //         $(".close-icon").click(function() {
+    //     // ดึงค่า data-id_image_post และ data-id_post จากรูปภาพที่เกี่ยวข้อง
+    //     var idImagePost = $(this).prev("img").data("id_image_post");
+    //     var idPost = $(this).prev("img").data("id_post");
+        
+    //     // แสดงค่าที่ดึงได้ในคอนโซล
+    //     console.log("data-id_image_post: " + idImagePost);
+    //     console.log("data-id_post: " + idPost);
+    //   });
+
+
+
+
+
+
+            // เมื่อคลิกที่รูปภาพ
+            $(".delete_image").click(function() {
+                // ดึงค่า data-id_image_post และแสดงในคอนโซล
+                var idImagePost = $(this).data("image-post-id");
+                var imageName = $(this).data("image-name");
+                var imageId = $(this).data("image-id");
+                // console.log("data-id_image_post: " + idImagePost);
+                // console.log("data-id_image_post: " + imageName);
+
+                var customUrl = "{{ url('post/delete/image/') }}" + '/' + idImagePost + '/' + imageId + '/' + imageName; // สร้าง URL โดยรวม idpost และ nameimage
+
+
+                $.ajax({
+                     
+                        url: customUrl,
+                        headers:{
+                                'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
+                        },
+                        method: "POST",
+                        data: {
+                            idImagePost: idImagePost,
+                            imageName: imageName
+                        },
+                        processData: false,
+                        dataType: 'json',
+                        contentType: false,
+                        beforeSend: function() {
+                            // $(form).find('span.error-text').text('');
+                            console.log('test');
+                        },
+                        success: function(data) {
+                            if (data.code == 0) {
+                                $.each(data.error, function(prefix, val) {
+                                    $(form).find('span.' + prefix + '_error').text(val[0]);
+                                });
+                            } else {
+
+
+                                Swal.fire({
+                                    title: 'แก้ไขสำเร็จ',
+                                    text: data.msg,
+                                    icon: 'success',
+                                    confirmButtonText: 'OK',
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        document.location.href = "{!! route('users') !!}"
+                                    }
+                                });
+
+                            }
+
+                        }
+                });
+
+
+
+
+
+
+            });
+
+
+
+
+
+
+            jQuery(document).ready(function() {
+                ImgUpload();
+            });
+
+        function ImgUpload() {
+            var imgWrap = "";
+            var imgArray = [];
+
+            $('.upload__inputfile').each(function() {
+                $(this).on('change', function(e) {
+                    imgWrap = $(this).closest('.upload__box').find('.upload__img-wrap');
+                    var maxLength = $(this).attr('data-max_length');
+
+                    var files = e.target.files;
+                    var filesArr = Array.prototype.slice.call(files);
+                    var iterator = 0;
+                    filesArr.forEach(function(f, index) {
+
+                        if (!f.type.match('image.*')) {
+                            return;
+                        }
+
+                        if (imgArray.length > maxLength) {
+                            return false
+                        } else {
+                            var len = 0;
+                            for (var i = 0; i < imgArray.length; i++) {
+                                if (imgArray[i] !== undefined) {
+                                    len++;
+                                }
+                            }
+                            if (len > maxLength) {
+                                return false;
+                            } else {
+                                imgArray.push(f);
+
+                                var reader = new FileReader();
+                                reader.onload = function(e) {
+                                    var html =
+                                        "<div class='upload__img-box'><div style='border-radius: 10px; background-image: url(" +
+                                        e.target.result + ")' data-number='" + $(
+                                            ".upload__img-close").length + "' data-file='" + f
+                                        .name +
+                                        "' class='img-bg'><div class='upload__img-close'></div></div></div>";
+                                    imgWrap.append(html);
+                                    iterator++;
+                                }
+                                reader.readAsDataURL(f);
+                            }
+                        }
+                    });
                 });
             });
 
+            $('body').on('click', ".upload__img-close", function(e) {
+
+                if (!$(this).hasClass('delete_image')) {
+                    var file = $(this).parent().data("file");
+                    for (var i = 0; i < imgArray.length; i++) {
+                        if (imgArray[i].name === file) {
+                            imgArray.splice(i, 1);
+                            break;
+                        }
+                    }
+                    $(this).parent().parent().remove();
+
+                  
+                  
+                }
+
+
+            });
+        }
+
+
+
+
+
+
+
+
         });
+
+
+
+
+        
     </script>
 @endsection
