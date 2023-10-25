@@ -57,6 +57,8 @@ Route::get('/posts', [PostController::class, 'index'])->name('posts');
 Route::get('/post/create', [PostController::class, 'create'])->name('post.create');
 Route::post('/post/storage', [PostController::class, 'storage'])->name('post.storage');
 Route::get('/post/edit/{id}', [PostController::class, 'edit']);
+Route::post('/post/delete/image/{idImagePost}/{imageId}/{nameImage}', [PostController::class, 'delete_image']);
+
 
 
 
