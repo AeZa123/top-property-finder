@@ -32,7 +32,7 @@
                                         <thead class="text-uppercase bg-danger">
                                             <tr class="text-white">
                                                 <th scope="col">ID</th>
-                                                <th scope="col">ชื่อ-นามสกุล</th>
+                                                <th class="text-left" scope="col">ชื่อ-นามสกุล</th>
                                                 <th scope="col">อีเมล</th>
                                                 <th scope="col">เบอร์โทร</th>
                                                 <th scope="col">status</th>
@@ -45,11 +45,81 @@
                                                 <tr>
                                                     <th scope="row">{{ $user->id }}</th>
                                                     {{-- <td><a href="{{url('showBlog/'.$user->id)}}" target="_bank">Test </a></td> --}}
-                                                    <td>{{ $user->fname }} {{ $user->lname }}</td>
+                                                    {{-- <td>
+                                                        <div class="row justify-content-center align-items-center">
+                                                            
+                                                            <div class="col-md-3 text-right">
+                                                                <div class="user-panel">
+                                                                    @if ($user->avatar != null)
+                                                                        <div>
+                                                                            <img src="{{ asset('storage/images/users/' . $user->avatar) }}"
+                                                                                class="img-circle " alt="User Image">
+                                                                        </div>
+                                                                    @else
+                                                                        <div>
+                                                                            <img src="{{ asset('storage/images/users/' . $user->avatar) }}"
+                                                                                class="img-circle " alt="User Image">
+                                                                        </div>
+                                                                    @endif
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-9 text-left">
+                                                                <div class="ml-2">
+                                                                    {{ $user->fname }} {{ $user->lname }}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                      
+                                                    </td> --}}
+
+                                                    <td>
+                                                        <div class="user-panel d-flex align-items-center text-center">
+                                                            @if ($user->avatar != null)
+                                                                <div>
+                                                                    <img src="{{ asset('storage/images/users/' . $user->avatar) }}"
+                                                                        class="img-circle " alt="User Image">
+                                                                </div>
+                                                            @else
+                                                                <div>
+                                                                    <img src="{{ asset('storage/images/users/653d4e8e1a4e0.png') }}"
+                                                                        class="img-circle " alt="User Image">
+                                                                </div>
+                                                            @endif
+                                                            <div class="ml-2">
+                                                                {{ $user->fname }} {{ $user->lname }}
+                                                            </div>
+                                                        </div>
+                                                    </td>
                                                     <td>{{ $user->email }}</td>
                                                     <td>{{ $user->tel }}</td>
-                                                    <td>{{ $user->role_name }}</td>
-                                                    <td>{{ \Carbon\Carbon::parse($user->created_at)->format('d/m/Y') }}</td>
+                                                    <td>
+                                                        <?php
+                                                        if ($user->role == 1) {
+                                                            $code_color_text = '#e11d48';
+                                                            $code_color_bg = '#ffe4e6';
+                                                        } elseif ($user->role == 2) {
+                                                            $code_color_text = '#ea580c';
+                                                            $code_color_bg = '#ffedd5';
+                                                        } elseif ($user->role == 3) {
+                                                            $code_color_text = '#0891b2';
+                                                            $code_color_bg = '#cffafe';
+                                                        }
+                                                        
+                                                        ?>
+
+                                                        <div class="row justify-content-center">
+                                                            <div class="col-md-8 text-center">
+                                                                <div class=""
+                                                                    style="border-radius: 12px; background-color: {{ $code_color_bg }}; color:{{$code_color_text}};">
+                                                                    <b>{{ $user->role_name }}</b>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+
+                                                    </td>
+                                                    <td>{{ \Carbon\Carbon::parse($user->created_at)->format('d/m/Y') }}
+                                                    </td>
                                                     <td>
                                                         {{-- <a href="{{url('blog/laravel/edit/'.$blog->id)}}">
                                                             <i class="ti-pencil-alt pr-3 text-warning" title="Edit"></i>

@@ -25,6 +25,7 @@ return new class extends Migration
             $table->integer('sale_type_id')->comment('ไอดีประเภทการขาย');
             $table->integer('property_type_id')->comment('ไอดีประเภทอสังหา');
             $table->integer('user_id')->comment('ไอดีผู้โพส');
+            $table->string('delete_post')->comment('สถานะการลบโพส');
             $table->timestamps();
         });
     }

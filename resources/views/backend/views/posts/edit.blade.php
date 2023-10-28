@@ -118,7 +118,8 @@
                         </div>
 
 
-                        <form id="form" method="POST" action="{{ url('post/update/' . $data->id) }}" enctype="multipart/form-data">
+                        <form id="form" method="POST" action="{{ url('post/update/' . $data->id) }}"
+                            enctype="multipart/form-data">
                             {{-- <form id="form" method="POST" action="" enctype="multipart/form-data"> --}}
                             <div class="card-body">
                                 @csrf
@@ -330,7 +331,7 @@
                                 }).then((result) => {
                                     if (result.isConfirmed) {
                                         document.location.href =
-                                            "{!! route('users') !!}"
+                                            "{!! route('posts') !!}"
                                     }
                                 });
 
@@ -353,7 +354,7 @@
                 // var id_delete_html = '#'+idImagePost+''+imageId;
 
                 var id_delete_html = '' + idImagePost + imageId;
-               
+
 
 
 

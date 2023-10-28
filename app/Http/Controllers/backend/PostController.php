@@ -25,7 +25,13 @@ class PostController extends Controller
     public function index()
     {
 
-        $datas = DB::table('posts')->select('*')->paginate(10);
+        // $datas = DB::table('posts')->where('delete_post', '=', null)->paginate(10);
+        $datas = DB::table('posts')
+            ->join('users', 'posts.user_id', '=', 'users.id', 'left')
+            ->where('delete_post', '=', null)
+            ->orWhere('delete_post', '=', '')
+            ->select('posts.*', 'users.fname', 'users.lname')
+            ->paginate(10);
         return view('backend.views.posts.list', compact('datas'));
     }
 
@@ -162,31 +168,28 @@ class PostController extends Controller
     }
 
 
-    
+
     public function delete_image($idPostImage, $imageId, $nameImage)
     {
-        if(!empty($idPostImage) AND !empty($imageId) AND !empty($nameImage)){
+        if (!empty($idPostImage) and !empty($imageId) and !empty($nameImage)) {
             // ImagePost::
             unlink('storage/images/property_image/' . $nameImage);
             $req1 = ImagePost::where('id', $idPostImage)->delete();
             $req2 = Image::where('id', $imageId)->delete();
 
             return response()->json(['code' => 1, 'msg' => 'ได้ทำการลบข้อมูลเรียบร้อยแล้ว']);
-        }else{
+        } else {
 
             return response()->json(['code' => 0, 'msg' => 'ไม่สามารถลบข้อมูลได้']);
         }
-
     }
 
 
 
 
-    
-    // ยังไม่เสร็จ 
+
     public function update(Request $request, $id)
     {
-        dd($request->all(), $id);
 
         $validator = \Validator::make(
             $request->all(),
@@ -233,35 +236,31 @@ class PostController extends Controller
 
 
 
-        // dd($data);
-        // create post
-        // $createPost = Post::updated($data);
-        $post_id = Post::where('id',$id)->update($data);
+        if ($request->hasFile('images')) {
 
-        $file = $request->file('images');
-
-
-        if ($request->hasFile('avatar')) {
+            $file = $request->file('images');
             if (!empty($file)) {
+
+                // dd($request->all());
 
                 $count = count($file);
                 for ($i = 0; $i < $count; $i++) {
                     $photo = $request->file('images')[$i]; // img = ชื่อ name ใน input
-                    $photoname = $post_id.uniqid().'-'. date('Y-m-d') . time() . '.' . $photo->getClientOriginalExtension();
+                    $photoname = uniqid() . '-' . date('Y-m-d') . time() . '.' . $photo->getClientOriginalExtension();
                     $request->images[$i]->move('storage/images/property_image', $photoname); // img = 'img' ตัวนี้
 
                     $image['image_name'] = $photoname;
                     $createdImage = Image::create($image); // create image
-                    $imagePost['post_id'] = $post_id;
+                    $imagePost['post_id'] = $id;
                     $imagePost['image_id'] = $createdImage->id;
-    
+
                     ImagePost::create($imagePost); //create image post
-    
+
                 }
             }
         }
 
-
+        Post::where('id', $id)->update($data);
 
         // return redirect('table/laravel');
         return response()->json(['code' => 1, 'msg' => 'ได้ทำการเพิ่มข้อมูลเรียบร้อยแล้ว']);
@@ -272,7 +271,14 @@ class PostController extends Controller
     public function destroy(Request $request)
     {
 
-        dd($request->all());
+        // dd($request->id);
+        $id = $request->id;
+        $data = array(
+            'delete_post' => 'del',
+        );
+        Post::where('id', $id)->update($data);
+
+        return response()->json(['code' => 1, 'msg' => 'ได้ทำการเพิ่มข้อมูลเรียบร้อยแล้ว']);
 
         // unlink('storage/images/property_image/' . $nameImage);
         // $req1 = ImagePost::where('id', $idPostImage)->delete();
@@ -280,6 +286,4 @@ class PostController extends Controller
 
 
     }
-
-
 }

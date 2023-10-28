@@ -49,7 +49,7 @@
                                                     <td>{{ $data->title }}</td>
                                                     <td>{{ $data->price }}</td>
                                                     <td>{{ $data->amount }}</td>
-                                                    <td>{{ $data->user_id }}</td>
+                                                    <td>{{ $data->fname }} {{ $data->lname }}</td>
                                                    
                                                     <td>
                                                         {{-- <a href="{{url('blog/laravel/edit/'.$blog->id)}}">
@@ -151,7 +151,7 @@
                                 }).then((result) => {
                                     if (result.isConfirmed) {
                                         document.location.href =
-                                            "{!! route('users') !!}"
+                                            "{!! route('posts') !!}"
                                     }
                                 });
 
