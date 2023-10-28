@@ -51,6 +51,12 @@ Route::get('/user/edit/{id}',[UserController::class, 'edit']);
 Route::post('/user/update/{id}',[UserController::class, 'update']);
 Route::post('/user/destroy',[UserController::class, 'destroy'])->name('user.destroy');
 
+// Route::post('/user/testimage',[UserController::class, 'testimage'])->name('user.testimage');
+// Route::post('save-crop-image', 'CropImageUploadController@store');
+// Route::get('image-crop', 'CropImageUploadController@index');
+// Route::get('/users', [UserController::class, 'index'])->name('users');
+ 
+
 
 // for post
 Route::get('/posts', [PostController::class, 'index'])->name('posts');
@@ -59,6 +65,7 @@ Route::post('/post/storage', [PostController::class, 'storage'])->name('post.sto
 Route::post('/post/update/{id}', [PostController::class, 'update']);
 Route::get('/post/edit/{id}', [PostController::class, 'edit']);
 Route::post('/post/delete/image/{idImagePost}/{imageId}/{nameImage}', [PostController::class, 'delete_image']);
+Route::post('/post/destroy', [PostController::class, 'destroy'])->name('user.destroy');
 
 
 

@@ -1,5 +1,3 @@
- 
- 
  <!-- Main Sidebar Container -->
  <aside class="main-sidebar sidebar-dark-primary elevation-4">
      <!-- Brand Logo -->
@@ -12,12 +10,11 @@
      <!-- Sidebar -->
      <div class="sidebar">
          <!-- Sidebar user panel (optional) -->
-         <div class=" mt-3 pb-3 mb-3 d-flex">
-             <div >
-                 <img class="brand-image img-circle elevation-3" style="background-size:cover; background-position:center; opacity: .8" width="40px" height="40px" src="{{ asset('storage/images/users/'. Auth::user()->avatar) }}" 
-                     alt="User Image">
+         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+             <div class="image">
+                 <img src="{{ asset('storage/images/users/' . Auth::user()->avatar) }}" class="img-circle elevation-2" alt="User Image">
              </div>
-             <div class="info ml-2 mt-1">
+             <div class="info">
                  <a href="#" class="d-block">{{ Auth::user()->fname }} {{ Auth::user()->lname }}</a>
              </div>
          </div>
@@ -39,7 +36,7 @@
          <nav class="mt-2">
              <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                  data-accordion="false">
-                
+
                  <li class="nav-header">Management</li>
                  <li class="nav-item">
                      <a href="{{ route('users') }}" class="nav-link">
@@ -55,7 +52,7 @@
                          <p>Announce</p>
                      </a>
                  </li>
-                 
+
              </ul>
          </nav>
          <!-- /.sidebar-menu -->

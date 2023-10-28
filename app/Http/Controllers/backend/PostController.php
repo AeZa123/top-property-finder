@@ -181,10 +181,12 @@ class PostController extends Controller
 
 
 
+
+    
     // ยังไม่เสร็จ 
     public function update(Request $request, $id)
     {
-        // dd($request->all(), $id);
+        dd($request->all(), $id);
 
         $validator = \Validator::make(
             $request->all(),
@@ -229,39 +231,54 @@ class PostController extends Controller
             'user_id' => Auth::user()->id,
         );
 
+
+
+        // dd($data);
         // create post
         // $createPost = Post::updated($data);
-        $createPost = Post::where('id',$id)->update($data);
-        $post_id = $createPost->id;
-
+        $post_id = Post::where('id',$id)->update($data);
 
         $file = $request->file('images');
 
-        if (!empty($file)) {
 
-            $count = count($file);
+        if ($request->hasFile('avatar')) {
+            if (!empty($file)) {
 
-            for ($i = 0; $i < $count; $i++) {
+                $count = count($file);
+                for ($i = 0; $i < $count; $i++) {
+                    $photo = $request->file('images')[$i]; // img = ชื่อ name ใน input
+                    $photoname = $post_id.uniqid().'-'. date('Y-m-d') . time() . '.' . $photo->getClientOriginalExtension();
+                    $request->images[$i]->move('storage/images/property_image', $photoname); // img = 'img' ตัวนี้
 
-                $photo = $request->file('images')[$i]; // img = ชื่อ name ใน input
-                $photoname = $post_id . $i . date('Y-m-d') . time() . '.' . $photo->getClientOriginalExtension();
-                $request->images[$i]->move('storage/images/property_image', $photoname); // img = 'img' ตัวนี้
-
-                $image['image_name'] = $photoname;
-
-                $createdImage = Image::create($image); // create image
-
-                $imagePost['post_id'] = $post_id;
-                $imagePost['image_id'] = $createdImage->id;
-
-                ImagePost::create($imagePost); //create image post
-
+                    $image['image_name'] = $photoname;
+                    $createdImage = Image::create($image); // create image
+                    $imagePost['post_id'] = $post_id;
+                    $imagePost['image_id'] = $createdImage->id;
+    
+                    ImagePost::create($imagePost); //create image post
+    
+                }
             }
         }
 
 
+
         // return redirect('table/laravel');
         return response()->json(['code' => 1, 'msg' => 'ได้ทำการเพิ่มข้อมูลเรียบร้อยแล้ว']);
+    }
+
+
+
+    public function destroy(Request $request)
+    {
+
+        dd($request->all());
+
+        // unlink('storage/images/property_image/' . $nameImage);
+        // $req1 = ImagePost::where('id', $idPostImage)->delete();
+        // $req2 = Image::where('id', $imageId)->delete();
+
+
     }
 
 
