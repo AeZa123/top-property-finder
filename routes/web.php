@@ -65,6 +65,7 @@ Route::post('/post/storage', [PostController::class, 'storage'])->name('post.sto
 Route::post('/post/update/{id}', [PostController::class, 'update']);
 Route::get('/post/edit/{id}', [PostController::class, 'edit']);
 Route::post('/post/delete/image/{idImagePost}/{imageId}/{nameImage}', [PostController::class, 'delete_image']);
+Route::post('/post/destroy', [PostController::class, 'destroy'])->name('user.destroy');
 
 
 
