@@ -113,9 +113,7 @@ class UserController extends Controller
             return response()->json(['code'=>0,'error'=>$validator->errors()->toArray()]);
 
         }
-
-
-
+        
         $data = array(
             'fname' => $request->fname,
             'lname' => $request->lname,
@@ -131,38 +129,40 @@ class UserController extends Controller
 
         if(!empty($file)){
 
-
-            $photo = $request->file('avatar'); // img = ชื่อ name ใน input
-            $photoname = time() . '.' . $photo->getClientOriginalExtension();
-            $request->avatar->move('storage/images/users', $photoname); // img = 'img' ตัวนี้
-
-            // resize_image
-
-            // $this->resize_image($photo, 200, 200);
-
-            // $img->move('storage/images/users', $photoname); // img = 'img' ตัวนี้
-            $data['avatar'] = $photoname;
+            $name_image = $this->uploadImage($request->data_base64);
+            $data['avatar'] = $name_image;
+            $request->avatar->move('storage/images/users/original', $name_image); // img = 'img' ตัวนี้
         }
 
-        // dd($file_name);
-
-
-        // if($upload){
-        //     Product::insert([
-        //         'product_name'=>$request->product_name,
-        //         'product_image'=>$file_name,
-        //     ]);
-        //     return response()->json(['code'=>1,'msg'=>'New product has been saved successfully']);
-        // }
-
-
-
-        // DB::table('blogs')->insert($data);
         User::create($data);
-        // return redirect('table/laravel');
         return response()->json(['code'=>1,'msg'=>'ได้ทำการเพิ่มข้อมูลเรียบร้อยแล้ว']);
 
 
+    }
+
+
+    //
+    public function uploadImage($data_base64)
+    {
+        $folderPath = public_path('storage/images/users/');
+        $image_parts = explode(";base64,", $data_base64);
+        // $image_parts = explode(";base64,", $request->image);
+        $image_type_aux = explode("image/", $image_parts[0]);
+        $image_type = $image_type_aux[1];
+        $image_base64 = base64_decode($image_parts[1]);
+ 
+        $imageName = uniqid() . '.png';
+ 
+        $imageFullPath = $folderPath.$imageName;
+ 
+        file_put_contents($imageFullPath, $image_base64);
+ 
+        //  $saveFile = new Image;
+        //  $saveFile->title = $imageName;
+        //  $saveFile->save();
+    
+        return $imageName;
+        // return response()->json(['success'=>'Crop Image Saved/Uploaded Successfully using jQuery and Ajax In Laravel']);
     }
 
 
