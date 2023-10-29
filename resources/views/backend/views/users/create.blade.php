@@ -102,9 +102,7 @@
                                                 accept="image/*" class="file-input" />
                                         </div>
 
-                                        
-
-
+                                    
                                     </div>
 
 
@@ -229,7 +227,7 @@
 
                             </div>
                             <div class="text-center mb-3">
-                                <button type="submit" class="btn btn-success">Create</button>
+                                <button type="submit" id="create" class="btn btn-success">Create</button>
                             </div>
                     </div>
 
@@ -297,6 +295,7 @@
                     dataType: 'json',
                     contentType: false,
                     beforeSend: function() {
+                        $('#create').prop('disabled', true);
                         $(form).find('span.error-text').text('');
                         // console.log('test');
                     },
@@ -323,22 +322,8 @@
                             });
 
 
-                            // Swal.fire({
-                            //     title: data.msg,
-                            //     icon: 'success',
-                            //     confirmButtonText: 'OK'
-
-                            // }).then((result) => {
-
-                            //     document.location.href="{!! route('users') !!}"
-
-                            // })
-
-
-                            //alert success
-                            // swal.fire("สำเร็จ", data.msg, "success");
-
                         }
+                        $('#create').prop('disabled', false);
 
                     }
                 });

@@ -20,7 +20,8 @@ use App\Http\Controllers\backend\PostController;
 */
 
 // Route::get('/', function () {
-//     return view('welcome');
+//         dd('hello');
+// //     return view('welcome');
 // });
 
 Auth::routes();
@@ -66,6 +67,7 @@ Route::post('/post/update/{id}', [PostController::class, 'update']);
 Route::get('/post/edit/{id}', [PostController::class, 'edit']);
 Route::post('/post/delete/image/{idImagePost}/{imageId}/{nameImage}', [PostController::class, 'delete_image']);
 Route::post('/post/destroy', [PostController::class, 'destroy'])->name('user.destroy');
+Route::get('/posts/search',[PostController::class, 'search']);
 
 
 

@@ -25,7 +25,13 @@ class PostController extends Controller
     public function index()
     {
 
-        $datas = DB::table('posts')->select('*')->paginate(10);
+        // $datas = DB::table('posts')->where('delete_post', '=', null)->paginate(10);
+        $datas = DB::table('posts')
+            ->join('users', 'posts.user_id', '=', 'users.id', 'left')
+            ->where('delete_post', '=', null)
+            ->orWhere('delete_post', '=', '')
+            ->select('posts.*', 'users.fname', 'users.lname')
+            ->paginate(10);
         return view('backend.views.posts.list', compact('datas'));
     }
 
@@ -52,6 +58,7 @@ class PostController extends Controller
                 'body' => 'required|string',
                 'price' => 'required|string|numeric',
                 'amount' => 'required|string|numeric',
+                'image_cover' => 'required|image|mimes:jpeg,png,jpg|max:2048',
                 'property_name' => 'required|string',
                 'sale_type_id' => 'required|string',
                 'property_type_id' => 'required|string',
@@ -66,6 +73,10 @@ class PostController extends Controller
                 'sale_type_id.required' => 'กรุณาระบุประเภทการขาย',
                 'property_type_id.required' => 'กรุณาระบุประเภทอสังหา',
                 'property_name.required' => 'กรุณาระบุชื่ออสังหา',
+                'image_cover.required' => 'กรุณาเพิ่มปกประกาศ',
+                'image_cover.image' => 'กรุณาเพิ่มปกประกาศเป็นรูปภาพ',
+                'image_cover.mimes' => 'รับประเภทไฟล์เป็น jpeg, png, jpg',
+                'image_cover.max' => 'รับขนาดไฟล์ไม่เกิน 2MB',
             ]
         );
 
@@ -87,6 +98,14 @@ class PostController extends Controller
             'property_name' => $request->property_name,
             'user_id' => Auth::user()->id,
         );
+
+
+        $file_image_cover = $request->file('image_cover');
+        if (!empty($file_image_cover)) {
+            $name_image = $this->uploadImage($request->data_base64);
+            $data['image_cover'] = $name_image;
+            // $request->image_cover->move('storage/images/users/original', $name_image); // img = 'img' ตัวนี้
+        }
 
         // create post
         $createPost = Post::create($data);
@@ -118,8 +137,33 @@ class PostController extends Controller
         }
 
 
+
+
+        
+       
+
         // return redirect('table/laravel');
         return response()->json(['code' => 1, 'msg' => 'ได้ทำการเพิ่มข้อมูลเรียบร้อยแล้ว']);
+    }
+
+
+    public function uploadImage($data_base64)
+    {
+        $folderPath = public_path('storage/images/property_image/image_cover/');
+        if (!file_exists($folderPath)) {
+            // ถ้าโฟลเดอร์ไม่มีอยู่ ให้สร้างขึ้นมา
+            mkdir($folderPath, 0777, true);
+        }
+        $image_parts = explode(";base64,", $data_base64);
+        // $image_parts = explode(";base64,", $request->image);
+        // $image_type_aux = explode("image/", $image_parts[0]);
+        // $image_type = $image_type_aux[1];
+        $image_base64 = base64_decode($image_parts[1]);
+        $imageName = uniqid() . '.png';
+        $imageFullPath = $folderPath . $imageName;
+        file_put_contents($imageFullPath, $image_base64);
+
+        return $imageName;
     }
 
 
@@ -162,31 +206,28 @@ class PostController extends Controller
     }
 
 
-    
+
     public function delete_image($idPostImage, $imageId, $nameImage)
     {
-        if(!empty($idPostImage) AND !empty($imageId) AND !empty($nameImage)){
+        if (!empty($idPostImage) and !empty($imageId) and !empty($nameImage)) {
             // ImagePost::
             unlink('storage/images/property_image/' . $nameImage);
             $req1 = ImagePost::where('id', $idPostImage)->delete();
             $req2 = Image::where('id', $imageId)->delete();
 
             return response()->json(['code' => 1, 'msg' => 'ได้ทำการลบข้อมูลเรียบร้อยแล้ว']);
-        }else{
+        } else {
 
             return response()->json(['code' => 0, 'msg' => 'ไม่สามารถลบข้อมูลได้']);
         }
-
     }
 
 
 
 
-    
-    // ยังไม่เสร็จ 
+
     public function update(Request $request, $id)
     {
-        dd($request->all(), $id);
 
         $validator = \Validator::make(
             $request->all(),
@@ -195,6 +236,7 @@ class PostController extends Controller
                 'body' => 'required|string',
                 'price' => 'required|string|numeric',
                 'amount' => 'required|string|numeric',
+                'image_cover' => 'image|mimes:jpeg,png,jpg|max:2048',
                 'property_name' => 'required|string',
                 'sale_type_id' => 'required|string',
                 'property_type_id' => 'required|string',
@@ -209,6 +251,10 @@ class PostController extends Controller
                 'sale_type_id.required' => 'กรุณาระบุประเภทการขาย',
                 'property_type_id.required' => 'กรุณาระบุประเภทอสังหา',
                 'property_name.required' => 'กรุณาระบุชื่ออสังหา',
+                'image_cover.image' => 'ไฟล์ที่อัปโหลดต้องเป็นรูปภาพ',
+                'image_cover.mimes' => 'ไฟล์ที่อัปโหลดต้องเป็นรูปภาพ jpg, jpeg, png',
+                'image_cover.max' => 'รูปภาพต้องมีขนาดไม่เกิน 2MB',
+
             ]
         );
 
@@ -233,35 +279,62 @@ class PostController extends Controller
 
 
 
-        // dd($data);
-        // create post
-        // $createPost = Post::updated($data);
-        $post_id = Post::where('id',$id)->update($data);
-
-        $file = $request->file('images');
 
 
-        if ($request->hasFile('avatar')) {
+          // เช็คว่ามีการเปลี่ยนไฟล์หรือไม่
+          if ($request->hasFile('image_cover')) {
+
+            $file = $request->file('image_cover');
             if (!empty($file)) {
 
-                $count = count($file);
-                for ($i = 0; $i < $count; $i++) {
-                    $photo = $request->file('images')[$i]; // img = ชื่อ name ใน input
-                    $photoname = $post_id.uniqid().'-'. date('Y-m-d') . time() . '.' . $photo->getClientOriginalExtension();
-                    $request->images[$i]->move('storage/images/property_image', $photoname); // img = 'img' ตัวนี้
+                $image_old = Post::where('id', $id)->first();
+                // ลบไฟล์รูปเก่า
+                $name_image_old = $image_old->image_cover;
+                $oldImagePath = 'storage/images/property_image/image_cover/' . $name_image_old;
+                // $oldOriginalImagePath = 'storage/images/users/original/' . $name_image_old;
 
-                    $image['image_name'] = $photoname;
-                    $createdImage = Image::create($image); // create image
-                    $imagePost['post_id'] = $post_id;
-                    $imagePost['image_id'] = $createdImage->id;
-    
-                    ImagePost::create($imagePost); //create image post
-    
+                if (file_exists($oldImagePath)) {
+                    @unlink($oldImagePath);
                 }
+                // if (file_exists($oldOriginalImagePath)) {
+                //     @unlink($oldOriginalImagePath);
+                // }
+
+                $name_image = $this->uploadImage($request->data_base64);
+                // กำหนดชื่อเอาไว้บันทึกใน db
+                $data['image_cover'] = $name_image;
+                // เก็บไฟล์ใหม่
+                // $request->avatar->move('storage/images/property_image/image_cover', $name_image); // img = 'img' ตัวนี้
             }
         }
 
 
+
+        if ($request->hasFile('images')) {
+
+            $file = $request->file('images');
+            if (!empty($file)) {
+
+                // dd($request->all());
+
+                $count = count($file);
+                for ($i = 0; $i < $count; $i++) {
+                    $photo = $request->file('images')[$i]; // img = ชื่อ name ใน input
+                    $photoname = uniqid() . '-' . date('Y-m-d') . time() . '.' . $photo->getClientOriginalExtension();
+                    $request->images[$i]->move('storage/images/property_image', $photoname); // img = 'img' ตัวนี้
+
+                    $image['image_name'] = $photoname;
+                    $createdImage = Image::create($image); // create image
+                    $imagePost['post_id'] = $id;
+                    $imagePost['image_id'] = $createdImage->id;
+
+                    ImagePost::create($imagePost); //create image post
+
+                }
+            }
+        }
+
+        Post::where('id', $id)->update($data);
 
         // return redirect('table/laravel');
         return response()->json(['code' => 1, 'msg' => 'ได้ทำการเพิ่มข้อมูลเรียบร้อยแล้ว']);
@@ -272,7 +345,14 @@ class PostController extends Controller
     public function destroy(Request $request)
     {
 
-        dd($request->all());
+        // dd($request->id);
+        $id = $request->id;
+        $data = array(
+            'delete_post' => 'del',
+        );
+        Post::where('id', $id)->update($data);
+
+        return response()->json(['code' => 1, 'msg' => 'ได้ทำการเพิ่มข้อมูลเรียบร้อยแล้ว']);
 
         // unlink('storage/images/property_image/' . $nameImage);
         // $req1 = ImagePost::where('id', $idPostImage)->delete();
@@ -280,6 +360,86 @@ class PostController extends Controller
 
 
     }
+
+
+
+
+
+
+    public function search(Request $request)
+    {
+
+
+        // dd($request->all());
+
+        $datas = DB::table('posts')
+            ->join('users', 'posts.user_id', '=', 'users.id', 'left')
+            ->where('title', 'LIKE', '%' . $request->search . "%")
+            ->orWhere('price', 'LIKE', '%' . $request->search . "%")
+            ->orWhere('property_name', 'LIKE', '%' . $request->search . "%")
+            ->orWhere('fname', 'LIKE', '%' . $request->search . "%")
+            ->orWhere('lname', 'LIKE', '%' . $request->search . "%")
+            // ->orWhere('sale_type_id', 'LIKE', '%' . $request->search . "%")
+            // ->orWhere('property_type_id', 'LIKE', '%' . $request->search . "%")
+
+            ->where('delete_post', '=', null)
+            ->orWhere('delete_post', '=', '')
+            ->select('posts.*', 'users.fname', 'users.lname')
+            ->paginate(15);
+     
+
+        $output = "";
+   
+
+        if ($datas) {
+            foreach ($datas as $key => $data) {
+
+
+                if($data->delete_post != 'del'){
+                    $output .= '<tr>' .
+                        '<td>' . $data->id . '</td>' .
+                       
+                        '<td>' . $data->property_name . '</td>' .
+                        '<td>' . $data->title . '</td>' .
+                        '<td>' . $data->price . '</td>' .
+                        '<td>' . $data->amount . '</td>' .
+                        '<td>' . $data->fname .' '. $data->lname. '</td>' .
+                       
+    
+                        '<td>' . \Carbon\Carbon::parse($data->created_at)->format('d/m/Y') . '</td>' .
+                        '<td>' . \Carbon\Carbon::parse($data->updated_at)->format('d/m/Y') . '</td>' .
+    
+                        '<td>' .
+                        '<a class="mr-1" href="' . url('post/edit/' . $data->id) . '" title="Edit">' .
+                        '<i class="fas fa-edit btn btn-warning"></i>' .
+                        '</a>' .
+    
+                        '<a href="#" data-id="' . $data->id . '" id="deleteBtn" title="Delete">' .
+                        '<i class="fas fa-trash-alt btn btn-danger text-white"></i>' .
+                        '</a>' .
+                        '</td>' .
+                        '</tr>';
+
+                }
+             
+
+            }
+            return $output;
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 }

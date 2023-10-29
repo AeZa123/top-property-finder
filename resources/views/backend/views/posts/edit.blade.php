@@ -103,7 +103,64 @@
             border-radius: 0 10px 0 0;
             cursor: pointer;
         }
+
+
+
+
+
+
+
+         /* ซ่อน input file ด้วย opacity 0 และ position absolute */
+         .file-input {
+            opacity: 0;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+        }
+
+        /* สร้างสไตล์สำหรับปุ่มที่ใช้เปิดหน้าต่างการเลือกไฟล์ */
+        .file-upload-button {
+            background-color: #007bff;
+            /* สีพื้นหลังของปุ่ม */
+            color: #fff;
+            /* สีข้อความ */
+            padding: 10px 15px;
+            /* ขนาดของปุ่ม */
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        /* สไตล์ปุ่มเมื่อนำเมาส์ hover หรือกดค้าง */
+        .file-upload-button:hover,
+        .file-upload-button:active {
+            background-color: #0056b3;
+        }
+
+
+
+
+
+
+
+
+
+
+
+
     </style>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.css" />
+    
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.min.js"></script>
+
+
     <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
@@ -118,11 +175,36 @@
                         </div>
 
 
-                        <form id="form" method="POST" action="{{ url('post/update/' . $data->id) }}" enctype="multipart/form-data">
+                        <form id="form" method="POST" action="{{ url('post/update/' . $data->id) }}"
+                            enctype="multipart/form-data">
                             {{-- <form id="form" method="POST" action="" enctype="multipart/form-data"> --}}
                             <div class="card-body">
                                 @csrf
                                 <div class="row justify-content-center">
+
+
+
+                                    <div class="col-md-12 mt-3 mb-3">
+
+                                        <div class="col-md-12 text-center mb-3">
+                                            
+                                            <img class=" rounded" id="data_base64" src="{{ asset('storage/images/property_image/image_cover/' . $data->image_cover) }}" alt="รูปภาพ">
+                                            <input type="hidden" name="data_base64" id="data_base64_input">
+                                        </div>
+                                        <div class="text-center mb-2">
+                                            <span class="text-danger text font-danger error-text image_cover_error"></span>
+                                        </div>
+
+                                        <div class="col-md-12 text-center">
+                                            <label for="image_cover" class="file-upload-button">
+                                                เลือกรูปปกประกาศ
+                                            </label>
+                                            <input type="file" name="image_cover" id="image_cover"
+                                                accept="image/*" class="file-input" />
+                                        </div>
+                                    </div>
+
+
                                     <div class="col-md-8">
                                         <div class="row">
                                             <div class="col-md-6">
@@ -274,7 +356,7 @@
                             </div>
 
                             <div class="text-center mb-3">
-                                <button type="submit" class="btn btn-primary">สร้างประกาศ</button>
+                                <button type="submit" id="update" class="btn btn-primary">แก้ไขประกาศ</button>
                             </div>
                         </form>
 
@@ -288,6 +370,44 @@
                 </div>
             </div>
         </div>
+
+
+         {{-- modal --}}
+         <div id="imageModel" class="modal fade bd-example-modal-lg" role="dialog">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title text-left">จัดรูปปกประกาศ</h4>
+                        <button type="button" class="close" data-dismiss="modal">×</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row justify-content-center">
+                            <div class="col-md-6 text-center">
+                                {{-- <div id="image_demo" style="width:350px; margin-top:30px"></div> --}}
+                                <div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="mb-3 img-fluid" id="image_demo"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            {{-- <div class="col-md-4" style="padding-top:30px;">
+                                <br />
+                                <br />
+                                <br />
+                            </div> --}}
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-success crop_image">Save</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 
 
     </section>
@@ -310,6 +430,7 @@
                         dataType: 'json',
                         contentType: false,
                         beforeSend: function() {
+                            $('#update').prop('disabled', true);
                             $(form).find('span.error-text').text('');
                             // console.log('test');
                         },
@@ -330,11 +451,12 @@
                                 }).then((result) => {
                                     if (result.isConfirmed) {
                                         document.location.href =
-                                            "{!! route('users') !!}"
+                                            "{!! route('posts') !!}"
                                     }
                                 });
 
                             }
+                            $('#update').prop('disabled', false);
 
                         }
                     });
@@ -353,7 +475,7 @@
                 // var id_delete_html = '#'+idImagePost+''+imageId;
 
                 var id_delete_html = '' + idImagePost + imageId;
-               
+
 
 
 
@@ -496,12 +618,100 @@
             }
 
 
-
-
-
-
-
-
         });
+
+
+
+        $image_crop = $('#image_demo').croppie({
+            enableExif: true,
+            viewport: {
+                width: 370,
+                height: 400,
+                type: 'square' //circle
+            },
+            // boundary: {
+            //     width: 300,
+            //     height: 300
+            // }
+        });
+
+        // เรียกฟังก์ชัน resizeCroppie เมื่อหน้าจอโหลดหรือเปลี่ยนขนาด
+        $(document).ready(function() {
+            resizeCroppie();
+            $(window).resize(function() {
+                resizeCroppie();
+            });
+        });
+
+        // ฟังก์ชันสําหรับปรับขนาด Croppie container
+        function resizeCroppie() {
+            var screenWidth = $(window).width();
+            var screenHeight = $(window).height();
+
+            var newCroppieWidth = screenWidth < 700 ? screenWidth : 600;
+            var newCroppieHeight = screenHeight < 700 ? screenHeight : 600;
+            // var newCroppieHeight = screenHeight ;
+
+            // ปรับขนาดของ Croppie container
+            $('#image_demo').css({
+                'width': newCroppieWidth + 'px',
+                'height': newCroppieHeight + 'px'
+            });
+        }
+
+        $('#image_cover').on('change', function() {
+            var reader = new FileReader();
+            reader.onload = function(event) {
+                $image_crop.croppie('bind', {
+                    url: event.target.result
+                }).then(function() {
+                    console.log('jQuery bind complete');
+                });
+            }
+            reader.readAsDataURL(this.files[0]);
+
+            $('#imageModel').modal('show');
+        });
+
+        $('.crop_image').click(function(event) {
+            $image_crop.croppie('result', {
+                type: 'canvas',
+                size: 'viewport'
+            }).then(function(response) {
+
+                console.log(response);
+
+                $("#data_base64").attr("src", response);
+                $("#data_base64_input").val(response);
+                $('#imageModel').modal('hide');
+
+                // $.ajax({
+                //     url: "{{ url('user/testimage') }}",
+                //     type: 'POST',
+                //     data: {
+                //         '_token': $('meta[name="csrf-token"]').attr('content'),
+                //         'image': response
+                //     },
+                //     success: function(data) {
+                //         $('#imageModel').modal('hide');
+                //         alert('Crop image has been uploaded');
+                //     }
+                // })
+            });
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     </script>
 @endsection
