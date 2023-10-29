@@ -58,6 +58,7 @@ class PostController extends Controller
                 'body' => 'required|string',
                 'price' => 'required|string|numeric',
                 'amount' => 'required|string|numeric',
+                'image_cover' => 'required|image|mimes:jpeg,png,jpg|max:2048',
                 'property_name' => 'required|string',
                 'sale_type_id' => 'required|string',
                 'property_type_id' => 'required|string',
@@ -72,6 +73,10 @@ class PostController extends Controller
                 'sale_type_id.required' => 'กรุณาระบุประเภทการขาย',
                 'property_type_id.required' => 'กรุณาระบุประเภทอสังหา',
                 'property_name.required' => 'กรุณาระบุชื่ออสังหา',
+                'image_cover.required' => 'กรุณาเพิ่มปกประกาศ',
+                'image_cover.image' => 'กรุณาเพิ่มปกประกาศเป็นรูปภาพ',
+                'image_cover.mimes' => 'รับประเภทไฟล์เป็น jpeg, png, jpg',
+                'image_cover.max' => 'รับขนาดไฟล์ไม่เกิน 2MB',
             ]
         );
 
@@ -93,6 +98,14 @@ class PostController extends Controller
             'property_name' => $request->property_name,
             'user_id' => Auth::user()->id,
         );
+
+
+        $file_image_cover = $request->file('image_cover');
+        if (!empty($file_image_cover)) {
+            $name_image = $this->uploadImage($request->data_base64);
+            $data['image_cover'] = $name_image;
+            // $request->image_cover->move('storage/images/users/original', $name_image); // img = 'img' ตัวนี้
+        }
 
         // create post
         $createPost = Post::create($data);
@@ -124,8 +137,33 @@ class PostController extends Controller
         }
 
 
+
+
+        
+       
+
         // return redirect('table/laravel');
         return response()->json(['code' => 1, 'msg' => 'ได้ทำการเพิ่มข้อมูลเรียบร้อยแล้ว']);
+    }
+
+
+    public function uploadImage($data_base64)
+    {
+        $folderPath = public_path('storage/images/property_image/image_cover/');
+        if (!file_exists($folderPath)) {
+            // ถ้าโฟลเดอร์ไม่มีอยู่ ให้สร้างขึ้นมา
+            mkdir($folderPath, 0777, true);
+        }
+        $image_parts = explode(";base64,", $data_base64);
+        // $image_parts = explode(";base64,", $request->image);
+        // $image_type_aux = explode("image/", $image_parts[0]);
+        // $image_type = $image_type_aux[1];
+        $image_base64 = base64_decode($image_parts[1]);
+        $imageName = uniqid() . '.png';
+        $imageFullPath = $folderPath . $imageName;
+        file_put_contents($imageFullPath, $image_base64);
+
+        return $imageName;
     }
 
 
@@ -198,6 +236,7 @@ class PostController extends Controller
                 'body' => 'required|string',
                 'price' => 'required|string|numeric',
                 'amount' => 'required|string|numeric',
+                'image_cover' => 'image|mimes:jpeg,png,jpg|max:2048',
                 'property_name' => 'required|string',
                 'sale_type_id' => 'required|string',
                 'property_type_id' => 'required|string',
@@ -212,6 +251,10 @@ class PostController extends Controller
                 'sale_type_id.required' => 'กรุณาระบุประเภทการขาย',
                 'property_type_id.required' => 'กรุณาระบุประเภทอสังหา',
                 'property_name.required' => 'กรุณาระบุชื่ออสังหา',
+                'image_cover.image' => 'ไฟล์ที่อัปโหลดต้องเป็นรูปภาพ',
+                'image_cover.mimes' => 'ไฟล์ที่อัปโหลดต้องเป็นรูปภาพ jpg, jpeg, png',
+                'image_cover.max' => 'รูปภาพต้องมีขนาดไม่เกิน 2MB',
+
             ]
         );
 
@@ -233,6 +276,37 @@ class PostController extends Controller
             'property_name' => $request->property_name,
             'user_id' => Auth::user()->id,
         );
+
+
+
+
+
+          // เช็คว่ามีการเปลี่ยนไฟล์หรือไม่
+          if ($request->hasFile('image_cover')) {
+
+            $file = $request->file('image_cover');
+            if (!empty($file)) {
+
+                $image_old = Post::where('id', $id)->first();
+                // ลบไฟล์รูปเก่า
+                $name_image_old = $image_old->image_cover;
+                $oldImagePath = 'storage/images/property_image/image_cover/' . $name_image_old;
+                // $oldOriginalImagePath = 'storage/images/users/original/' . $name_image_old;
+
+                if (file_exists($oldImagePath)) {
+                    @unlink($oldImagePath);
+                }
+                // if (file_exists($oldOriginalImagePath)) {
+                //     @unlink($oldOriginalImagePath);
+                // }
+
+                $name_image = $this->uploadImage($request->data_base64);
+                // กำหนดชื่อเอาไว้บันทึกใน db
+                $data['image_cover'] = $name_image;
+                // เก็บไฟล์ใหม่
+                // $request->avatar->move('storage/images/property_image/image_cover', $name_image); // img = 'img' ตัวนี้
+            }
+        }
 
 
 
@@ -286,4 +360,86 @@ class PostController extends Controller
 
 
     }
+
+
+
+
+
+
+    public function search(Request $request)
+    {
+
+
+        // dd($request->all());
+
+        $datas = DB::table('posts')
+            ->join('users', 'posts.user_id', '=', 'users.id', 'left')
+            ->where('title', 'LIKE', '%' . $request->search . "%")
+            ->orWhere('price', 'LIKE', '%' . $request->search . "%")
+            ->orWhere('property_name', 'LIKE', '%' . $request->search . "%")
+            ->orWhere('fname', 'LIKE', '%' . $request->search . "%")
+            ->orWhere('lname', 'LIKE', '%' . $request->search . "%")
+            // ->orWhere('sale_type_id', 'LIKE', '%' . $request->search . "%")
+            // ->orWhere('property_type_id', 'LIKE', '%' . $request->search . "%")
+
+            ->where('delete_post', '=', null)
+            ->orWhere('delete_post', '=', '')
+            ->select('posts.*', 'users.fname', 'users.lname')
+            ->paginate(15);
+     
+
+        $output = "";
+   
+
+        if ($datas) {
+            foreach ($datas as $key => $data) {
+
+
+                if($data->delete_post != 'del'){
+                    $output .= '<tr>' .
+                        '<td>' . $data->id . '</td>' .
+                       
+                        '<td>' . $data->property_name . '</td>' .
+                        '<td>' . $data->title . '</td>' .
+                        '<td>' . $data->price . '</td>' .
+                        '<td>' . $data->amount . '</td>' .
+                        '<td>' . $data->fname .' '. $data->lname. '</td>' .
+                       
+    
+                        '<td>' . \Carbon\Carbon::parse($data->created_at)->format('d/m/Y') . '</td>' .
+                        '<td>' . \Carbon\Carbon::parse($data->updated_at)->format('d/m/Y') . '</td>' .
+    
+                        '<td>' .
+                        '<a class="mr-1" href="' . url('post/edit/' . $data->id) . '" title="Edit">' .
+                        '<i class="fas fa-edit btn btn-warning"></i>' .
+                        '</a>' .
+    
+                        '<a href="#" data-id="' . $data->id . '" id="deleteBtn" title="Delete">' .
+                        '<i class="fas fa-trash-alt btn btn-danger text-white"></i>' .
+                        '</a>' .
+                        '</td>' .
+                        '</tr>';
+
+                }
+             
+
+            }
+            return $output;
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

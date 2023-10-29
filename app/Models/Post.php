@@ -16,6 +16,7 @@ class Post extends Model
         'amount',
         'property_name',
         'category_id',
+        'image_cover',
         'image_id',
         'sale_type_id',
         'property_type_id',

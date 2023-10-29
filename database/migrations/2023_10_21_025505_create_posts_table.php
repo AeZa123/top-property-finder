@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('amount')->comment('จํานวน');
             $table->string('property_name')->comment('ชื่ออสังหา');
             $table->integer('category_id')->comment('หมวดหมู่โพส')->nullable();
+            $table->string('image_cover')->comment('รูปปกโพส');
             $table->integer('image_id')->comment('ไอดีรูปโพส')->nullable();
             $table->integer('sale_type_id')->comment('ไอดีประเภทการขาย');
             $table->integer('property_type_id')->comment('ไอดีประเภทอสังหา');

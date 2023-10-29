@@ -37,6 +37,8 @@
                                                 <th scope="col">ราคา</th>
                                                 <th scope="col">จำนวน</th>
                                                 <th scope="col">เจ้าของประกาศ</th>
+                                                <th scope="col">วันที่ประกาศ</th>
+                                                <th scope="col">วันที่แก้ไขล่าสุด</th>
                                                 <th scope="col">action</th>
                                             </tr>
                                         </thead>
@@ -50,7 +52,9 @@
                                                     <td>{{ $data->price }}</td>
                                                     <td>{{ $data->amount }}</td>
                                                     <td>{{ $data->fname }} {{ $data->lname }}</td>
-                                                   
+                                                    <td>{{ \Carbon\Carbon::parse($data->created_at)->format('d/m/Y') }}</td>
+                                                    <td>{{ \Carbon\Carbon::parse($data->updated_at)->format('d/m/Y') }}</td>
+
                                                     <td>
                                                         {{-- <a href="{{url('blog/laravel/edit/'.$blog->id)}}">
                                                             <i class="ti-pencil-alt pr-3 text-warning" title="Edit"></i>
@@ -90,19 +94,43 @@
     <!-- /.content -->
 
     <script type="text/javascript">
+        var delayTimer;
         $('#search').on('keyup', function() {
             $value = $(this).val();
-            $.ajax({
-                type: 'get',
-                url: '{{ URL::to('users/search') }}',
-                data: {
-                    'search': $value
-                },
-                success: function(data) {
-                    $('tbody').html(data);
-                    // console.log(data);
-                }
-            });
+
+            // กำหนดเวลาหน่วง (เช่น 1000 มิลลิวินาทีหรือ 1 วินาที)
+            var delay = 1000;
+
+            // ถ้ามีการกระทำก่อนหน้านี้ (การพิมพ์เพื่อค้นหา) ยกเลิกการหน่วงเวลาเดิม
+            clearTimeout(delayTimer);
+
+            delayTimer = setTimeout(function() {
+                $.ajax({
+                    type: 'get',
+                    url: '{{ URL::to('posts/search') }}',
+                    data: {
+                        'search': $value
+                    },
+                    success: function(data) {
+                        $('tbody').html(data);
+                        // console.log(data);
+                    }
+                });
+            }, delay);
+
+
+
+            // $.ajax({
+            //     type: 'get',
+            //     url: '{{ URL::to('posts/search') }}',
+            //     data: {
+            //         'search': $value
+            //     },
+            //     success: function(data) {
+            //         $('tbody').html(data);
+            //         // console.log(data);
+            //     }
+            // });
         })
 
 

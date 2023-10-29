@@ -216,7 +216,7 @@
                             </div>
 
                             <div class="text-center mb-3">
-                                <button type="submit" class="btn btn-primary">Update</button>
+                                <button type="submit" id="update" class="btn btn-primary">Update</button>
                             </div>
                         </form>
                     </div>
@@ -284,6 +284,7 @@
                     dataType: 'json',
                     contentType: false,
                     beforeSend: function() {
+                        $('#update').prop('disabled', true);
                         $(form).find('span.error-text').text('');
                         // console.log('test');
                     },
@@ -307,6 +308,8 @@
                             });
 
                         }
+
+                        $('#update').prop('disabled', false);
 
                     }
                 });

@@ -270,90 +270,77 @@ class UserController extends Controller
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     public function search(Request $request)
     {
+        $folderPath = url('storage/images/users/');
 
-        // dd($request->show);
-        // return $request->show;
-        if ($request->ajax()) {
-            $output = "";
-            $users = DB::table('users')->where('fname', 'LIKE', '%' . $request->search . "%")->select('*')->paginate(15);
+        $output = "";
+        $users = DB::table('users')
+            ->join('roles', 'users.role', '=', 'roles.id', 'left')
+            ->where('fname', 'LIKE', '%' . $request->search . "%")
+            ->orWhere('lname', 'LIKE', '%' . $request->search . "%")
+            ->orWhere('email', 'LIKE', '%' . $request->search . "%")
+            ->orWhere('tel', 'LIKE', '%' . $request->search . "%")
+            ->orWhere('role_name', 'LIKE', '%' . $request->search . "%")
+            ->select('users.*', 'roles.role_name')
+            ->paginate(15);
 
-            // return $blogs;
-            if ($users) {
-                foreach ($users as $key => $user) {
-                    $output .= '<tr>' .
-                        '<td>' . $user->id . '</td>' .
-                        // '<td>'.$blog->title.'</td>'.
-                        // '<td>'.'<a'.' '.'href="'.url('showBlog/'.$user->id).'"target="_bank">'.$user->title. '</a>'.'</td>'.
-                        '<td>' . '<a' . ' ' . 'href="#" target="_bank">' . $user->fname . ' ' . $user->lname . '</a>' . '</td>' .
-                        '<td>' . $user->email . '</td>' .
-                        '<td>' . $user->tel . '</td>' .
-                        '<td>' . $user->role . '</td>' .
-                        '<td>' . \Carbon\Carbon::parse($user->created_at)->format('d/m/Y') . '</td>' .
-                        '<td>' .
-                        // '<a'.' '.'href="'.url('blog/laravel/edit/'.$user->id).'"title="Edit">'.
-                        '<a' . ' ' . 'href="#" title="Edit">' .
-                        '<i class="ti-pencil-alt pr-3 text-warning"></i>' .
-                        '</a>' .
+        if ($users) {
+            foreach ($users as $key => $user) {
+                $avatarUrl = $user->avatar ? $folderPath . '/' . $user->avatar : $folderPath . '/653d4e8e1a4e0.png';
+                $imgTag = '<div>' .
+                    '<img src="' . $avatarUrl . '" class="img-circle " alt="User Image">' .
+                    '</div>';
 
-                        '<a' . ' ' . 'href="#" data-id="' . $user->id . '" id="deleteBtn" title="Delete">' .
-                        '<i class="ti-trash text-danger"></i>' .
-                        '</a>' .
-
-                        '</td>' .
-                        // '<td>'.$product->description.'</td>'.
-                        '</tr>';
+                $codeColorText = '';
+                $codeColorBg = '';
+                if ($user->role == 1) {
+                    $codeColorText = '#e11d48';
+                    $codeColorBg = '#ffe4e6';
+                } elseif ($user->role == 2) {
+                    $codeColorText = '#ea580c';
+                    $codeColorBg = '#ffedd5';
+                } elseif ($user->role == 3) {
+                    $codeColorText = '#0891b2';
+                    $codeColorBg = '#cffafe';
                 }
-                return $output;
-                // Response($output);
+
+                $output .= '<tr>' .
+                    '<td>' . $user->id . '</td>' .
+                    '<td>' .
+                    '<a href="#" target="_bank">' .
+                    '<div class="user-panel d-flex align-items-center justify-content-center text-center">' .
+                    $imgTag .
+                    '<div class="ml-2">' .
+                    $user->fname . ' ' . $user->lname .
+                    '</div>' .
+                    '</div>' .
+                    '</a>' .
+                    '</td>' .
+                    '<td>' . $user->email . '</td>' .
+                    '<td>' . $user->tel . '</td>' .
+                    '<td>' .
+                    '<div class="row justify-content-center">' .
+                    '<div class="col-md-8 text-center" style="border-radius: 12px; background-color: ' . $codeColorBg . '; color: ' . $codeColorText . ';">' .
+                    '<b> ' . $user->role_name . '</b>' .
+                    '</div>' .
+                    '</div>' .
+                    '</td>' .
+
+                    '<td>' . \Carbon\Carbon::parse($user->created_at)->format('d/m/Y') . '</td>' .
+
+                    '<td>' .
+                    '<a class="mr-1" href="' . url('user/edit/' . $user->id) . '" title="Edit">' .
+                    '<i class="fas fa-edit btn btn-warning"></i>' .
+                    '</a>' .
+
+                    '<a href="#" data-id="' . $user->id . '" id="deleteBtn" title="Delete">' .
+                    '<i class="fas fa-trash-alt btn btn-danger text-white"></i>' .
+                    '</a>' .
+                    '</td>' .
+                    '</tr>';
             }
+            return $output;
         }
-    }
-
-
-
-    function resize_image($file, $w, $h, $crop = FALSE)
-    {
-        list($width, $height) = getimagesize($file);
-        $r = $width / $height;
-        if ($crop) {
-            if ($width > $height) {
-                $width = ceil($width - ($width * abs($r - $w / $h)));
-            } else {
-                $height = ceil($height - ($height * abs($r - $w / $h)));
-            }
-            $newwidth = $w;
-            $newheight = $h;
-        } else {
-            if ($w / $h > $r) {
-                $newwidth = $h * $r;
-                $newheight = $h;
-            } else {
-                $newheight = $w / $r;
-                $newwidth = $w;
-            }
-        }
-        $src = imagecreatefromjpeg($file);
-        $dst = imagecreatetruecolor($newwidth, $newheight);
-        imagecopyresampled($dst, $src, 0, 0, 0, 0, $newwidth, $newheight, $width, $height);
-
-        return $dst;
     }
 }

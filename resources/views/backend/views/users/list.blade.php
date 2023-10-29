@@ -32,7 +32,7 @@
                                         <thead class="text-uppercase bg-danger">
                                             <tr class="text-white">
                                                 <th scope="col">ID</th>
-                                                <th class="text-left" scope="col">ชื่อ-นามสกุล</th>
+                                                <th class="text-center" scope="col">ชื่อ-นามสกุล</th>
                                                 <th scope="col">อีเมล</th>
                                                 <th scope="col">เบอร์โทร</th>
                                                 <th scope="col">status</th>
@@ -73,22 +73,27 @@
                                                     </td> --}}
 
                                                     <td>
-                                                        <div class="user-panel d-flex align-items-center text-center">
-                                                            @if ($user->avatar != null)
-                                                                <div>
-                                                                    <img src="{{ asset('storage/images/users/' . $user->avatar) }}"
-                                                                        class="img-circle " alt="User Image">
+                                                        <a href="#">
+
+
+                                                            <div
+                                                                class="user-panel d-flex align-items-center justify-content-center text-center">
+                                                                @if ($user->avatar != null)
+                                                                    <div>
+                                                                        <img src="{{ asset('storage/images/users/' . $user->avatar) }}"
+                                                                            class="img-circle " alt="User Image">
+                                                                    </div>
+                                                                @else
+                                                                    <div>
+                                                                        <img src="{{ asset('storage/images/users/653d4e8e1a4e0.png') }}"
+                                                                            class="img-circle " alt="User Image">
+                                                                    </div>
+                                                                @endif
+                                                                <div class="ml-2">
+                                                                    {{ $user->fname }} {{ $user->lname }}
                                                                 </div>
-                                                            @else
-                                                                <div>
-                                                                    <img src="{{ asset('storage/images/users/653d4e8e1a4e0.png') }}"
-                                                                        class="img-circle " alt="User Image">
-                                                                </div>
-                                                            @endif
-                                                            <div class="ml-2">
-                                                                {{ $user->fname }} {{ $user->lname }}
                                                             </div>
-                                                        </div>
+                                                        </a>
                                                     </td>
                                                     <td>{{ $user->email }}</td>
                                                     <td>{{ $user->tel }}</td>
@@ -110,7 +115,7 @@
                                                         <div class="row justify-content-center">
                                                             <div class="col-md-8 text-center">
                                                                 <div class=""
-                                                                    style="border-radius: 12px; background-color: {{ $code_color_bg }}; color:{{$code_color_text}};">
+                                                                    style="border-radius: 12px; background-color: {{ $code_color_bg }}; color:{{ $code_color_text }};">
                                                                     <b>{{ $user->role_name }}</b>
                                                                 </div>
                                                             </div>
@@ -159,19 +164,26 @@
     <!-- /.content -->
 
     <script type="text/javascript">
+        var delayTimer;
         $('#search').on('keyup', function() {
             $value = $(this).val();
-            $.ajax({
-                type: 'get',
-                url: '{{ URL::to('users/search') }}',
-                data: {
-                    'search': $value
-                },
-                success: function(data) {
-                    $('tbody').html(data);
-                    // console.log(data);
-                }
-            });
+            // กำหนดเวลาหน่วง (เช่น 1000 มิลลิวินาทีหรือ 1 วินาที)
+            var delay = 1000;
+            // ถ้ามีการกระทำก่อนหน้านี้ (การพิมพ์เพื่อค้นหา) ยกเลิกการหน่วงเวลาเดิม
+            clearTimeout(delayTimer);
+            delayTimer = setTimeout(function() {
+                $.ajax({
+                    type: 'get',
+                    url: '{{ URL::to('users/search') }}',
+                    data: {
+                        'search': $value
+                    },
+                    success: function(data) {
+                        $('tbody').html(data);
+                        // console.log(data);
+                    }
+                });
+            }, delay);
         })
 
 
