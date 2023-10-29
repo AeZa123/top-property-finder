@@ -71,7 +71,7 @@
 
 
              <li class="nav-item">
-                 <a href="" class="nav-link text-white">หน้าแรก</a>
+                 <a href="" class="nav-link text-white"><i class="fas fa-home fa-sm mr-1"></i>หน้าแรก</a>
              </li>
 
              {{-- <li class="nav-item">
@@ -92,10 +92,37 @@
                      </li>
                  @endif --}}
              @else
+                 <li class="nav-item">
+                     <a href="{{ route('posts') }}" class="nav-link text-white"> <i class="fas fa-bullhorn fa-sm mr-1"></i> ลงประกาศฟรี</a>
+                 </li>
+
                  <li class="nav-item dropdown">
+                     <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true"
+                         aria-expanded="false" class="nav-link dropdown-toggle text-white">Hi~ {{ Auth::user()->fname }}
+                     </a>
+                     <ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu border-0 shadow">
+
+
+
+                         <li>
+                             <a class="dropdown-item" href="{{ route('logout') }}"
+                                 onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                 {{ __('Logout') }}
+                             </a>
+                         </li>
+
+
+                         {{-- <li class="dropdown-divider"></li> --}}
+
+
+                     </ul>
+                 </li>
+
+
+                 {{-- <li class="nav-item dropdown">
                      <a id="navbarDropdown" class="nav-link dropdown-toggle text-white" href="#" role="button"
                          data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                        Hi~ {{ Auth::user()->fname }} 
+                         Hi~ {{ Auth::user()->fname }}
                      </a>
 
                      <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
@@ -109,7 +136,7 @@
                              @csrf
                          </form>
                      </div>
-                 </li>
+                 </li> --}}
              @endguest
 
 
