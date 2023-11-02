@@ -146,6 +146,10 @@ class UserController extends Controller
     public function uploadImage($data_base64)
     {
         $folderPath = public_path('storage/images/users/');
+        if (!file_exists($folderPath)) {
+            // ถ้าโฟลเดอร์ไม่มีอยู่ ให้สร้างขึ้นมา
+            mkdir($folderPath, 0777, true);
+        }
         $image_parts = explode(";base64,", $data_base64);
         // $image_parts = explode(";base64,", $request->image);
         // $image_type_aux = explode("image/", $image_parts[0]);

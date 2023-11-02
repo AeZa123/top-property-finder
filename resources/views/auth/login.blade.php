@@ -1,4 +1,4 @@
-@extends('frontend.layouts.app')
+@extends('frontend.layouts.login_register_layout')
 
 @section('content')
     <style>
