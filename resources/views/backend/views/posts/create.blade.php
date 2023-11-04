@@ -9,16 +9,16 @@
         }
 
         /* html * {
-            box-sizing: border-box;
-        } */
+                    box-sizing: border-box;
+                } */
 
         p {
             margin: 0;
         }
 
         /* .upload__box {
-            padding: 40px;
-        } */
+                    padding: 40px;
+                } */
 
         .upload__inputfile {
             width: .1px;
@@ -105,8 +105,8 @@
 
 
 
-         /* ซ่อน input file ด้วย opacity 0 และ position absolute */
-         .file-input {
+        /* ซ่อน input file ด้วย opacity 0 และ position absolute */
+        .file-input {
             opacity: 0;
             position: absolute;
             top: 0;
@@ -134,15 +134,10 @@
         .file-upload-button:active {
             background-color: #0056b3;
         }
-
-
-
-
-
     </style>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.css" />
-    
+
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.min.js"></script>
@@ -161,7 +156,8 @@
                             <h3 class="card-title">สร้างปรกาศ</h3>
                         </div>
 
-                        <form id="form" method="POST" action="{{ route('post.storage') }}" enctype="multipart/form-data">
+                        <form id="form" method="POST" action="{{ route('post.storage') }}"
+                            enctype="multipart/form-data">
                             {{-- <form id="form" method="POST" action="" enctype="multipart/form-data"> --}}
                             <div class="card-body">
                                 @csrf
@@ -172,7 +168,7 @@
                                     <div class="col-md-12 mt-3 mb-3">
 
                                         <div class="col-md-12 text-center mb-3">
-                                            
+
                                             <img class="img-fluid rounded" id="data_base64" src="" alt="รูปภาพ">
                                             <input type="hidden" name="data_base64" id="data_base64_input">
                                         </div>
@@ -184,8 +180,8 @@
                                             <label for="image_cover" class="file-upload-button">
                                                 เลือกรูปปกประกาศ
                                             </label>
-                                            <input type="file" name="image_cover" id="image_cover"
-                                                accept="image/*" class="file-input" />
+                                            <input type="file" name="image_cover" id="image_cover" accept="image/*"
+                                                class="file-input" />
                                         </div>
                                     </div>
 
@@ -284,15 +280,15 @@
                                                 </div>
                                             </div>
 
-                                           
+
 
                                             <div class="col-md-12">
                                                 <div class="upload__box">
                                                     <div class="upload__btn-box">
                                                         <label class="upload__btn">
                                                             <p>Upload images</p>
-                                                            <input type="file" name="images[]" multiple="" data-max_length="20"
-                                                                class="upload__inputfile">
+                                                            <input type="file" name="images[]" multiple=""
+                                                                data-max_length="20" class="upload__inputfile">
                                                         </label>
                                                     </div>
                                                     <div class="upload__img-wrap"></div>
@@ -347,7 +343,7 @@
 
         {{-- modal --}}
         <div id="imageModel" class="modal fade bd-example-modal-lg" role="dialog">
-            <div class="modal-dialog modal-lg">
+            <div class="modal-dialog modal-xl">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h4 class="modal-title text-left">จัดรูปปกประกาศ</h4>
@@ -355,7 +351,7 @@
                     </div>
                     <div class="modal-body">
                         <div class="row justify-content-center">
-                            <div class="col-md-6 text-center">
+                            <div class="col-md-8 text-center">
                                 {{-- <div id="image_demo" style="width:350px; margin-top:30px"></div> --}}
                                 <div>
                                     <div class="row">
@@ -443,7 +439,6 @@
         });
 
 
-
         jQuery(document).ready(function() {
             ImgUpload();
         });
@@ -520,16 +515,28 @@
 
 
 
+
+
+
+
+
+
+
+        // var imageUrl = "{{ asset('images/default_image/default_01.jpg') }}";
+        //  // เพิ่มรูปเข้าไปใน div ที่มี id="image_demo"
+        // $('#image_demo').html('<img src="' + imageUrl + '" alt="รูปภาพ">');
+
         $image_crop = $('#image_demo').croppie({
             enableExif: true,
+            showZoomer: false,
             viewport: {
-                width: 370,
+                width: 600,
                 height: 400,
                 type: 'square' //circle
             },
             // boundary: {
-            //     width: 300,
-            //     height: 300
+            //     width: 700,
+            //     height: 500
             // }
         });
 
@@ -539,6 +546,90 @@
             $(window).resize(function() {
                 resizeCroppie();
             });
+
+            // var imageUrl = "{{ asset('images/default_image/default_01.jpg') }}";
+            // var reader = new FileReader();
+            // reader.onload = function(event) {
+            //     $image_crop.croppie('bind', {
+
+            //         url: imageUrl
+            //         url: event.target.result
+            //     }).then(function() {
+            //         console.log('jQuery bind complete');
+            //     });
+            // }
+            // reader.readAsDataURL(this.files[0]);
+
+            // $('#imageModel').modal('show');
+
+
+            // var imageUrl = "{{ asset('images/default_image/default_01.jpg') }}";
+
+            // // ตรงนี้เราไม่ต้องใช้ FileReader แล้ว เราใช้ imageUrl ที่มีอยู่แล้ว
+            // $image_crop.croppie('bind', {
+            //     url: imageUrl
+            // }).then(function() {
+            //     console.log('jQuery bind complete');
+            // });
+
+
+
+            // // สร้าง FileReader
+            // var reader = new FileReader();
+
+            // reader.onload = function(event) {
+            //     // อ่านและแสดงรูปภาพเมื่ออ่านสำเร็จ
+            //     $image_crop.croppie('bind', {
+            //         url: event.target.result
+            //     }).then(function() {
+            //         console.log('jQuery bind complete');
+            //     });
+            // };
+
+            // // ในกรณีนี้คุณต้องเพิ่มอีกบรรทัดเพื่ออ่านไฟล์
+            // reader.readAsDataURL(this.files[0]);
+
+
+
+
+            var $image_crop = $('#image_demo'); // ต้องมีตัวแปร $image_crop โดยถูกต้อง
+
+            // สร้าง FileReader
+            var reader = new FileReader();
+
+            reader.onload = function(event) {
+                // อ่านและแสดงรูปภาพเมื่ออ่านสำเร็จ
+                $image_crop.croppie('bind', {
+                    url: event.target.result
+                }).then(function() {
+                    console.log('jQuery bind complete');
+                });
+            };
+
+            // เช็คว่ามีไฟล์ถูกเลือกหรือไม่
+            if (this.files.length > 0) {
+                // ถ้ามีไฟล์ถูกเลือกให้อ่านและแสดงไฟล์ภาพ
+                reader.readAsDataURL(this.files[0]);
+            } else {
+                // ถ้าไม่มีไฟล์ถูกเลือกให้ใช้ imageUrl ที่มีอยู่เป็น URL ดีฟอลต์
+                $image_crop.croppie('bind', {
+                    url: "{{ asset('images/default_image/default_01.jpg') }}"
+                }).then(function() {
+                    console.log('jQuery bind complete');
+                });
+            }
+
+
+
+
+
+
+
+
+
+
+
+
         });
 
         // ฟังก์ชันสําหรับปรับขนาด Croppie container
@@ -547,8 +638,9 @@
             var screenHeight = $(window).height();
 
             var newCroppieWidth = screenWidth < 700 ? screenWidth : 600;
-            var newCroppieHeight = screenHeight < 700 ? screenHeight : 600;
+            var newCroppieHeight = screenHeight < 500 ? screenHeight : 500;
             // var newCroppieHeight = screenHeight ;
+
 
             // ปรับขนาดของ Croppie container
             $('#image_demo').css({
@@ -558,6 +650,7 @@
         }
 
         $('#image_cover').on('change', function() {
+
             var reader = new FileReader();
             reader.onload = function(event) {
                 $image_crop.croppie('bind', {
@@ -583,38 +676,14 @@
                 $("#data_base64_input").val(response);
                 $('#imageModel').modal('hide');
 
-                // $.ajax({
-                //     url: "{{ url('user/testimage') }}",
-                //     type: 'POST',
-                //     data: {
-                //         '_token': $('meta[name="csrf-token"]').attr('content'),
-                //         'image': response
-                //     },
-                //     success: function(data) {
-                //         $('#imageModel').modal('hide');
-                //         alert('Crop image has been uploaded');
-                //     }
-                // })
+
             });
         });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     </script>
+
+
+
+
+    {{-- crop image new --}}
+    <script></script>
 @endsection

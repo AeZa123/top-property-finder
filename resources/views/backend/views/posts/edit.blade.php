@@ -374,7 +374,7 @@
 
          {{-- modal --}}
          <div id="imageModel" class="modal fade bd-example-modal-lg" role="dialog">
-            <div class="modal-dialog modal-lg">
+            <div class="modal-dialog modal-xl">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h4 class="modal-title text-left">จัดรูปปกประกาศ</h4>
@@ -382,7 +382,7 @@
                     </div>
                     <div class="modal-body">
                         <div class="row justify-content-center">
-                            <div class="col-md-6 text-center">
+                            <div class="col-md-8 text-center">
                                 {{-- <div id="image_demo" style="width:350px; margin-top:30px"></div> --}}
                                 <div>
                                     <div class="row">
@@ -621,18 +621,24 @@
         });
 
 
+        var imageUrl = "{{ asset('images/default_image/default_01.jpg') }}";
+         // เพิ่มรูปเข้าไปใน div ที่มี id="image_demo"
+        $('#image_demo').html('<img src="' + imageUrl + '" alt="รูปภาพ">');
+
+
 
         $image_crop = $('#image_demo').croppie({
             enableExif: true,
+            showZoomer: false,
             viewport: {
-                width: 370,
+                width: 600,
                 height: 400,
                 type: 'square' //circle
             },
-            // boundary: {
-            //     width: 300,
-            //     height: 300
-            // }
+            boundary: {
+                width: 700,
+                height: 500
+            }
         });
 
         // เรียกฟังก์ชัน resizeCroppie เมื่อหน้าจอโหลดหรือเปลี่ยนขนาด
@@ -641,6 +647,29 @@
             $(window).resize(function() {
                 resizeCroppie();
             });
+
+
+
+
+
+            var imageUrl = "{{ asset('images/default_image/default_01.jpg') }}";
+            var reader = new FileReader();
+            reader.onload = function(event) {
+                $image_crop.croppie('bind', {
+                   
+                    url: imageUrl
+                    // url: event.target.result
+                }).then(function() {
+                    console.log('jQuery bind complete');
+                });
+            }
+            // reader.readAsDataURL(this.files[0]);
+
+            // $('#imageModel').modal('show');
+
+
+
+
         });
 
         // ฟังก์ชันสําหรับปรับขนาด Croppie container
@@ -649,7 +678,7 @@
             var screenHeight = $(window).height();
 
             var newCroppieWidth = screenWidth < 700 ? screenWidth : 600;
-            var newCroppieHeight = screenHeight < 700 ? screenHeight : 600;
+            var newCroppieHeight = screenHeight < 500 ? screenHeight : 500;
             // var newCroppieHeight = screenHeight ;
 
             // ปรับขนาดของ Croppie container
@@ -660,6 +689,9 @@
         }
 
         $('#image_cover').on('change', function() {
+
+            $('#image_demo img').removeAttr('src');
+
             var reader = new FileReader();
             reader.onload = function(event) {
                 $image_crop.croppie('bind', {
