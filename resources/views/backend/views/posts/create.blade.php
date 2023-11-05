@@ -552,7 +552,7 @@
             // reader.onload = function(event) {
             //     $image_crop.croppie('bind', {
 
-            //         url: imageUrl
+            //         // url: imageUrl
             //         url: event.target.result
             //     }).then(function() {
             //         console.log('jQuery bind complete');
@@ -561,65 +561,6 @@
             // reader.readAsDataURL(this.files[0]);
 
             // $('#imageModel').modal('show');
-
-
-            // var imageUrl = "{{ asset('images/default_image/default_01.jpg') }}";
-
-            // // ตรงนี้เราไม่ต้องใช้ FileReader แล้ว เราใช้ imageUrl ที่มีอยู่แล้ว
-            // $image_crop.croppie('bind', {
-            //     url: imageUrl
-            // }).then(function() {
-            //     console.log('jQuery bind complete');
-            // });
-
-
-
-            // // สร้าง FileReader
-            // var reader = new FileReader();
-
-            // reader.onload = function(event) {
-            //     // อ่านและแสดงรูปภาพเมื่ออ่านสำเร็จ
-            //     $image_crop.croppie('bind', {
-            //         url: event.target.result
-            //     }).then(function() {
-            //         console.log('jQuery bind complete');
-            //     });
-            // };
-
-            // // ในกรณีนี้คุณต้องเพิ่มอีกบรรทัดเพื่ออ่านไฟล์
-            // reader.readAsDataURL(this.files[0]);
-
-
-
-
-            var $image_crop = $('#image_demo'); // ต้องมีตัวแปร $image_crop โดยถูกต้อง
-
-            // สร้าง FileReader
-            var reader = new FileReader();
-
-            reader.onload = function(event) {
-                // อ่านและแสดงรูปภาพเมื่ออ่านสำเร็จ
-                $image_crop.croppie('bind', {
-                    url: event.target.result
-                }).then(function() {
-                    console.log('jQuery bind complete');
-                });
-            };
-
-            // เช็คว่ามีไฟล์ถูกเลือกหรือไม่
-            if (this.files.length > 0) {
-                // ถ้ามีไฟล์ถูกเลือกให้อ่านและแสดงไฟล์ภาพ
-                reader.readAsDataURL(this.files[0]);
-            } else {
-                // ถ้าไม่มีไฟล์ถูกเลือกให้ใช้ imageUrl ที่มีอยู่เป็น URL ดีฟอลต์
-                $image_crop.croppie('bind', {
-                    url: "{{ asset('images/default_image/default_01.jpg') }}"
-                }).then(function() {
-                    console.log('jQuery bind complete');
-                });
-            }
-
-
 
 
 

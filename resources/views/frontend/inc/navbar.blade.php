@@ -3,7 +3,8 @@
         <nav class="navbar navbar-expand-lg bg-white navbar-light py-0 px-4">
             <a href="#" class="navbar-brand d-flex align-items-center text-center">
                 <div class="icon p-2 me-2">
-                    <img class="img-fluid" src="{{asset('template/img/icon-deal.png')}}" alt="Icon" style="width: 30px; height: 30px;">
+                    <img class="img-fluid" src="{{ asset('template/img/icon-deal.png') }}" alt="Icon"
+                        style="width: 30px; height: 30px;">
                 </div>
                 <h1 class="m-0 text-primary">Top Property finder</h1>
             </a>
@@ -30,10 +31,53 @@
                         </div>
                     </div>
                     <a href="contact.html" class="nav-item nav-link">Contact</a>
-                    <a href="{{ route('login') }}" class="nav-item nav-link">Login</a>
+
+
+
+                    @guest
+                        @if (Route::has('login'))
+                            {{-- <li class="nav-item">
+                            <a class="nav-link text-white" href="{{ route('login') }}">{{ __('Login') }}</a>
+                        </li> --}}
+                            <a href="{{ route('login') }}" class="nav-item nav-link">Login</a>
+                        @endif
+                    @else
+                        <a href="{{ route('dashboard') }}" class="nav-item nav-link">dashboard</a>
+
+                    @endguest
+
+
+
+
+
+
+
+
+
+
+
+
+
                 </div>
-                <a href="" class="btn btn-primary px-3 d-none d-lg-flex">Add Property</a>
+
+
+
+                <a style="margin-right: 8px;" href="{{ route('post.create') }}" class="btn btn-primary px-3 d-none d-lg-flex">Add Property</a>
+
                 
+                @guest
+                    {{-- @if (Route::has('login'))
+                    @endif --}}
+                @else
+                    <a class="btn btn-danger d-none d-lg-flex" href="{{ route('logout') }}"
+                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                        {{ __('Logout') }}
+                    </a>
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                        @csrf
+                    </form>
+                @endguest
+
             </div>
         </nav>
     </div>
