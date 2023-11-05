@@ -1,6 +1,20 @@
+<style>
+    .nav-bar1 {
+        position: relative;
+        margin-top: 0px;
+        padding: 0px;
+        transition: .5s;
+        z-index: 9999;
+        position: sticky;
+        /* sticky: top!important; */
+    }
+</style>
+    
     <!-- Navbar Start -->
-    <div class="container-fluid nav-bar bg-transparent">
+    <div class="container-fluid nav-bar1" >
+    {{-- <div class="container-fluid nav-bar bg-transparent"> --}}
         <nav class="navbar navbar-expand-lg bg-white navbar-light py-0 px-4">
+        {{-- <nav class="navbar navbar-expand-lg bg-white navbar-light py-0 px-4"> --}}
             <a href="#" class="navbar-brand d-flex align-items-center text-center">
                 <div class="icon p-2 me-2">
                     <img class="img-fluid" src="{{ asset('template/img/icon-deal.png') }}" alt="Icon"
