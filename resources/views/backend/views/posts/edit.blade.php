@@ -143,6 +143,29 @@
 
 
 
+        .show-image {
+            padding: 0.25rem;
+            background-color: #fff;
+            border: 1px solid #dee2e6;
+            border-radius: 0.25rem;
+            box-shadow: 0 1px 2px rgba(0,0,0,.075);
+            max-width: 100%;
+            height: auto;
+            /* border-radius: 20px; */
+        }
+
+        .img-thumbnail {
+            padding: 0.25rem!important;
+            background-color: #fff!important;
+            border: 1px solid #dee2e6!important;
+            border-radius: 0.25rem!important;
+            box-shadow: 0 1px 2px rgba(0,0,0,.075)!important;
+            max-width: 100%!important;
+            height: auto!important;
+            /* border-radius: 20px; */
+        }
+
+
 
 
 
@@ -154,11 +177,18 @@
     </style>
 
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.css" />
+{{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.css" />
     
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.min.js"></script> --}}
+
+
+<link href="{{ asset('cropImage/src/jquery.cropbox.css') }}" rel="stylesheet" type="text/css">
+
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-mousewheel/3.1.12/jquery.mousewheel.js"></script>
+    <script src="{{ asset('cropImage/src/jquery.cropbox.js') }}"></script>
+
 
 
     <!-- Main content -->
@@ -184,7 +214,7 @@
 
 
 
-                                    <div class="col-md-12 mt-3 mb-3">
+                                    {{-- <div class="col-md-12 mt-3 mb-3">
 
                                         <div class="col-md-12 text-center mb-3">
                                             
@@ -202,7 +232,68 @@
                                             <input type="file" name="image_cover" id="image_cover"
                                                 accept="image/*" class="file-input" />
                                         </div>
+                                    </div> --}}
+
+
+
+
+
+
+
+                                    
+
+                                    <div class="col-md-6 text-center mb-5">
+                                        <img class="show-image mb-2"  src="{{ asset('storage/images/property_image/image_cover/' . $data->image_cover) }}" alt="รูปภาพ">
+                                        <div id="plugin" class="cropbox">
+                                            <div class="workarea-cropbox">
+                                                <div class="bg-cropbox">
+                                                    <img class="image-cropbox">
+                                                    <div class="membrane-cropbox"></div>
+                                                </div>
+                                                <div class="frame-cropbox">
+                                                    <div class="resize-cropbox"></div>
+                                                </div>
+                                            </div>
+                                         
+                                            <div class="cropped panel panel-default">
+                                                {{-- <div class="panel-heading">
+                                                    <h3 class="panel-title">Result of cropping</h3>
+                                                </div> --}}
+                                                <div class="panel-body"></div>
+                                            </div>
+
+
+                                            <div class="btn-group">
+                                                <span class="btn btn-primary btn-file">
+                                                    
+                                                    <i class="fas fa-folder-open"></i> เลือกภาพหน้าปก <input type="file" id="image_cover" name="image_cover" accept="image/*">
+                                                </span>
+                                                <button type="button" class="btn btn-success btn-crop">
+                                                    <i class="fas fa-crop-alt"></i>Crop
+                                                </button>
+                                                {{-- <button type="button" class="btn btn-warning btn-reset">
+                                                    <i class="glyphicon glyphicon-repeat"></i> Reset
+                                                </button> --}}
+                                            </div>
+                                            <div class="text-center mb-2">
+                                                <span class="text-danger text font-danger error-text image_cover_error"></span>
+                                            </div>
+
+
+                                            <div class="form-group" hidden>
+                                                <textarea class="data form-control" name="data_base64" rows="5"></textarea>
+                                            </div>
+                                        </div>
                                     </div>
+
+
+
+
+
+
+
+
+
 
 
                                     <div class="col-md-8">
@@ -620,130 +711,69 @@
 
         });
 
-
-        var imageUrl = "{{ asset('images/default_image/default_01.jpg') }}";
-         // เพิ่มรูปเข้าไปใน div ที่มี id="image_demo"
-        $('#image_demo').html('<img src="' + imageUrl + '" alt="รูปภาพ">');
+    </script>
 
 
 
-        $image_crop = $('#image_demo').croppie({
-            enableExif: true,
-            showZoomer: false,
-            viewport: {
-                width: 600,
-                height: 400,
-                type: 'square' //circle
+
+
+
+
+
+
+ {{-- crop image new --}}
+ <script>
+
+
+
+    $('#image_cover').on('change', function() {
+
+
+        $('.image-cropbox').css("width", "50% !important");
+        $('.image-cropbox').css("height", "auto !important");
+        // $('.img-thumbnail').css("border-radius", "20px !important");
+
+        $('.show-image').hide();
+
+
+
+   
+    });
+
+
+
+
+
+        $('#plugin').cropbox({
+            selectors: {
+                inputInfo: '#plugin textarea.data',
+                inputFile: '#plugin input[type="file"]',
+                btnCrop: '#plugin .btn-crop',
+                btnReset: '#plugin .btn-reset',
+                resultContainer: '#plugin .cropped .panel-body',
+                messageBlock: '#message'
             },
-            boundary: {
-                width: 700,
-                height: 500
-            }
+            imageOptions: {
+                class: 'img-thumbnail',
+                style: 'margin-right: 5px; margin-bottom: 5px'
+            },
+            variants: [{
+                    width: 600,
+                    height: 400,
+                    minWidth: 600,
+                    minHeight: 400,
+                    maxWidth: 600,
+                    maxHeight: 400
+                },
+                // {
+                //     width: 600,
+                //     height: 400
+                // }
+            ],
+            messages: [
+                'Crop a middle image.',
+                // 'Crop a small image.'
+            ]
         });
-
-        // เรียกฟังก์ชัน resizeCroppie เมื่อหน้าจอโหลดหรือเปลี่ยนขนาด
-        $(document).ready(function() {
-            resizeCroppie();
-            $(window).resize(function() {
-                resizeCroppie();
-            });
-
-
-
-
-
-            var imageUrl = "{{ asset('images/default_image/default_01.jpg') }}";
-            var reader = new FileReader();
-            reader.onload = function(event) {
-                $image_crop.croppie('bind', {
-                   
-                    url: imageUrl
-                    // url: event.target.result
-                }).then(function() {
-                    console.log('jQuery bind complete');
-                });
-            }
-            // reader.readAsDataURL(this.files[0]);
-
-            // $('#imageModel').modal('show');
-
-
-
-
-        });
-
-        // ฟังก์ชันสําหรับปรับขนาด Croppie container
-        function resizeCroppie() {
-            var screenWidth = $(window).width();
-            var screenHeight = $(window).height();
-
-            var newCroppieWidth = screenWidth < 700 ? screenWidth : 600;
-            var newCroppieHeight = screenHeight < 500 ? screenHeight : 500;
-            // var newCroppieHeight = screenHeight ;
-
-            // ปรับขนาดของ Croppie container
-            $('#image_demo').css({
-                'width': newCroppieWidth + 'px',
-                'height': newCroppieHeight + 'px'
-            });
-        }
-
-        $('#image_cover').on('change', function() {
-
-            $('#image_demo img').removeAttr('src');
-
-            var reader = new FileReader();
-            reader.onload = function(event) {
-                $image_crop.croppie('bind', {
-                    url: event.target.result
-                }).then(function() {
-                    console.log('jQuery bind complete');
-                });
-            }
-            reader.readAsDataURL(this.files[0]);
-
-            $('#imageModel').modal('show');
-        });
-
-        $('.crop_image').click(function(event) {
-            $image_crop.croppie('result', {
-                type: 'canvas',
-                size: 'viewport'
-            }).then(function(response) {
-
-                console.log(response);
-
-                $("#data_base64").attr("src", response);
-                $("#data_base64_input").val(response);
-                $('#imageModel').modal('hide');
-
-                // $.ajax({
-                //     url: "{{ url('user/testimage') }}",
-                //     type: 'POST',
-                //     data: {
-                //         '_token': $('meta[name="csrf-token"]').attr('content'),
-                //         'image': response
-                //     },
-                //     success: function(data) {
-                //         $('#imageModel').modal('hide');
-                //         alert('Crop image has been uploaded');
-                //     }
-                // })
-            });
-        });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     </script>
 @endsection

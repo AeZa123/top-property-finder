@@ -48,16 +48,35 @@
         .file-upload-button:active {
             background-color: #0056b3;
         }
+
+
+
+        .show-image-profile {
+            padding: 0.25rem;
+            background-color: #fff;
+            border: 1px solid #dee2e6;
+            border-radius: 0.25rem;
+            box-shadow: 0 1px 2px rgba(0,0,0,.075);
+            max-width: 100%;
+            height: auto;
+            /* border-radius: 20px; */
+        }
+
+
+
     </style>
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.css" />
+    {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.css" />
    
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.min.js"></script>
-  
+   --}}
 
+    <link href="{{ asset('cropImage/src/jquery.cropbox.css') }}" rel="stylesheet" type="text/css">
 
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-mousewheel/3.1.12/jquery.mousewheel.js"></script>
+    <script src="{{ asset('cropImage/src/jquery.cropbox.js') }}"></script>
 
 
 
@@ -84,7 +103,7 @@
                                 @csrf
                                 <div class="row justify-content-center">
 
-                                    <div class="col-md-12 mt-3 mb-3">
+                                    {{-- <div class="col-md-12 mt-3 mb-3">
 
                                         <div class="col-md-12 text-center mb-3">
                                             <img class="rounded-circle" id="data_base64" src="" alt="รูปภาพ">
@@ -103,7 +122,59 @@
                                         </div>
 
                                     
+                                    </div> --}}
+
+
+
+                                    
+                                    <div class="col-md-6 text-center mb-5">
+                                        <div id="plugin" class="cropbox">
+                                            <div class="workarea-cropbox">
+                                                <div class="bg-cropbox">
+                                                    <img class="image-cropbox">
+                                                    <div class="membrane-cropbox"></div>
+                                                </div>
+                                                <div class="frame-cropbox">
+                                                    <div class="resize-cropbox"></div>
+                                                </div>
+                                            </div>
+
+                                            <div class="cropped panel panel-default">
+                                                {{-- <div class="panel-heading">
+                                                    <h3 class="panel-title">Result of cropping</h3>
+                                                </div> --}}
+                                                <div class="panel-body"></div>
+                                            </div>
+
+
+                                            <div class="btn-group">
+                                                <span class="btn btn-primary btn-file">
+
+                                                    <i class="fas fa-folder-open"></i> เลือกโปรไฟล์ <input type="file"
+                                                        id="avatar" name="avatar" accept="image/*">
+                                                </span>
+                                                <button type="button" class="btn btn-success btn-crop">
+                                                    <i class="fas fa-crop-alt"></i> Crop
+                                                </button>
+                                                {{-- <button type="button" class="btn btn-warning btn-reset">
+                                                    <i class="glyphicon glyphicon-repeat"></i> Reset
+                                                </button> --}}
+                                            </div>
+                                            <div class="text-center mb-2">
+                                                <span
+                                                    class="text-danger text font-danger error-text avatar_error"></span>
+                                            </div>
+
+
+                                            <div class="form-group" hidden>
+                                                <textarea class="data form-control" name="data_base64" rows="5"></textarea>
+                                            </div>
+                                        </div>
                                     </div>
+
+
+
+
 
 
                                     <div class="col-md-8">
@@ -427,6 +498,55 @@
         // });
     </script>
 
-    {{-- testimage --}}
-    <script></script>
+     {{-- crop image new --}}
+     <script>
+        $('#avatar').on('change', function() {
+
+
+            $('.image-cropbox').css("width", "50% !important");
+            $('.image-cropbox').css("height", "auto !important");
+
+            // console.log('test');
+
+            // $('.image-cropbox').attr("width", "50%!important");
+            // $('.image-cropbox').attr("height", "auto!important");
+
+        });
+
+
+
+
+
+        $('#plugin').cropbox({
+            selectors: {
+                inputInfo: '#plugin textarea.data',
+                inputFile: '#plugin input[type="file"]',
+                btnCrop: '#plugin .btn-crop',
+                btnReset: '#plugin .btn-reset',
+                resultContainer: '#plugin .cropped .panel-body',
+                messageBlock: '#message'
+            },
+            imageOptions: {
+                class: 'img-thumbnail rounded-circle',
+                style: 'margin-right: 5px; margin-bottom: 5px'
+            },
+            variants: [{
+                    width: 300,
+                    height: 300,
+                    minWidth: 300,
+                    minHeight: 300,
+                    maxWidth: 300,
+                    maxHeight: 300
+                },
+                // {
+                //     width: 600,
+                //     height: 400
+                // }
+            ],
+            messages: [
+                'Crop a middle image.',
+                // 'Crop a small image.'
+            ]
+        });
+    </script>
 @endsection
