@@ -49,7 +49,6 @@ class PostController extends Controller
     public function storage(Request $request)
     {
 
-
         // dd($request->all());
         $validator = \Validator::make(
             $request->all(),
@@ -100,11 +99,14 @@ class PostController extends Controller
         );
 
 
+       
+
+
         $file_image_cover = $request->file('image_cover');
         if (!empty($file_image_cover)) {
             $name_image = $this->uploadImage($request->data_base64);
             $data['image_cover'] = $name_image;
-            // $request->image_cover->move('storage/images/users/original', $name_image); // img = 'img' ตัวนี้
+           
         }
 
         // create post
@@ -112,28 +114,76 @@ class PostController extends Controller
         $post_id = $createPost->id;
 
 
+      
+
+
+
         $file = $request->file('images');
 
         if (!empty($file)) {
 
-            $count = count($file);
 
+
+            $uniqueImages = [];
+            $originalNames = [];
+
+            foreach ($request->images as $image_1) {
+                $originalName = $image_1->getClientOriginalName();
+                if (!in_array($originalName, $originalNames)) {
+                    $originalNames[] = $originalName;
+                    $uniqueImages[] = $image_1;
+                }
+            }
+
+
+            // $request->merge(['images' => $uniqueImages]);
+            $request->request->set('images_filter', $uniqueImages);
+            // dd( $request->images_filter[0]);
+            $count = count($request->images_filter);
+           
+         
+
+            // $count = count($file);
+
+
+            // for ($i = 0; $i < $count; $i++) {
+
+            //     $photo = $request->file('images')[$i]; // img = ชื่อ name ใน input
+            //     $photoname = $post_id . $i . date('Y-m-d') . time() . '.' . $photo->getClientOriginalExtension();
+            //     $request->images[$i]->move('storage/images/property_image', $photoname); // img = 'img' ตัวนี้
+
+            //     $image['image_name'] = $photoname;
+
+            //     $createdImage = Image::create($image); // create image
+
+            //     $imagePost['post_id'] = $post_id;
+            //     $imagePost['image_id'] = $createdImage->id;
+
+            //     ImagePost::create($imagePost); //create image post
+
+            // }
+
+
+
+            // $count = count($file);
             for ($i = 0; $i < $count; $i++) {
-
                 $photo = $request->file('images')[$i]; // img = ชื่อ name ใน input
-                $photoname = $post_id . $i . date('Y-m-d') . time() . '.' . $photo->getClientOriginalExtension();
+                $photoname = uniqid() . '-' . date('Y-m-d') . time() . '.' . $photo->getClientOriginalExtension();
                 $request->images[$i]->move('storage/images/property_image', $photoname); // img = 'img' ตัวนี้
 
                 $image['image_name'] = $photoname;
-
                 $createdImage = Image::create($image); // create image
-
                 $imagePost['post_id'] = $post_id;
                 $imagePost['image_id'] = $createdImage->id;
 
                 ImagePost::create($imagePost); //create image post
 
             }
+
+
+
+
+
         }
 
 
@@ -248,6 +298,7 @@ class PostController extends Controller
     public function update(Request $request, $id)
     {
 
+        
         $validator = \Validator::make(
             $request->all(),
             [

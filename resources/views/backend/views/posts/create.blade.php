@@ -409,8 +409,8 @@
                                                     <div class="upload__btn-box">
                                                         <label class="upload__btn">
                                                             <p>Upload images</p>
-                                                            <input type="file" name="images[]" multiple=""
-                                                                data-max_length="20" class="upload__inputfile">
+                                                            <input id="images-file-input" type="file" name="images[]" multiple data-max_length="20" class="upload__inputfile">
+                                                            {{-- <input id="images-file-input" type="file" name="images[]" multiple data-max_length="20" class="upload__inputfile"> --}}
                                                         </label>
                                                     </div>
                                                     <div class="upload__img-wrap"></div>
@@ -441,38 +441,11 @@
 
                             </div>
 
+                            <div id="selected-file-names"></div>
+
                             <div class="text-center mb-3">
                                 <button type="submit" id="create" class="btn btn-primary">สร้างประกาศ</button>
                             </div>
-
-
-
-
-
-
-
-
-
-
-
-                            {{-- test --}}
-                            <div class="container">
-
-
-
-                            </div>
-
-
-
-
-
-
-
-
-
-
-
-
 
 
                         </form>
@@ -541,15 +514,43 @@
 
     <!-- create data -->
     <script>
+
+        var imgArray = [];
+
+
+
         $(function() {
+
+
+           
             $('#form').on('submit', function(e) {
                 e.preventDefault();
 
                 var form = this;
+                var form_data = new FormData(form)
+
+                // var formData = new FormData();
+                var files = $('#images-file-input')[0].files; // รับรายการไฟล์ที่เลือก
+
+                // console.log(files);
+                // console.log(imgArray);
+
+                // เพิ่มไฟล์ใน FormData
+                for (var i = 0; i < imgArray.length; i++) {
+
+                    form_data.append('images[]', imgArray[i]);
+
+                }
+
+                // console.log(test)
+
+
+
                 $.ajax({
                     url: $(form).attr('action'),
                     method: $(form).attr('method'),
-                    data: new FormData(form),
+                    data: form_data,
+                    // data: new FormData(form),
                     processData: false,
                     dataType: 'json',
                     contentType: false,
@@ -598,7 +599,7 @@
 
         function ImgUpload() {
             var imgWrap = "";
-            var imgArray = [];
+            // var imgArray = [];
 
             $('.upload__inputfile').each(function() {
                 $(this).on('change', function(e) {
@@ -643,6 +644,33 @@
                             }
                         }
                     });
+
+                    // $('#images-file-input').val(imgArray);
+                    // $('#images-file-input').val(JSON.stringify(imgArray)); // แปลงเป็น JSON เพื่อเก็บใน input
+                    // $('#images-file-input').val(imgArray.join(', '));
+
+
+
+                    // var formData = new FormData();
+                    // var files = $('#images-file-input')[0].files; // รับรายการไฟล์ที่เลือก
+
+                    // // เพิ่มไฟล์ใน FormData
+                    // for (var i = 0; i < files.length; i++) {
+                    //     formData.append('images[]', files[i]);
+                    // }
+
+                    // console.log(formData);
+
+
+
+
+
+                     // แสดงชื่อไฟล์ที่เลือกบนหน้าเว็บ
+                    // var fileNames = imgArray.map(function(file) {
+                    //     return file.name;
+                    // });
+                    // $('#selected-file-names').text(fileNames.join(', '));
+                    console.log(imgArray);
                 });
             });
 

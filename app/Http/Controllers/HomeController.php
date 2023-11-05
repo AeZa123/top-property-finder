@@ -34,7 +34,10 @@ class HomeController extends Controller
             ->select('posts.*', 'users.fname', 'users.lname')
             ->where('posts.delete_post', '=',  null)
             ->orWhere('posts.delete_post', '=',  '')
+            ->limit(9)
             ->get();
+
+       
 
         return view('frontend.views.index', compact('datas'));
     }
