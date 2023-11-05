@@ -9,16 +9,16 @@
         }
 
         /* html * {
-            box-sizing: border-box;
-        } */
+                                box-sizing: border-box;
+                            } */
 
         p {
             margin: 0;
         }
 
         /* .upload__box {
-            padding: 40px;
-        } */
+                                padding: 40px;
+                            } */
 
         .upload__inputfile {
             width: .1px;
@@ -105,8 +105,8 @@
 
 
 
-         /* ซ่อน input file ด้วย opacity 0 และ position absolute */
-         .file-input {
+        /* ซ่อน input file ด้วย opacity 0 และ position absolute */
+        .file-input {
             opacity: 0;
             position: absolute;
             top: 0;
@@ -139,13 +139,57 @@
 
 
 
+
+
+
+
+        div.cropbox .btn-file {
+            position: relative;
+            overflow: hidden;
+        }
+
+        div.cropbox .btn-file input[type=file] {
+            position: absolute;
+            top: 0;
+            right: 0;
+            min-width: 100%;
+            min-height: 100%;
+            font-size: 100px;
+            text-align: right;
+            filter: alpha(opacity=0);
+            opacity: 0;
+            outline: none;
+            background: white;
+            cursor: inherit;
+            display: block;
+        }
+
+        div.cropbox .cropped {
+            margin-top: 10px;
+        }
+
+        .syntaxhighlighter table .container:before {
+            display: none !important;
+        }
+
+        footer {
+            margin-top: 10px;
+            border-top: #cdcdcd 1px solid;
+        }
     </style>
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.css" />
-    
+    {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.css" />
+
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.min.js"></script> --}}
+
+
+
+    <link href="{{ asset('cropImage/src/jquery.cropbox.css') }}" rel="stylesheet" type="text/css">
+
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-mousewheel/3.1.12/jquery.mousewheel.js"></script>
+    <script src="{{ asset('cropImage/src/jquery.cropbox.js') }}"></script>
 
 
 
@@ -161,18 +205,19 @@
                             <h3 class="card-title">สร้างปรกาศ</h3>
                         </div>
 
-                        <form id="form" method="POST" action="{{ route('post.storage') }}" enctype="multipart/form-data">
+                        <form id="form" method="POST" action="{{ route('post.storage') }}"
+                            enctype="multipart/form-data">
                             {{-- <form id="form" method="POST" action="" enctype="multipart/form-data"> --}}
                             <div class="card-body">
                                 @csrf
                                 <div class="row justify-content-center">
 
 
-
+                                    {{-- 
                                     <div class="col-md-12 mt-3 mb-3">
 
                                         <div class="col-md-12 text-center mb-3">
-                                            
+
                                             <img class="img-fluid rounded" id="data_base64" src="" alt="รูปภาพ">
                                             <input type="hidden" name="data_base64" id="data_base64_input">
                                         </div>
@@ -184,10 +229,83 @@
                                             <label for="image_cover" class="file-upload-button">
                                                 เลือกรูปปกประกาศ
                                             </label>
-                                            <input type="file" name="image_cover" id="image_cover"
-                                                accept="image/*" class="file-input" />
+                                            <input type="file" name="image_cover" id="image_cover" accept="image/*"
+                                                class="file-input" />
+                                        </div>
+                                    </div> --}}
+
+
+
+
+
+
+                                    <div class="col-md-6 text-center mb-5">
+                                        <div id="plugin" class="cropbox">
+                                            <div class="workarea-cropbox">
+                                                <div class="bg-cropbox">
+                                                    <img class="image-cropbox">
+                                                    <div class="membrane-cropbox"></div>
+                                                </div>
+                                                <div class="frame-cropbox">
+                                                    <div class="resize-cropbox"></div>
+                                                </div>
+                                            </div>
+
+                                            <div class="cropped panel panel-default">
+                                                {{-- <div class="panel-heading">
+                                                    <h3 class="panel-title">Result of cropping</h3>
+                                                </div> --}}
+                                                <div class="panel-body"></div>
+                                            </div>
+
+
+                                            <div class="btn-group">
+                                                <span class="btn btn-primary btn-file">
+
+                                                    <i class="fas fa-folder-open"></i> เลือกภาพหน้าปก <input type="file"
+                                                        id="image_cover" name="image_cover" accept="image/*">
+                                                </span>
+                                                <button type="button" class="btn btn-success btn-crop">
+                                                    <i class="fas fa-crop-alt"></i> Crop
+                                                </button>
+                                                {{-- <button type="button" class="btn btn-warning btn-reset">
+                                                    <i class="glyphicon glyphicon-repeat"></i> Reset
+                                                </button> --}}
+                                            </div>
+                                            <div class="text-center mb-2">
+                                                <span
+                                                    class="text-danger text font-danger error-text image_cover_error"></span>
+                                            </div>
+
+
+                                            <div class="form-group" hidden>
+                                                <textarea class="data form-control" name="data_base64" rows="5"></textarea>
+                                            </div>
                                         </div>
                                     </div>
+                                    {{-- <input type="hidden" name="data_base64" id="data_base64_input"> --}}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -284,15 +402,15 @@
                                                 </div>
                                             </div>
 
-                                           
+
 
                                             <div class="col-md-12">
                                                 <div class="upload__box">
                                                     <div class="upload__btn-box">
                                                         <label class="upload__btn">
                                                             <p>Upload images</p>
-                                                            <input type="file" name="images[]" multiple="" data-max_length="20"
-                                                                class="upload__inputfile">
+                                                            <input type="file" name="images[]" multiple=""
+                                                                data-max_length="20" class="upload__inputfile">
                                                         </label>
                                                     </div>
                                                     <div class="upload__img-wrap"></div>
@@ -326,6 +444,37 @@
                             <div class="text-center mb-3">
                                 <button type="submit" id="create" class="btn btn-primary">สร้างประกาศ</button>
                             </div>
+
+
+
+
+
+
+
+
+
+
+
+                            {{-- test --}}
+                            <div class="container">
+
+
+
+                            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                         </form>
                     </div>
                     <!-- /.card -->
@@ -347,7 +496,7 @@
 
         {{-- modal --}}
         <div id="imageModel" class="modal fade bd-example-modal-lg" role="dialog">
-            <div class="modal-dialog modal-lg">
+            <div class="modal-dialog modal-xl">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h4 class="modal-title text-left">จัดรูปปกประกาศ</h4>
@@ -355,7 +504,7 @@
                     </div>
                     <div class="modal-body">
                         <div class="row justify-content-center">
-                            <div class="col-md-6 text-center">
+                            <div class="col-md-8 text-center">
                                 {{-- <div id="image_demo" style="width:350px; margin-top:30px"></div> --}}
                                 <div>
                                     <div class="row">
@@ -443,7 +592,6 @@
         });
 
 
-
         jQuery(document).ready(function() {
             ImgUpload();
         });
@@ -509,112 +657,60 @@
                 $(this).parent().parent().remove();
             });
         }
+    </script>
 
 
 
 
-
-
-
-
-
-
-
-        $image_crop = $('#image_demo').croppie({
-            enableExif: true,
-            viewport: {
-                width: 370,
-                height: 400,
-                type: 'square' //circle
-            },
-            // boundary: {
-            //     width: 300,
-            //     height: 300
-            // }
-        });
-
-        // เรียกฟังก์ชัน resizeCroppie เมื่อหน้าจอโหลดหรือเปลี่ยนขนาด
-        $(document).ready(function() {
-            resizeCroppie();
-            $(window).resize(function() {
-                resizeCroppie();
-            });
-        });
-
-        // ฟังก์ชันสําหรับปรับขนาด Croppie container
-        function resizeCroppie() {
-            var screenWidth = $(window).width();
-            var screenHeight = $(window).height();
-
-            var newCroppieWidth = screenWidth < 700 ? screenWidth : 600;
-            var newCroppieHeight = screenHeight < 700 ? screenHeight : 600;
-            // var newCroppieHeight = screenHeight ;
-
-            // ปรับขนาดของ Croppie container
-            $('#image_demo').css({
-                'width': newCroppieWidth + 'px',
-                'height': newCroppieHeight + 'px'
-            });
-        }
-
+    {{-- crop image new --}}
+    <script>
         $('#image_cover').on('change', function() {
-            var reader = new FileReader();
-            reader.onload = function(event) {
-                $image_crop.croppie('bind', {
-                    url: event.target.result
-                }).then(function() {
-                    console.log('jQuery bind complete');
-                });
-            }
-            reader.readAsDataURL(this.files[0]);
 
-            $('#imageModel').modal('show');
-        });
 
-        $('.crop_image').click(function(event) {
-            $image_crop.croppie('result', {
-                type: 'canvas',
-                size: 'viewport'
-            }).then(function(response) {
+            $('.image-cropbox').css("width", "50% !important");
+            $('.image-cropbox').css("height", "auto !important");
 
-                console.log(response);
+            console.log('test');
 
-                $("#data_base64").attr("src", response);
-                $("#data_base64_input").val(response);
-                $('#imageModel').modal('hide');
+            // $('.image-cropbox').attr("width", "50%!important");
+            // $('.image-cropbox').attr("height", "auto!important");
 
-                // $.ajax({
-                //     url: "{{ url('user/testimage') }}",
-                //     type: 'POST',
-                //     data: {
-                //         '_token': $('meta[name="csrf-token"]').attr('content'),
-                //         'image': response
-                //     },
-                //     success: function(data) {
-                //         $('#imageModel').modal('hide');
-                //         alert('Crop image has been uploaded');
-                //     }
-                // })
-            });
         });
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        $('#plugin').cropbox({
+            selectors: {
+                inputInfo: '#plugin textarea.data',
+                inputFile: '#plugin input[type="file"]',
+                btnCrop: '#plugin .btn-crop',
+                btnReset: '#plugin .btn-reset',
+                resultContainer: '#plugin .cropped .panel-body',
+                messageBlock: '#message'
+            },
+            imageOptions: {
+                class: 'img-thumbnail',
+                style: 'margin-right: 5px; margin-bottom: 5px'
+            },
+            variants: [{
+                    width: 600,
+                    height: 400,
+                    minWidth: 600,
+                    minHeight: 400,
+                    maxWidth: 600,
+                    maxHeight: 400
+                },
+                // {
+                //     width: 600,
+                //     height: 400
+                // }
+            ],
+            messages: [
+                'Crop a middle image.',
+                // 'Crop a small image.'
+            ]
+        });
     </script>
 @endsection

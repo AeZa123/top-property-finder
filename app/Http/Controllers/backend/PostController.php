@@ -154,7 +154,26 @@ class PostController extends Controller
             // ถ้าโฟลเดอร์ไม่มีอยู่ ให้สร้างขึ้นมา
             mkdir($folderPath, 0777, true);
         }
-        $image_parts = explode(";base64,", $data_base64);
+
+
+
+        
+        // แปลง JSON เป็นโครงสร้างข้อมูล
+        $data = json_decode($data_base64, true);
+
+        // เข้าถึงค่าของ "image"
+        $image_data = $data[0]['image'];
+
+        // ตัดสตริงออกมาโดยใช้ substr
+        $start = strpos($image_data, "data:image/png;base64,");
+        if ($start !== false) {
+            $image_data = substr($image_data, $start);
+        }
+
+
+
+        $image_parts = explode(";base64,", $image_data);
+        // $image_parts = explode(";base64,", $data_base64);
         // $image_parts = explode(";base64,", $request->image);
         // $image_type_aux = explode("image/", $image_parts[0]);
         // $image_type = $image_type_aux[1];

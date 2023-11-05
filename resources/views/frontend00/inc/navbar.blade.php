@@ -91,7 +91,7 @@
                          <a class="nav-link text-white" href="{{ route('register') }}">{{ __('Register') }}</a>
                      </li>
                  @endif --}}
-             @else
+                @else
                  <li class="nav-item">
                      <a href="{{ route('posts') }}" class="nav-link text-white"> <i class="fas fa-bullhorn fa-sm mr-1"></i> ลงประกาศฟรี</a>
                  </li>

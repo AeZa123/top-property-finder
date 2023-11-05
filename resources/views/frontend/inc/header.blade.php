@@ -1,5 +1,5 @@
 <meta charset="utf-8">
-<title>Makaan - Real Estate HTML Template</title>
+<title>{{ config('app.name', 'Laravel') }}</title>
 <meta content="width=device-width, initial-scale=1.0" name="viewport">
 <meta content="" name="keywords">
 <meta content="" name="description">
@@ -25,3 +25,24 @@
 
 <!-- Template Stylesheet -->
 <link href="{{asset('template/css/style.css')}}" rel="stylesheet">
+
+
+{{-- <style>
+
+.btn-primary {
+  color: white!important; 
+  background-color: #FF5733!important;
+  border: #FF5733
+
+}
+.bg-primary {
+  color: #FF5733!important; 
+  background-color: #FF5733!important;
+  color: white!important;
+}
+.text-primary {
+  color: #FF5733!important;
+}
+
+
+</style> --}}

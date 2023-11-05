@@ -16,7 +16,7 @@
             <div class="col-md-6 animated fadeIn">
                 <div class="owl-carousel header-carousel">
                     <div class="owl-carousel-item">
-                        <img class="img-fluid" src="{{ asset('template/img/carousel-1.jpg') }}" alt="">
+                        <img height="600px" class="img-fluid" src="{{ asset('template/img/carousel-1.jpg') }}" alt="">
                     </div>
                     <div class="owl-carousel-item">
                         <img class="img-fluid" src="{{ asset('template/img/carousel-2.jpg') }}" alt="">
@@ -29,7 +29,7 @@
 
 
     <!-- Search Start -->
-    <div class="container bg-primary mb-5 wow fadeIn" data-wow-delay="0.1s" style="padding: 35px; z-index: 9999!important; position: relative; margin-top: -100px; border-radius: 12px;">
+    <div class="container bg-primary mb-5 wow fadeIn" data-wow-delay="0.1s" style="padding: 35px; z-index: 9999!important; position: relative; margin-top: -180px; border-radius: 12px;">
         <div class="container">
             <div class="row g-2">
                 <div class="col-md-10">
@@ -170,7 +170,7 @@
 
 
     <!-- About Start -->
-    <div class="container-xxl py-5">
+    {{-- <div class="container-xxl py-5">
         <div class="container">
             <div class="row g-5 align-items-center">
                 <div class="col-lg-6 wow fadeIn" data-wow-delay="0.1s">
@@ -189,7 +189,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
     <!-- About End -->
 
 
@@ -221,11 +221,12 @@
             <div class="tab-content">
                 <div id="tab-1" class="tab-pane fade show p-0 active">
                     <div class="row g-4">
+                        @foreach ($datas as $data)
                         <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
                             <div class="property-item rounded overflow-hidden">
                                 <div class="position-relative overflow-hidden">
-                                    <a href=""><img class="img-fluid"
-                                            src="{{ asset('template/img/property-1.jpg') }}" alt=""></a>
+                                    <a href=""><img class="img-fluid" src="{{ asset('storage/images/property_image/image_cover/'.$data->image_cover)}}" alt=""></a>
+                                    {{-- <a href=""><img class="img-fluid" src="{{ asset('template/img/property-1.jpg') }}" alt=""></a> --}}
                                     <div
                                         class="bg-primary rounded text-white position-absolute start-0 top-0 m-4 py-1 px-3">
                                         For Sell</div>
@@ -234,8 +235,9 @@
                                         Appartment</div>
                                 </div>
                                 <div class="p-4 pb-0">
-                                    <h5 class="text-primary mb-3">$12,345</h5>
-                                    <a class="d-block h5 mb-2" href="">Golden Urban House For Sell</a>
+                                    <h5 class="text-primary mb-3">{{ $data->price }} THB</h5>
+                                    <a class="d-block h5 mb-2" href="">{{ $data->title }}</a>
+                                    <span>{{ $data->property_name }}</span>
                                     <p><i class="fa fa-map-marker-alt text-primary me-2"></i>123 Street, New York, USA</p>
                                 </div>
                                 <div class="d-flex border-top">
@@ -248,7 +250,9 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
+                        @endforeach
+
+                        {{-- <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
                             <div class="property-item rounded overflow-hidden">
                                 <div class="position-relative overflow-hidden">
                                     <a href=""><img class="img-fluid"
@@ -382,10 +386,10 @@
                                             class="fa fa-bath text-primary me-2"></i>2 Bath</small>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-12 text-center wow fadeInUp" data-wow-delay="0.1s">
+                        </div> --}}
+                        {{-- <div class="col-12 text-center wow fadeInUp" data-wow-delay="0.1s">
                             <a class="btn btn-primary py-3 px-5" href="">Browse More Property</a>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
                 <div id="tab-2" class="tab-pane fade show p-0">
@@ -733,7 +737,7 @@
 
 
     <!-- Call to Action Start -->
-    <div class="container-xxl py-5">
+    {{-- <div class="container-xxl py-5">
         <div class="container">
             <div class="bg-light rounded p-3">
                 <div class="bg-white rounded p-4" style="border: 1px dashed rgba(0, 185, 142, .3)">
@@ -757,12 +761,12 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
     <!-- Call to Action End -->
 
 
     <!-- Team Start -->
-    <div class="container-xxl py-5">
+    {{-- <div class="container-xxl py-5">
         <div class="container">
             <div class="text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 600px;">
                 <h1 class="mb-3">Property Agents</h1>
@@ -836,7 +840,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
     <!-- Team End -->
 
 

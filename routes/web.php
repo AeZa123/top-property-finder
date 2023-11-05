@@ -30,9 +30,8 @@ Auth::routes();
 /********************************
         frontend Routes
 *********************************/
-Route::get('/home', [HomeController::class, 'index'])->name('home');
+// Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/', [IndexController::class, 'index'])->name('home');
-
 
 
 
