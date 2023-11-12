@@ -24,21 +24,5 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index()
-    {
-        // return view('home');
-        $datas = DB::table('posts')
-        // ->join('categories', 'posts.category_id', '=', 'categories.id')
-            ->join('users', 'posts.user_id', '=', 'users.id')
-            ->orderBy('posts.id', 'desc') 
-            ->select('posts.*', 'users.fname', 'users.lname')
-            ->where('posts.delete_post', '=',  null)
-            ->orWhere('posts.delete_post', '=',  '')
-            ->limit(9)
-            ->get();
-
-       
-
-        return view('frontend.views.index', compact('datas'));
-    }
+   
 }

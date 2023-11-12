@@ -1,0 +1,54 @@
+/*  
+    Created on : 05 June 2023
+    Author     : Tiego Masemola | Hashbrown_CWA
+    https://cw-arts.netlify.app/about-us
+*/
+
+/* * { box-sizing: border-box; } */
+
+html { scroll-behavior: smooth; }
+
+/* body 
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    background-color: #fafafa;
+    padding:  5px 10px;
+    margin: 0;
+
+    font-family: "Inter", sans-serif;
+} */
+.lead { 
+  font-size: 1.5rem; 
+  font-weight: 300;
+  background: linear-gradient(to right, #000000 0%, #000000 30%,#666 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color:transparent; 
+  z-index:10000;
+}
+/* h1 {
+  background: linear-gradient( 120deg, #bd34fe 30%, #41d1ff );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+} */
+
+
+/* GALLERY STYLING */
+.image-container{
+    width: 100%;
+    height: auto;
+    /* background-color: #bcbcbc; */
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.cwa-lightbox-image{
+    display: flex;
+    float: left;
+    margin: 5px;
+    height: 25vh;
+    width: auto;
+    background-color: white;
+}
