@@ -36,7 +36,12 @@ class IndexController extends Controller
 
         // dd($id);
 
-        $images = DB::table('image_posts')->where('post_id', '=', $id)->get();
+        $images = DB::table('image_posts')->where('post_id', '=', $id)
+        ->join('images', 'image_posts.image_id', '=', 'images.id')
+        ->select('images.*')
+        ->get();
+
+        // dd($images);
 
         $data = DB::table('posts')
                 ->join('users', 'posts.user_id', '=', 'users.id')

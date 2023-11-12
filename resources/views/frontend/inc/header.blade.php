@@ -21,10 +21,12 @@
 <link href="{{asset('template/lib/owlcarousel/assets/owl.carousel.min.css')}}" rel="stylesheet">
 
 <!-- Customized Bootstrap Stylesheet -->
+{{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css"> --}}
 <link href="{{asset('template/css/bootstrap.min.css')}}" rel="stylesheet">
 
 <!-- Template Stylesheet -->
 <link href="{{asset('template/css/style.css')}}" rel="stylesheet">
+
 
 
 {{-- <style>

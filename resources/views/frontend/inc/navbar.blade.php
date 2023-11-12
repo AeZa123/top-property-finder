@@ -1,17 +1,21 @@
 <style>
     .nav-bar1 {
-        position: relative;
-        margin-top: 0px;
         padding: 0px;
-        transition: .5s;
         z-index: 9999;
-        position: sticky;
-        /* sticky: top!important; */
+        overflow: hidden;
+        position: fixed;
+        top: 0;
+        width: 100%;
     }
+    /* .nav-bar.sticky-top {
+        position: sticky;
+        padding: 0;
+        z-index: 9999;
+    } */
 </style>
     
     <!-- Navbar Start -->
-    <div class="container-fluid nav-bar1" >
+    <div class="container-fluid nav-bar1 bg-transparent" >
     {{-- <div class="container-fluid nav-bar bg-transparent"> --}}
         <nav class="navbar navbar-expand-lg bg-white navbar-light py-0 px-4">
         {{-- <nav class="navbar navbar-expand-lg bg-white navbar-light py-0 px-4"> --}}
