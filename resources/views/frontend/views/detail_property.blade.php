@@ -53,90 +53,22 @@
                 <div class="bg-light rounded p-3">
                     <div class="bg-white rounded p-4" style="border: 1px dashed rgba(0, 185, 142, .3)">
                         <div class="row g-5 align-items-center">
-
-
-
                             <div class="image-container">
-
-
                                 @foreach ($images as $image)
-                                    {{-- <div class="col-md-3">
-                                        <img class="img-fluid rounded "
+                                    <a class="cwa-lightbox-image text-center"
+                                        href="{{ asset('storage/images/property_image/' . $image->image_name) }}"
+                                        data-desc="">
+                                        <img class="rounded"
                                             src="{{ asset('storage/images/property_image/' . $image->image_name) }}"
-                                            alt="">
-                                        <img style="width: 200px; height: 200px;" class="rounded "
-                                            src="{{ asset('storage/images/property_image/' . $image->image_name) }}"
-                                            alt="">
-                                    </div> --}}
-
-                                    <a class="cwa-lightbox-image" href="{{ asset('storage/images/property_image/' . $image->image_name) }}"
-                                        data-desc="cwa_lightbox: jQuery Lightbox Gallery Plugin. https://www.jqueryscript.net">
-                                        <img class="rounded" src="{{ asset('storage/images/property_image/' . $image->image_name) }}" alt=""
-                                            loading="lazy" />
+                                            alt="" loading="lazy" />
                                     </a>
                                 @endforeach
-
-                                {{-- <a class="cwa-lightbox-image" href="https://source.unsplash.com/EBtfyalTU50/1200x800"
-                                    data-desc="cwa_lightbox: jQuery Lightbox Gallery Plugin. https://www.jqueryscript.net">
-                                    <img src="https://source.unsplash.com/EBtfyalTU50/1200x800" alt=""
-                                        loading="lazy" />
-                                </a> --}}
-
-
-
-
-
-                                {{-- <a class="cwa-lightbox-image" href="https://source.unsplash.com/U4sKL1sHwtQ/1200x800" data-desc="cwa_lightbox: jQuery Lightbox Gallery Plugin. https://www.jqueryscript.net">
-                                    <img src="https://source.unsplash.com/U4sKL1sHwtQ/1200x800" alt="" loading="lazy"/>
-                                </a>
-                    
-                                <a class="cwa-lightbox-image" href="https://source.unsplash.com/-djRG1vB1pw/1200x800" data-desc="cwa_lightbox: jQuery Lightbox Gallery Plugin. https://www.jqueryscript.net">
-                                    <img src="https://source.unsplash.com/-djRG1vB1pw/1200x800" alt="" loading="lazy"/>
-                                </a>
-                    
-                                <a class="cwa-lightbox-image" href="https://source.unsplash.com/NYHvtXLNYyY/1200x800" data-desc="cwa_lightbox: jQuery Lightbox Gallery Plugin. https://www.jqueryscript.net">
-                                    <img src="https://source.unsplash.com/NYHvtXLNYyY/1200x800" alt="" loading="lazy"/>
-                                </a>
-                    
-                                <a class="cwa-lightbox-image" href="https://source.unsplash.com/z0nVqfrOqWA/1200x800" data-desc="cwa_lightbox: jQuery Lightbox Gallery Plugin. https://www.jqueryscript.net">
-                                    <img src="https://source.unsplash.com/z0nVqfrOqWA/1200x800" alt="" loading="lazy"/>
-                                </a>
-                    
-                                <a class="cwa-lightbox-image" href="https://source.unsplash.com/3hoAon9Mc88/1200x800" data-desc="cwa_lightbox: jQuery Lightbox Gallery Plugin. https://www.jqueryscript.net">
-                                    <img src="https://source.unsplash.com/3hoAon9Mc88/1200x800" alt="" loading="lazy"/>
-                                </a> --}}
                             </div>
-
-
-
-                            {{-- @foreach ($images as $image)
-                                <div class="col-md-3">
-                                    <img class="img-fluid rounded "
-                                        src="{{ asset('storage/images/property_image/' . $image->image_name) }}"
-                                        alt="">
-                                    <img style="width: 200px; height: 200px;" class="rounded "
-                                        src="{{ asset('storage/images/property_image/' . $image->image_name) }}"
-                                        alt="">
-                                </div>
-                            @endforeach --}}
                         </div>
                     </div>
 
                 </div>
-                {{-- <div class="bg-light rounded p-3">
-                <div class="bg-white rounded p-4" style="border: 1px dashed rgba(0, 185, 142, .3)">
-                    <div class="row g-5 align-items-center">
 
-                        @foreach ($images as $image)
-                        <div class="col-md-3">
-                            <img class="img-fluid rounded " src="{{ asset('storage/images/property_image/'.$image->image_name) }}" alt="">
-                            <img style="width: 200px; height: 200px;" class="rounded " src="{{ asset('storage/images/property_image/'.$image->image_name) }}" alt="">
-                        </div>
-                        @endforeach
-                    </div>
-                </div>
-
-            </div> --}}
             </div>
         </div>
         <!-- gallery End -->

@@ -14,12 +14,17 @@ class Post extends Model
         'body',
         'price',
         'amount',
+        'bathroom',
+        'bedroom',
+        'area',
         'property_name',
+        'date_start_rent',
         'category_id',
         'image_cover',
         'image_id',
         'sale_type_id',
         'property_type_id',
         'user_id',
+        'thai_provinces_id',
     ];
 }
