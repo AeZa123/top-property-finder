@@ -9,16 +9,16 @@
         }
 
         /* html * {
-                                box-sizing: border-box;
-                            } */
+                                    box-sizing: border-box;
+                                } */
 
         p {
             margin: 0;
         }
 
         /* .upload__box {
-                                padding: 40px;
-                            } */
+                                    padding: 40px;
+                                } */
 
         .upload__inputfile {
             width: .1px;
@@ -394,11 +394,81 @@
                                                 </div>
                                             </div>
 
+
+                                            <div class="col-md-6">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="bedroom">จำนวนห้องนอน<span
+                                                                    class="star-req">*</span></label>
+                                                            <input type="text" class="form-control" name="bedroom"
+                                                                id="bedroom" placeholder="จำนวนห้องนอน">
+                                                            <span
+                                                                class="text-danger font-danger error-text bedroom_error"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="bathroom">จำนวนห้องน้ำ<span
+                                                                    class="star-req">*</span></label>
+                                                            <input type="text" class="form-control" name="bathroom"
+                                                                id="bathroom" placeholder="จำนวนห้องน้ำ">
+                                                            <span
+                                                                class="text-danger font-danger error-text bathroom_error"></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="area">พื้นที่ ตร.ม.<span
+                                                                    class="star-req">*</span></label>
+                                                            <input type="text" class="form-control" name="area"
+                                                                id="area" placeholder="พื้นที่ ตร.ม.">
+                                                            <span
+                                                                class="text-danger font-danger error-text area_error"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="date_start_rent">วันที่พร้อมให้เช่า</label>
+                                                            <input type="date" class="form-control"
+                                                                name="date_start_rent" id="date_start_rent"
+                                                                placeholder="จำนวนห้องน้ำ">
+                                                            <span
+                                                                class="text-danger font-danger error-text date_start_rent_error"></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label for="body">เนื้อหา<span class="star-req">*</span></label>
                                                     <textarea class="form-control" name="body" id="body" rows="3" placeholder="เนื้อหา..."></textarea>
                                                     <span class="text-danger font-danger error-text body_error"></span>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="thai_provinces_id">จังหวัด<span
+                                                            class="star-req">*</span></label>
+                                                    <select class="form-control" name="thai_provinces_id">
+                                                        <option value="">เลือกจังหวัด</option>
+                                                        @foreach ($thai_provinces as $provinces)
+                                                            <option value="{{ $provinces->id }}">
+                                                                {{ $provinces->name_th }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                    <span
+                                                        class="text-danger font-danger error-text thai_provinces_id_error"></span>
                                                 </div>
                                             </div>
 
@@ -409,28 +479,14 @@
                                                     <div class="upload__btn-box">
                                                         <label class="upload__btn">
                                                             <p>Upload images</p>
-                                                            <input id="images-file-input" type="file" name="images[]" multiple data-max_length="20" class="upload__inputfile">
+                                                            <input id="images-file-input" type="file" name="images[]"
+                                                                multiple data-max_length="20" class="upload__inputfile">
                                                             {{-- <input id="images-file-input" type="file" name="images[]" multiple data-max_length="20" class="upload__inputfile"> --}}
                                                         </label>
                                                     </div>
                                                     <div class="upload__img-wrap"></div>
                                                 </div>
                                             </div>
-
-                                            {{-- <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label for="image">รูปอสังหา ค่อยมาใส่</label>
-                                                    <div class="input-group">
-                                                        <div class="custom-file">
-                                                            <input type="file" class="custom-file-input" name="image"
-                                                                id="image">
-                                                            <label class="custom-file-label" for="exampleInputFile">Choose
-                                                                file</label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div> --}}
-
 
                                         </div>
                                     </div>
@@ -514,7 +570,6 @@
 
     <!-- create data -->
     <script>
-
         var imgArray = [];
 
 
@@ -522,7 +577,7 @@
         $(function() {
 
 
-           
+
             $('#form').on('submit', function(e) {
                 e.preventDefault();
 
@@ -665,7 +720,7 @@
 
 
 
-                     // แสดงชื่อไฟล์ที่เลือกบนหน้าเว็บ
+                    // แสดงชื่อไฟล์ที่เลือกบนหน้าเว็บ
                     // var fileNames = imgArray.map(function(file) {
                     //     return file.name;
                     // });

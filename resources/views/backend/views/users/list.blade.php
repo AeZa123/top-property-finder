@@ -113,7 +113,7 @@
                                                         ?>
 
                                                         <div class="row justify-content-center">
-                                                            <div class="col-md-8 text-center">
+                                                            <div class="col-md-12 text-center">
                                                                 <div class=""
                                                                     style="border-radius: 12px; background-color: {{ $code_color_bg }}; color:{{ $code_color_text }};">
                                                                     <b>{{ $user->role_name }}</b>

@@ -41,8 +41,9 @@ class PostController extends Controller
 
         $property_type = DB::table('property_type')->select('*')->get();
         $sales_type = DB::table('sales_type')->select('*')->get();
+        $thai_provinces = DB::table('thai_provinces')->select('*')->get();
 
-        return view('backend.views.posts.create', compact('property_type', 'sales_type'));
+        return view('backend.views.posts.create', compact('property_type', 'sales_type', 'thai_provinces'));
     }
 
 
@@ -57,10 +58,14 @@ class PostController extends Controller
                 'body' => 'required|string',
                 'price' => 'required|string|numeric',
                 'amount' => 'required|string|numeric',
+                'bathroom' => 'required|string|numeric',
+                'bedroom' => 'required|string|numeric',
+                'area' => 'required|string|numeric',
                 'image_cover' => 'required|image|mimes:jpeg,png,jpg|max:2048',
                 'property_name' => 'required|string',
                 'sale_type_id' => 'required|string',
                 'property_type_id' => 'required|string',
+                'thai_provinces_id' => 'required|string',
             ],
             [
                 'title.required' => 'กรุณาระบุหัวข้อ',
@@ -69,6 +74,13 @@ class PostController extends Controller
                 'price.numeric' => 'กรุณาระบุราคาเป็นตัวเลข',
                 'amount.required' => 'กรุณาระบุจํานวน',
                 'amount.numeric' => 'กรุณาระบุจํานวนเป็นตัวเลข',
+                'bathroom.required' => 'กรุณาระบุจํานวน',
+                'bathroom.numeric' => 'กรุณาระบุจํานวนเป็นตัวเลข',
+                'bedroom.required' => 'กรุณาระบุจํานวน',
+                'bedroom.numeric' => 'กรุณาระบุจํานวนเป็นตัวเลข',
+                'area.required' => 'กรุณาระบุจํานวน',
+                'thai_provinces_id.required' => 'กรุณาระบุจังหวัด',
+                'area.numeric' => 'กรุณาระบุจํานวนเป็นตัวเลข',
                 'sale_type_id.required' => 'กรุณาระบุประเภทการขาย',
                 'property_type_id.required' => 'กรุณาระบุประเภทอสังหา',
                 'property_name.required' => 'กรุณาระบุชื่ออสังหา',
@@ -92,16 +104,19 @@ class PostController extends Controller
             'body' => $request->body,
             'price' => $request->price,
             'amount' => $request->amount,
+            'bathroom' => $request->bathroom,
+            'bedroom' => $request->bedroom,
+            'area' => $request->area,
             'sale_type_id' => $request->sale_type_id,
             'property_type_id' => $request->property_type_id,
             'property_name' => $request->property_name,
+            'date_start_rent' => isset($request->date_start_rent) ? $request->date_start_rent : null,
+            'thai_provinces_id' => $request->thai_provinces_id,
             'user_id' => Auth::user()->id,
         );
 
 
        
-
-
         $file_image_cover = $request->file('image_cover');
         if (!empty($file_image_cover)) {
             $name_image = $this->uploadImage($request->data_base64);
@@ -115,14 +130,9 @@ class PostController extends Controller
 
 
       
-
-
-
         $file = $request->file('images');
 
         if (!empty($file)) {
-
-
 
             $uniqueImages = [];
             $originalNames = [];
@@ -142,29 +152,6 @@ class PostController extends Controller
             $count = count($request->images_filter);
            
          
-
-            // $count = count($file);
-
-
-            // for ($i = 0; $i < $count; $i++) {
-
-            //     $photo = $request->file('images')[$i]; // img = ชื่อ name ใน input
-            //     $photoname = $post_id . $i . date('Y-m-d') . time() . '.' . $photo->getClientOriginalExtension();
-            //     $request->images[$i]->move('storage/images/property_image', $photoname); // img = 'img' ตัวนี้
-
-            //     $image['image_name'] = $photoname;
-
-            //     $createdImage = Image::create($image); // create image
-
-            //     $imagePost['post_id'] = $post_id;
-            //     $imagePost['image_id'] = $createdImage->id;
-
-            //     ImagePost::create($imagePost); //create image post
-
-            // }
-
-
-
             // $count = count($file);
             for ($i = 0; $i < $count; $i++) {
                 $photo = $request->file('images')[$i]; // img = ชื่อ name ใน input
@@ -180,17 +167,8 @@ class PostController extends Controller
 
             }
 
-
-
-
-
         }
 
-
-
-
-        
-       
 
         // return redirect('table/laravel');
         return response()->json(['code' => 1, 'msg' => 'ได้ทำการเพิ่มข้อมูลเรียบร้อยแล้ว']);
