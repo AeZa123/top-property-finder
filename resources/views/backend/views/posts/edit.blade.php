@@ -110,8 +110,8 @@
 
 
 
-         /* ซ่อน input file ด้วย opacity 0 และ position absolute */
-         .file-input {
+        /* ซ่อน input file ด้วย opacity 0 และ position absolute */
+        .file-input {
             opacity: 0;
             position: absolute;
             top: 0;
@@ -148,43 +148,33 @@
             background-color: #fff;
             border: 1px solid #dee2e6;
             border-radius: 0.25rem;
-            box-shadow: 0 1px 2px rgba(0,0,0,.075);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, .075);
             max-width: 100%;
             height: auto;
             /* border-radius: 20px; */
         }
 
         .img-thumbnail {
-            padding: 0.25rem!important;
-            background-color: #fff!important;
-            border: 1px solid #dee2e6!important;
-            border-radius: 0.25rem!important;
-            box-shadow: 0 1px 2px rgba(0,0,0,.075)!important;
-            max-width: 100%!important;
-            height: auto!important;
+            padding: 0.25rem !important;
+            background-color: #fff !important;
+            border: 1px solid #dee2e6 !important;
+            border-radius: 0.25rem !important;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, .075) !important;
+            max-width: 100% !important;
+            height: auto !important;
             /* border-radius: 20px; */
         }
-
-
-
-
-
-
-
-
-
-
     </style>
 
 
-{{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.css" />
+    {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.css" />
     
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.min.js"></script> --}}
 
 
-<link href="{{ asset('cropImage/src/jquery.cropbox.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ asset('cropImage/src/jquery.cropbox.css') }}" rel="stylesheet" type="text/css">
 
     <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-mousewheel/3.1.12/jquery.mousewheel.js"></script>
     <script src="{{ asset('cropImage/src/jquery.cropbox.js') }}"></script>
@@ -240,10 +230,12 @@
 
 
 
-                                    
+
 
                                     <div class="col-md-6 text-center mb-5">
-                                        <img class="show-image mb-2"  src="{{ asset('storage/images/property_image/image_cover/' . $data->image_cover) }}" alt="รูปภาพ">
+                                        <img class="show-image mb-2"
+                                            src="{{ asset('storage/images/property_image/image_cover/' . $data->image_cover) }}"
+                                            alt="รูปภาพ">
                                         <div id="plugin" class="cropbox">
                                             <div class="workarea-cropbox">
                                                 <div class="bg-cropbox">
@@ -254,7 +246,7 @@
                                                     <div class="resize-cropbox"></div>
                                                 </div>
                                             </div>
-                                         
+
                                             <div class="cropped panel panel-default">
                                                 {{-- <div class="panel-heading">
                                                     <h3 class="panel-title">Result of cropping</h3>
@@ -265,8 +257,9 @@
 
                                             <div class="btn-group">
                                                 <span class="btn btn-primary btn-file">
-                                                    
-                                                    <i class="fas fa-folder-open"></i> เลือกภาพหน้าปก <input type="file" id="image_cover" name="image_cover" accept="image/*">
+
+                                                    <i class="fas fa-folder-open"></i> เลือกภาพหน้าปก <input type="file"
+                                                        id="image_cover" name="image_cover" accept="image/*">
                                                 </span>
                                                 <button type="button" class="btn btn-success btn-crop">
                                                     <i class="fas fa-crop-alt"></i>Crop
@@ -276,7 +269,8 @@
                                                 </button> --}}
                                             </div>
                                             <div class="text-center mb-2">
-                                                <span class="text-danger text font-danger error-text image_cover_error"></span>
+                                                <span
+                                                    class="text-danger text font-danger error-text image_cover_error"></span>
                                             </div>
 
 
@@ -351,6 +345,7 @@
 
                                             <div class="col-md-6">
                                                 <div class="row">
+
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label for="property_type_id">ประเภทอสังหา<span
@@ -364,6 +359,7 @@
                                                                 class="text-danger font-danger error-text property_type_error"></span>
                                                         </div>
                                                     </div>
+
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label for="sale_type_id">ประเภทการขาย<span
@@ -371,23 +367,90 @@
                                                             <select class="form-control" name="sale_type_id">
                                                                 <option value="">เลือกประเภทการขาย</option>
                                                                 <?php echo $data_html_sales_type; ?>
-                                                                {{-- @foreach ($sales_type as $sale_type)
-                                                                    <option value="{{ $sale_type->id }}">
-                                                                        {{ $sale_type->name_sale_type }}</option>
-                                                                @endforeach --}}
                                                             </select>
                                                             <span
                                                                 class="text-danger font-danger error-text sale_type_id_error"></span>
                                                         </div>
                                                     </div>
+
                                                 </div>
                                             </div>
+
+
+                                            <div class="col-md-6">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="bedroom">จำนวนห้องนอน<span
+                                                                    class="star-req">*</span></label>
+                                                            <input type="text" class="form-control" name="bedroom"
+                                                                id="bedroom" placeholder="จำนวนห้องนอน"
+                                                                value="{{ $data->bedroom }}">
+                                                            <span
+                                                                class="text-danger font-danger error-text bedroom_error"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="bathroom">จำนวนห้องน้ำ<span
+                                                                    class="star-req">*</span></label>
+                                                            <input type="text" class="form-control" name="bathroom"
+                                                                id="bathroom" placeholder="จำนวนห้องน้ำ"
+                                                                value="{{ $data->bathroom }}">
+                                                            <span
+                                                                class="text-danger font-danger error-text bathroom_error"></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+
+                                            <div class="col-md-6">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="area">พื้นที่ ตร.ม<span
+                                                                    class="star-req">*</span></label>
+                                                            <input type="text" class="form-control" name="area"
+                                                                id="area" placeholder="พื้นที่ ตร.ม"
+                                                                value="{{ $data->area }}">
+                                                            <span
+                                                                class="text-danger font-danger error-text area_error"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="date_start_rent">วันที่พร้อมให้เช่า</label>
+                                                            <input type="date" class="form-control" name="date_start_rent"
+                                                                id="date_start_rent"
+                                                                value="{{ $data->date_start_rent }}">
+                                                            <span
+                                                                class="text-danger font-danger error-text date_start_rent_error"></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
 
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label for="body">เนื้อหา<span class="star-req">*</span></label>
                                                     <textarea class="form-control" name="body" id="body" rows="3" placeholder="เนื้อหา..."> {{ $data->body }} </textarea>
                                                     <span class="text-danger font-danger error-text body_error"></span>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="thai_provinces_id">จังหวัด<span
+                                                            class="star-req">*</span></label>
+                                                    <select class="form-control" name="thai_provinces_id">
+                                                        <option value="">เลือกจังหวัด</option>
+                                                        <?php echo $data_html_thai_provinces; ?>
+                                                    </select>
+                                                    <span
+                                                        class="text-danger font-danger error-text thai_provinces_id_error"></span>
                                                 </div>
                                             </div>
 
@@ -419,7 +482,6 @@
                                                                     data-image-id="{{ $imagePost->image_id }}"
                                                                     data-image-name="{{ $imagePost->image_name }}"></div>
 
-
                                                             </div>
                                                         @endforeach
 
@@ -427,14 +489,6 @@
                                                     </div>
                                                 </div>
                                             </div>
-
-
-
-
-
-
-
-
 
 
                                         </div>
@@ -463,8 +517,8 @@
         </div>
 
 
-         {{-- modal --}}
-         <div id="imageModel" class="modal fade bd-example-modal-lg" role="dialog">
+        {{-- modal --}}
+        <div id="imageModel" class="modal fade bd-example-modal-lg" role="dialog">
             <div class="modal-dialog modal-xl">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -566,10 +620,6 @@
                 // var id_delete_html = '#'+idImagePost+''+imageId;
 
                 var id_delete_html = '' + idImagePost + imageId;
-
-
-
-
                 $.ajax({
 
                     url: customUrl,
@@ -601,21 +651,11 @@
                             Toast.fire({
                                 icon: 'success',
                                 // title: data.msg
-                                title: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.'
+                                title: '<div class="mt-2 ml-2 text-success">ลบรูปภาพเรียบร้อยแล้ว!!</div>'
                             })
                             $('#' + id_delete_html).remove();
 
-                            // Swal.fire({
-                            //     title: 'แก้ไขสำเร็จ',
-                            //     text: data.msg,
-                            //     icon: 'success',
-                            //     confirmButtonText: 'OK',
-                            // }).then((result) => {
-                            //     if (result.isConfirmed) {
-                            //         document.location.href = "{!! route('users') !!}"
-                            //     }
-                            // });
-
+                     
                         }
 
                     }
@@ -710,7 +750,6 @@
 
 
         });
-
     </script>
 
 
@@ -721,24 +760,21 @@
 
 
 
- {{-- crop image new --}}
- <script>
+    {{-- crop image new --}}
+    <script>
+        $('#image_cover').on('change', function() {
+
+
+            $('.image-cropbox').css("width", "50% !important");
+            $('.image-cropbox').css("height", "auto !important");
+            // $('.img-thumbnail').css("border-radius", "20px !important");
+
+            $('.show-image').hide();
 
 
 
-    $('#image_cover').on('change', function() {
 
-
-        $('.image-cropbox').css("width", "50% !important");
-        $('.image-cropbox').css("height", "auto !important");
-        // $('.img-thumbnail').css("border-radius", "20px !important");
-
-        $('.show-image').hide();
-
-
-
-   
-    });
+        });
 
 
 

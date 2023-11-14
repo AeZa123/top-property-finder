@@ -230,9 +230,11 @@ class PostController extends Controller
         // dd($imagePosts);
         $property_type = DB::table('property_type')->select('*')->get();
         $sales_type = DB::table('sales_type')->select('*')->get();
+        $thai_provinces = DB::table('thai_provinces')->select('name_th', 'id')->get();
 
         $count_property_type = count($property_type);
         $count_sales_type = count($sales_type);
+        $count_thai_provinces = count($thai_provinces);
 
         $data_html_proper_type = '';
         for ($i = 0; $i < $count_property_type; $i++) {
@@ -248,8 +250,15 @@ class PostController extends Controller
             $data_html_sales_type .= '>' . $sales_type[$i]->name_sale_type . '</option>';
         }
 
+        $data_html_thai_provinces = '';
+        for ($i = 0; $i < $count_thai_provinces; $i++) {
+            $data_html_thai_provinces .= '<option value="' . $thai_provinces[$i]->id . '"';
+            $data_html_thai_provinces .= ($data->property_type_id == $thai_provinces[$i]->id) ? 'selected' : '';
+            $data_html_thai_provinces .= '>' . $thai_provinces[$i]->name_th . '</option>';
+        }
 
-        return view('backend.views.posts.edit', compact('data', 'data_html_sales_type', 'data_html_proper_type', 'imagePosts'));
+
+        return view('backend.views.posts.edit', compact('data', 'data_html_sales_type', 'data_html_proper_type', 'imagePosts', 'data_html_thai_provinces'));
     }
 
 
@@ -284,10 +293,17 @@ class PostController extends Controller
                 'body' => 'required|string',
                 'price' => 'required|string|numeric',
                 'amount' => 'required|string|numeric',
+                'bathroom' => 'required|string|numeric',
+                'bedroom' => 'required|string|numeric',
+                'area' => 'required|string|numeric',
                 'image_cover' => 'image|mimes:jpeg,png,jpg|max:2048',
                 'property_name' => 'required|string',
+                'thai_provinces_id' => 'required',
                 'sale_type_id' => 'required|string',
                 'property_type_id' => 'required|string',
+
+
+
             ],
             [
                 'title.required' => 'กรุณาระบุหัวข้อ',
@@ -296,6 +312,13 @@ class PostController extends Controller
                 'price.numeric' => 'กรุณาระบุราคาเป็นตัวเลข',
                 'amount.required' => 'กรุณาระบุจํานวน',
                 'amount.numeric' => 'กรุณาระบุจํานวนเป็นตัวเลข',
+                'bathroom.required' => 'กรุณาระบุจํานวน',
+                'bathroom.numeric' => 'กรุณาระบุจํานวนเป็นตัวเลข',
+                'bedroom.required' => 'กรุณาระบุจํานวน',
+                'bedroom.numeric' => 'กรุณาระบุจํานวนเป็นตัวเลข',
+                'area.required' => 'กรุณาระบุพื้นที่',
+                'area.numeric' => 'กรุณาระบุพื้นที่เป็นตัวเลข',
+                'thai_provinces_id.required' => 'กรุณาระบุจังหวัด',
                 'sale_type_id.required' => 'กรุณาระบุประเภทการขาย',
                 'property_type_id.required' => 'กรุณาระบุประเภทอสังหา',
                 'property_name.required' => 'กรุณาระบุชื่ออสังหา',
@@ -319,6 +342,11 @@ class PostController extends Controller
             'body' => $request->body,
             'price' => $request->price,
             'amount' => $request->amount,
+            'bathroom' => $request->bathroom,
+            'bedroom' => $request->bedroom,
+            'area' => $request->area,
+            'thai_provinces_id' => $request->thai_provinces_id,
+            'date_start_rent' => $request->date_start_rent,
             'sale_type_id' => $request->sale_type_id,
             'property_type_id' => $request->property_type_id,
             'property_name' => $request->property_name,
