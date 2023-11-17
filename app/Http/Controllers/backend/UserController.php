@@ -155,6 +155,7 @@ class UserController extends Controller
           // แปลง JSON เป็นโครงสร้างข้อมูล
           $data = json_decode($data_base64, true);
 
+
           // เข้าถึงค่าของ "image"
           $image_data = $data[0]['image'];
   
@@ -267,6 +268,7 @@ class UserController extends Controller
     {
 
         $data = User::where('id', $request->id)->first();
+
 
         $name_image_old = $data->avatar;
         $oldImagePath = 'storage/images/users/' . $name_image_old;

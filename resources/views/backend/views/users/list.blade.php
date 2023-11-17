@@ -195,7 +195,7 @@
         //--------------------------
         $(document).on('click', '#deleteBtn', function() {
             var id = $(this).data('id');
-            var url = '{{ route('user.destroy') }}';
+            var url = '{{ URL::to('user/destroy') }}';
 
 
             Swal.fire({

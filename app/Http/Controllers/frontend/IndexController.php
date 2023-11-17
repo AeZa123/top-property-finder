@@ -14,6 +14,31 @@ class IndexController extends Controller
 
 
     public function index(){
+
+
+
+        $property_type = DB::table('property_type')->select('*')->get();
+        $thai_provinces = DB::table('thai_provinces')->select('name_th', 'id')->get();
+        $count_property_type = count($property_type);
+        $count_thai_provinces = count($thai_provinces);
+
+        $data_html_proper_type = '';
+        for ($i = 0; $i < $count_property_type; $i++) {
+            $data_html_proper_type .= '<option value="' . $property_type[$i]->id . '"';
+            $data_html_proper_type .= '>' . $property_type[$i]->name_property_type . '</option>';
+        }
+
+        $data_html_thai_provinces = '';
+        for ($i = 0; $i < $count_thai_provinces; $i++) {
+            $data_html_thai_provinces .= '<option value="' . $thai_provinces[$i]->id . '"';
+            $data_html_thai_provinces .= '>' . $thai_provinces[$i]->name_th . '</option>';
+        }
+
+
+
+
+
+
         $datas = DB::table('posts')
                 // ->join('categories', 'posts.category_id', '=', 'categories.id')
                 ->join('users', 'posts.user_id', '=', 'users.id')
@@ -24,7 +49,7 @@ class IndexController extends Controller
                 ->limit(9)
                 ->get();
 
-        return view('frontend.views.index', compact('datas'));
+        return view('frontend.views.index', compact('datas', 'data_html_proper_type', 'data_html_thai_provinces'));
     }
 
 

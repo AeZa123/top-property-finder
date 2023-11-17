@@ -61,7 +61,7 @@ class PostController extends Controller
                 'bathroom' => 'required|string|numeric',
                 'bedroom' => 'required|string|numeric',
                 'area' => 'required|string|numeric',
-                'image_cover' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+                'image_cover' => 'required|image|mimes:jpeg,png,jpg|max:5000',
                 'property_name' => 'required|string',
                 'sale_type_id' => 'required|string',
                 'property_type_id' => 'required|string',
@@ -119,8 +119,21 @@ class PostController extends Controller
        
         $file_image_cover = $request->file('image_cover');
         if (!empty($file_image_cover)) {
-            $name_image = $this->uploadImage($request->data_base64);
-            $data['image_cover'] = $name_image;
+            // $name_image = $this->uploadImage($request->data_base64);
+
+
+
+            $photo = $request->file('image'); // img = ชื่อ name ใน input
+            $photoname = uniqid() . '-' . date('Y-m-d') . time() . '.webp';
+            // $photoname = uniqid() . '-' . date('Y-m-d') . time() . '.' . $photo->getClientOriginalExtension();
+
+            // dd($photoname);
+            $request->image->move('storage/images/property_image/image_cover', $photoname); // img = 'img' ตัวนี้
+            
+            $data['image_cover'] = $photoname;
+
+
+            // $data['image_cover'] = $name_image;
            
         }
 
@@ -175,43 +188,47 @@ class PostController extends Controller
     }
 
 
-    public function uploadImage($data_base64)
-    {
-        $folderPath = public_path('storage/images/property_image/image_cover/');
-        if (!file_exists($folderPath)) {
-            // ถ้าโฟลเดอร์ไม่มีอยู่ ให้สร้างขึ้นมา
-            mkdir($folderPath, 0777, true);
-        }
+    // public function uploadImage($data_base64)
+    // {
+    //     // $folderPath = public_path('storage/images/property_image/image_cover/');
+    //     // if (!file_exists($folderPath)) {
+    //     //     // ถ้าโฟลเดอร์ไม่มีอยู่ ให้สร้างขึ้นมา
+    //     //     mkdir($folderPath, 0777, true);
+    //     // }
 
 
 
         
-        // แปลง JSON เป็นโครงสร้างข้อมูล
-        $data = json_decode($data_base64, true);
+    //     // แปลง JSON เป็นโครงสร้างข้อมูล
+    //     // $data = json_decode($data_base64, true);
 
-        // เข้าถึงค่าของ "image"
-        $image_data = $data[0]['image'];
+    //     // dd($data_base64);
+    //     // เข้าถึงค่าของ "image"
+    //     // $image_data = $data[0]['image'];
 
-        // ตัดสตริงออกมาโดยใช้ substr
-        $start = strpos($image_data, "data:image/png;base64,");
-        if ($start !== false) {
-            $image_data = substr($image_data, $start);
-        }
+    //     // ตัดสตริงออกมาโดยใช้ substr
+    //     // $start = strpos($image_data, "data:image/png;base64,");
+    //     // if ($start !== false) {
+    //     //     $image_data = substr($image_data, $start);
+    //     // }
 
 
 
-        $image_parts = explode(";base64,", $image_data);
-        // $image_parts = explode(";base64,", $data_base64);
-        // $image_parts = explode(";base64,", $request->image);
-        // $image_type_aux = explode("image/", $image_parts[0]);
-        // $image_type = $image_type_aux[1];
-        $image_base64 = base64_decode($image_parts[1]);
-        $imageName = uniqid() . '.png';
-        $imageFullPath = $folderPath . $imageName;
-        file_put_contents($imageFullPath, $image_base64);
+    //     // $image_parts = explode(";base64,", $image_data);
+    //     // $image_parts = explode(";base64,", $data_base64);
+    //     // $image_parts = explode(";base64,", $request->image);
+    //     // $image_type_aux = explode("image/", $image_parts[0]);
+    //     // $image_type = $image_type_aux[1];
+    //     // $image_base64 = base64_decode($image_parts[1]);
+       
+    //     // $photo = $request->file('images')
+    //     // $photo = $request->file('image_cover');
+    //     // $imageName =  uniqid() . '-' . date('Y-m-d') . time() . '.' . $photo->getClientOriginalExtension();;
+    //     // $imageFullPath = $folderPath . $imageName;
+    //     // file_put_contents($imageFullPath, $image_base64);
 
-        return $imageName;
-    }
+    //     // return $imageName;
+    // }
 
 
 
@@ -230,9 +247,11 @@ class PostController extends Controller
         // dd($imagePosts);
         $property_type = DB::table('property_type')->select('*')->get();
         $sales_type = DB::table('sales_type')->select('*')->get();
+        $thai_provinces = DB::table('thai_provinces')->select('name_th', 'id')->get();
 
         $count_property_type = count($property_type);
         $count_sales_type = count($sales_type);
+        $count_thai_provinces = count($thai_provinces);
 
         $data_html_proper_type = '';
         for ($i = 0; $i < $count_property_type; $i++) {
@@ -248,8 +267,15 @@ class PostController extends Controller
             $data_html_sales_type .= '>' . $sales_type[$i]->name_sale_type . '</option>';
         }
 
+        $data_html_thai_provinces = '';
+        for ($i = 0; $i < $count_thai_provinces; $i++) {
+            $data_html_thai_provinces .= '<option value="' . $thai_provinces[$i]->id . '"';
+            $data_html_thai_provinces .= ($data->property_type_id == $thai_provinces[$i]->id) ? 'selected' : '';
+            $data_html_thai_provinces .= '>' . $thai_provinces[$i]->name_th . '</option>';
+        }
 
-        return view('backend.views.posts.edit', compact('data', 'data_html_sales_type', 'data_html_proper_type', 'imagePosts'));
+
+        return view('backend.views.posts.edit', compact('data', 'data_html_sales_type', 'data_html_proper_type', 'imagePosts', 'data_html_thai_provinces'));
     }
 
 
@@ -276,6 +302,9 @@ class PostController extends Controller
     public function update(Request $request, $id)
     {
 
+
+        // dd($request->file('image'));
+
         
         $validator = \Validator::make(
             $request->all(),
@@ -284,10 +313,15 @@ class PostController extends Controller
                 'body' => 'required|string',
                 'price' => 'required|string|numeric',
                 'amount' => 'required|string|numeric',
+                'bathroom' => 'required|string|numeric',
+                'bedroom' => 'required|string|numeric',
+                'area' => 'required|string|numeric',
                 'image_cover' => 'image|mimes:jpeg,png,jpg|max:2048',
                 'property_name' => 'required|string',
+                'thai_provinces_id' => 'required',
                 'sale_type_id' => 'required|string',
                 'property_type_id' => 'required|string',
+
             ],
             [
                 'title.required' => 'กรุณาระบุหัวข้อ',
@@ -296,6 +330,13 @@ class PostController extends Controller
                 'price.numeric' => 'กรุณาระบุราคาเป็นตัวเลข',
                 'amount.required' => 'กรุณาระบุจํานวน',
                 'amount.numeric' => 'กรุณาระบุจํานวนเป็นตัวเลข',
+                'bathroom.required' => 'กรุณาระบุจํานวน',
+                'bathroom.numeric' => 'กรุณาระบุจํานวนเป็นตัวเลข',
+                'bedroom.required' => 'กรุณาระบุจํานวน',
+                'bedroom.numeric' => 'กรุณาระบุจํานวนเป็นตัวเลข',
+                'area.required' => 'กรุณาระบุพื้นที่',
+                'area.numeric' => 'กรุณาระบุพื้นที่เป็นตัวเลข',
+                'thai_provinces_id.required' => 'กรุณาระบุจังหวัด',
                 'sale_type_id.required' => 'กรุณาระบุประเภทการขาย',
                 'property_type_id.required' => 'กรุณาระบุประเภทอสังหา',
                 'property_name.required' => 'กรุณาระบุชื่ออสังหา',
@@ -319,6 +360,11 @@ class PostController extends Controller
             'body' => $request->body,
             'price' => $request->price,
             'amount' => $request->amount,
+            'bathroom' => $request->bathroom,
+            'bedroom' => $request->bedroom,
+            'area' => $request->area,
+            'thai_provinces_id' => $request->thai_provinces_id,
+            'date_start_rent' => $request->date_start_rent,
             'sale_type_id' => $request->sale_type_id,
             'property_type_id' => $request->property_type_id,
             'property_name' => $request->property_name,
@@ -332,15 +378,24 @@ class PostController extends Controller
           // เช็คว่ามีการเปลี่ยนไฟล์หรือไม่
           if ($request->hasFile('image_cover')) {
 
-            $file = $request->file('image_cover');
+            $file = $request->file('image');
             if (!empty($file)) {
+
+
+
+                 $folderPath = public_path('storage/images/property_image/image_cover/');
+                if (!file_exists($folderPath)) {
+                    // ถ้าโฟลเดอร์ไม่มีอยู่ ให้สร้างขึ้นมา
+                    mkdir($folderPath, 0777, true);
+                }
+
+
 
                 $image_old = Post::where('id', $id)->first();
                 // ลบไฟล์รูปเก่า
                 $name_image_old = $image_old->image_cover;
                 $oldImagePath = 'storage/images/property_image/image_cover/' . $name_image_old;
                 // $oldOriginalImagePath = 'storage/images/users/original/' . $name_image_old;
-
                 if (file_exists($oldImagePath)) {
                     @unlink($oldImagePath);
                 }
@@ -348,11 +403,24 @@ class PostController extends Controller
                 //     @unlink($oldOriginalImagePath);
                 // }
 
-                $name_image = $this->uploadImage($request->data_base64);
+                // $name_image = $this->uploadImage($request->data_base64);
                 // กำหนดชื่อเอาไว้บันทึกใน db
-                $data['image_cover'] = $name_image;
                 // เก็บไฟล์ใหม่
                 // $request->avatar->move('storage/images/property_image/image_cover', $name_image); // img = 'img' ตัวนี้
+                
+                
+                
+                // $folderPath = public_path('storage/images/property_image/image_cover/');
+                
+                $photo = $request->file('image'); // img = ชื่อ name ใน input
+                $photoname = uniqid() . '-' . date('Y-m-d') . time() . '.webp';
+                // $photoname = uniqid() . '-' . date('Y-m-d') . time() . '.' . $photo->getClientOriginalExtension();
+
+                // dd($photoname);
+                $request->image->move('storage/images/property_image/image_cover', $photoname); // img = 'img' ตัวนี้
+                
+                $data['image_cover'] = $photoname;
+
             }
         }
 
