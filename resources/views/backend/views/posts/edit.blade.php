@@ -202,6 +202,8 @@
                                 @csrf
                                 <div class="row justify-content-center">
 
+                                    <input type="text" hidden value="{{ $data->id }}" id="id">
+
 
 
                                     {{-- <div class="col-md-12 mt-3 mb-3">
@@ -566,9 +568,14 @@
                 $('#form').on('submit', function(e) {
                     e.preventDefault();
 
+                    var id = $('#id').val();
+
+                    // var url = 'post/update/' + id;
+
                     var form = this;
                     $.ajax({
-                        url: $(form).attr('action'),
+                        url: '{{ url('/post/update/') }}' +'/'+ id,
+                        // url: $(form).attr('action'),
                         method: $(form).attr('method'),
                         data: new FormData(form),
                         processData: false,

@@ -357,7 +357,8 @@
 
                 var form = this;
                 $.ajax({
-                    url: $(form).attr('action'),
+                    url: '{{ URL::to('user/storage') }}',
+                    // url: $(form).attr('action'),
                     method: $(form).attr('method'),
                     data: new FormData(form),
                     processData: false,

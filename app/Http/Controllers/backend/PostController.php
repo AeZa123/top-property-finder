@@ -61,7 +61,7 @@ class PostController extends Controller
                 'bathroom' => 'required|string|numeric',
                 'bedroom' => 'required|string|numeric',
                 'area' => 'required|string|numeric',
-                'image_cover' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+                'image_cover' => 'required|image|mimes:jpeg,png,jpg|max:5000',
                 'property_name' => 'required|string',
                 'sale_type_id' => 'required|string',
                 'property_type_id' => 'required|string',
@@ -189,6 +189,7 @@ class PostController extends Controller
         // แปลง JSON เป็นโครงสร้างข้อมูล
         $data = json_decode($data_base64, true);
 
+        // dd($data_base64);
         // เข้าถึงค่าของ "image"
         $image_data = $data[0]['image'];
 
@@ -284,6 +285,9 @@ class PostController extends Controller
 
     public function update(Request $request, $id)
     {
+
+
+        // dd($request->all());
 
         
         $validator = \Validator::make(

@@ -602,7 +602,8 @@
 
 
                 $.ajax({
-                    url: $(form).attr('action'),
+                    url: '{{ URL::to('post/storage') }}',
+                    // url: $(form).attr('action'),
                     method: $(form).attr('method'),
                     data: form_data,
                     // data: new FormData(form),
@@ -753,10 +754,7 @@
             $('.image-cropbox').css("width", "50% !important");
             $('.image-cropbox').css("height", "auto !important");
 
-            console.log('test');
-
-            // $('.image-cropbox').attr("width", "50%!important");
-            // $('.image-cropbox').attr("height", "auto!important");
+            // console.log('test');
 
         });
 
