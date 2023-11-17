@@ -119,8 +119,21 @@ class PostController extends Controller
        
         $file_image_cover = $request->file('image_cover');
         if (!empty($file_image_cover)) {
-            $name_image = $this->uploadImage($request->data_base64);
-            $data['image_cover'] = $name_image;
+            // $name_image = $this->uploadImage($request->data_base64);
+
+
+
+            $photo = $request->file('image'); // img = ชื่อ name ใน input
+            $photoname = uniqid() . '-' . date('Y-m-d') . time() . '.webp';
+            // $photoname = uniqid() . '-' . date('Y-m-d') . time() . '.' . $photo->getClientOriginalExtension();
+
+            // dd($photoname);
+            $request->image->move('storage/images/property_image/image_cover', $photoname); // img = 'img' ตัวนี้
+            
+            $data['image_cover'] = $photoname;
+
+
+            // $data['image_cover'] = $name_image;
            
         }
 
@@ -175,44 +188,47 @@ class PostController extends Controller
     }
 
 
-    public function uploadImage($data_base64)
-    {
-        $folderPath = public_path('storage/images/property_image/image_cover/');
-        if (!file_exists($folderPath)) {
-            // ถ้าโฟลเดอร์ไม่มีอยู่ ให้สร้างขึ้นมา
-            mkdir($folderPath, 0777, true);
-        }
+    // public function uploadImage($data_base64)
+    // {
+    //     // $folderPath = public_path('storage/images/property_image/image_cover/');
+    //     // if (!file_exists($folderPath)) {
+    //     //     // ถ้าโฟลเดอร์ไม่มีอยู่ ให้สร้างขึ้นมา
+    //     //     mkdir($folderPath, 0777, true);
+    //     // }
 
 
 
         
-        // แปลง JSON เป็นโครงสร้างข้อมูล
-        $data = json_decode($data_base64, true);
+    //     // แปลง JSON เป็นโครงสร้างข้อมูล
+    //     // $data = json_decode($data_base64, true);
 
-        // dd($data_base64);
-        // เข้าถึงค่าของ "image"
-        $image_data = $data[0]['image'];
+    //     // dd($data_base64);
+    //     // เข้าถึงค่าของ "image"
+    //     // $image_data = $data[0]['image'];
 
-        // ตัดสตริงออกมาโดยใช้ substr
-        $start = strpos($image_data, "data:image/png;base64,");
-        if ($start !== false) {
-            $image_data = substr($image_data, $start);
-        }
+    //     // ตัดสตริงออกมาโดยใช้ substr
+    //     // $start = strpos($image_data, "data:image/png;base64,");
+    //     // if ($start !== false) {
+    //     //     $image_data = substr($image_data, $start);
+    //     // }
 
 
 
-        $image_parts = explode(";base64,", $image_data);
-        // $image_parts = explode(";base64,", $data_base64);
-        // $image_parts = explode(";base64,", $request->image);
-        // $image_type_aux = explode("image/", $image_parts[0]);
-        // $image_type = $image_type_aux[1];
-        $image_base64 = base64_decode($image_parts[1]);
-        $imageName = uniqid() . '.png';
-        $imageFullPath = $folderPath . $imageName;
-        file_put_contents($imageFullPath, $image_base64);
+    //     // $image_parts = explode(";base64,", $image_data);
+    //     // $image_parts = explode(";base64,", $data_base64);
+    //     // $image_parts = explode(";base64,", $request->image);
+    //     // $image_type_aux = explode("image/", $image_parts[0]);
+    //     // $image_type = $image_type_aux[1];
+    //     // $image_base64 = base64_decode($image_parts[1]);
+       
+    //     // $photo = $request->file('images')
+    //     // $photo = $request->file('image_cover');
+    //     // $imageName =  uniqid() . '-' . date('Y-m-d') . time() . '.' . $photo->getClientOriginalExtension();;
+    //     // $imageFullPath = $folderPath . $imageName;
+    //     // file_put_contents($imageFullPath, $image_base64);
 
-        return $imageName;
-    }
+    //     // return $imageName;
+    // }
 
 
 
@@ -287,7 +303,7 @@ class PostController extends Controller
     {
 
 
-        // dd($request->all());
+        // dd($request->file('image'));
 
         
         $validator = \Validator::make(
@@ -305,8 +321,6 @@ class PostController extends Controller
                 'thai_provinces_id' => 'required',
                 'sale_type_id' => 'required|string',
                 'property_type_id' => 'required|string',
-
-
 
             ],
             [
@@ -364,15 +378,24 @@ class PostController extends Controller
           // เช็คว่ามีการเปลี่ยนไฟล์หรือไม่
           if ($request->hasFile('image_cover')) {
 
-            $file = $request->file('image_cover');
+            $file = $request->file('image');
             if (!empty($file)) {
+
+
+
+                 $folderPath = public_path('storage/images/property_image/image_cover/');
+                if (!file_exists($folderPath)) {
+                    // ถ้าโฟลเดอร์ไม่มีอยู่ ให้สร้างขึ้นมา
+                    mkdir($folderPath, 0777, true);
+                }
+
+
 
                 $image_old = Post::where('id', $id)->first();
                 // ลบไฟล์รูปเก่า
                 $name_image_old = $image_old->image_cover;
                 $oldImagePath = 'storage/images/property_image/image_cover/' . $name_image_old;
                 // $oldOriginalImagePath = 'storage/images/users/original/' . $name_image_old;
-
                 if (file_exists($oldImagePath)) {
                     @unlink($oldImagePath);
                 }
@@ -380,11 +403,24 @@ class PostController extends Controller
                 //     @unlink($oldOriginalImagePath);
                 // }
 
-                $name_image = $this->uploadImage($request->data_base64);
+                // $name_image = $this->uploadImage($request->data_base64);
                 // กำหนดชื่อเอาไว้บันทึกใน db
-                $data['image_cover'] = $name_image;
                 // เก็บไฟล์ใหม่
                 // $request->avatar->move('storage/images/property_image/image_cover', $name_image); // img = 'img' ตัวนี้
+                
+                
+                
+                // $folderPath = public_path('storage/images/property_image/image_cover/');
+                
+                $photo = $request->file('image'); // img = ชื่อ name ใน input
+                $photoname = uniqid() . '-' . date('Y-m-d') . time() . '.webp';
+                // $photoname = uniqid() . '-' . date('Y-m-d') . time() . '.' . $photo->getClientOriginalExtension();
+
+                // dd($photoname);
+                $request->image->move('storage/images/property_image/image_cover', $photoname); // img = 'img' ตัวนี้
+                
+                $data['image_cover'] = $photoname;
+
             }
         }
 
