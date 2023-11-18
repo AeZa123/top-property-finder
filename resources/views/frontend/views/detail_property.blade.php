@@ -17,8 +17,12 @@
         <!-- About Start -->
         <div class="container-fluid mt-5">
             <div class="container">
-                <div class="row g-5 align-items-center">
-                    <div class="col-lg-6 wow fadeIn" data-wow-delay="0.1s">
+                <div class="row align-items-center">
+                {{-- <div class="row g-5 align-items-center"> --}}
+                    <h1 style="margin-top: 10%;">{{ $data->property_name }}</h1>
+                    <hr style="margin-bottom: 3%;">
+                   
+                    <div class="col-lg-6 wow fadeIn" data-wow-delay="0.1s" >
                         <div class="about-img position-relative overflow-hidden p-5 pe-0">
                             <img class="img-fluid w-100"
                                 src="{{ asset('storage/images/property_image/image_cover/' . $data->image_cover) }}">
@@ -39,7 +43,7 @@
 
 
         <!-- gallery Start -->
-        <div class="container-full py-5">
+        <div class="container-fluid py-5">
             <div class="container">
 
                 <div class="row">

@@ -39,6 +39,12 @@
 
                  <li class="nav-header">Management</li>
                  <li class="nav-item">
+                     <a href="{{ route('dashboard') }}" class="nav-link">
+                         <i class="nav-icon fas fa-chart-line"></i>
+                         <p>Dashboard</p>
+                     </a>
+                 </li>
+                 <li class="nav-item">
                      <a href="{{ route('users') }}" class="nav-link">
                          <i class="nav-icon fas fa-users"></i>
                          <p>Users</p>

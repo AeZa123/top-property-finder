@@ -17,9 +17,9 @@
     <!-- Navbar Start -->
     <div class="container-fluid nav-bar1 bg-transparent" >
     {{-- <div class="container-fluid nav-bar bg-transparent"> --}}
-        <nav class="navbar navbar-expand-lg bg-white navbar-light py-0 px-4">
+        <nav class="navbar navbar-expand-lg bg-white navbar-light py-0 px-4" style="box-shadow: 0 -10px 15px rgba(0,0,0,0.25),0 0px 10px rgba(0,0,0,0.22)!important;">
         {{-- <nav class="navbar navbar-expand-lg bg-white navbar-light py-0 px-4"> --}}
-            <a href="#" class="navbar-brand d-flex align-items-center text-center">
+            <a href="{{ route('home') }}" class="navbar-brand d-flex align-items-center text-center">
                 <div class="icon p-2 me-2">
                     <img class="img-fluid" src="{{ asset('template/img/icon-deal.png') }}" alt="Icon"
                         style="width: 30px; height: 30px;">
@@ -33,22 +33,22 @@
                 <div class="navbar-nav ms-auto">
                     <a href="#" class="nav-item nav-link active">Home</a>
                     <a href="#" class="nav-item nav-link">About</a>
-                    <div class="nav-item dropdown">
+                    {{-- <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Property</a>
                         <div class="dropdown-menu rounded-0 m-0">
                             <a href="property-list.html" class="dropdown-item">Property List</a>
                             <a href="property-type.html" class="dropdown-item">Property Type</a>
                             <a href="property-agent.html" class="dropdown-item">Property Agent</a>
                         </div>
-                    </div>
-                    <div class="nav-item dropdown">
+                    </div> --}}
+                    {{-- <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
                         <div class="dropdown-menu rounded-0 m-0">
                             <a href="testimonial.html" class="dropdown-item">Testimonial</a>
                             <a href="404.html" class="dropdown-item">404 Error</a>
                         </div>
-                    </div>
-                    <a href="contact.html" class="nav-item nav-link">Contact</a>
+                    </div> --}}
+                    <a href="#" class="nav-item nav-link">Contact</a>
 
 
 

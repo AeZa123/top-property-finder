@@ -33,6 +33,7 @@ Auth::routes();
 // Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/', [IndexController::class, 'index'])->name('home');
 Route::get('/detail/property/{id}', [IndexController::class, 'detail_property']);
+Route::get('/type/propertys/{id}', [IndexController::class, 'getListPropertyInType']);
 
 
 

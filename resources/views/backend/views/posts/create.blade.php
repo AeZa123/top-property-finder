@@ -279,7 +279,7 @@
 
 
                                             <div class="form-group" hidden>
-                                                <textarea class="data form-control" name="data_base64" rows="5"></textarea>
+                                                <textarea class="data form-control" name="" rows="5"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -636,7 +636,7 @@
                 fd.append("image", blob);
 
                 var imageData = fd.get("image");
-                console.log(imageData);
+                // console.log(imageData);
 
                 // var form = this;
                 // var form_data = new FormData(form)

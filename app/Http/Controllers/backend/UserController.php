@@ -130,11 +130,33 @@ class UserController extends Controller
         );
 
 
-        $file = $request->file('avatar');
+        $file = $request->file('image');
         if (!empty($file)) {
-            $name_image = $this->uploadImage($request->data_base64);
-            $data['avatar'] = $name_image;
-            $request->avatar->move('storage/images/users/original', $name_image); // img = 'img' ตัวนี้
+            // $name_image = $this->uploadImage($request->data_base64);
+
+            $folderPath = public_path('storage/images/users/original/');
+            if (!file_exists($folderPath)) {
+                // ถ้าโฟลเดอร์ไม่มีอยู่ ให้สร้างขึ้นมา
+                mkdir($folderPath, 0777, true);
+            }
+
+            $folderPath_thumbnail = public_path('storage/images/users/');
+            if (!file_exists($folderPath_thumbnail)) {
+                // ถ้าโฟลเดอร์ไม่มีอยู่ ให้สร้างขึ้นมา
+                mkdir($folderPath_thumbnail, 0777, true);
+            }
+
+
+            $photoname = uniqid() . '-' . date('Y-m-d') . time() . '.webp';
+            // $photoname = uniqid() . '-' . date('Y-m-d') . time() . '.' . $photo->getClientOriginalExtension();
+
+           
+            $request->avatar->move('storage/images/users/original', $photoname); // original
+            $request->image->move('storage/images/users', $photoname); // thumbnail
+            
+            $data['avatar'] = $photoname;
+
+            
         }
 
         User::create($data);
@@ -143,7 +165,7 @@ class UserController extends Controller
 
 
     //
-    public function uploadImage($data_base64)
+    private function uploadImage($data_base64)
     {
         $folderPath = public_path('storage/images/users/');
         if (!file_exists($folderPath)) {
@@ -248,11 +270,21 @@ class UserController extends Controller
                     @unlink($oldOriginalImagePath);
                 }
 
-                $name_image = $this->uploadImage($request->data_base64);
+
+
+                
+                $photoname = uniqid() . '-' . date('Y-m-d') . time() . '.webp';
+                $request->avatar->move('storage/images/users/original', $photoname); // original
+                $request->image->move('storage/images/users', $photoname); // thumbnail
+                $data['avatar'] = $photoname;
+
+
+
+                // $name_image = $this->uploadImage($request->data_base64);
                 // กำหนดชื่อเอาไว้บันทึกใน db
-                $data['avatar'] = $name_image;
+                // $data['avatar'] = $name_image;
                 // เก็บไฟล์ใหม่
-                $request->avatar->move('storage/images/users/original', $name_image); // img = 'img' ตัวนี้
+                // $request->avatar->move('storage/images/users/original', $name_image); // img = 'img' ตัวนี้
             }
         }
 
