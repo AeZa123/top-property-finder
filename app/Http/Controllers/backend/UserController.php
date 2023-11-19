@@ -20,12 +20,29 @@ class UserController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        // $role = auth()->user()->role;
+
+    
+
+        if (auth()->check()) {
+            $role = auth()->user()->role;
+    
+            // Check if the user has the required role
+            if ($role != '1') {
+                abort(403);
+            }
+        }
     }
 
 
 
     public function index()
     {
+        $role = auth()->user()->role;
+
+        if($role != '1'){
+            abort(403);
+        }
 
         $users = DB::table('users')
             ->join('roles', 'users.role', '=', 'roles.id', 'left')
@@ -39,6 +56,12 @@ class UserController extends Controller
 
     public function create()
     {
+        $role = auth()->user()->role;
+
+        if($role != '1'){
+            abort(403);
+        }
+
         $genders = DB::table('genders')->select('*')->where('status', 'open')->get();
         $roles = DB::table('roles')->select('*')->where('status', 'open')->get();
         return view('backend.views.users.create', compact('genders', 'roles'));
@@ -46,6 +69,11 @@ class UserController extends Controller
 
     public function edit($id)
     {
+        $role = auth()->user()->role;
+
+        if($role != '1'){
+            abort(403);
+        }
 
         $data = User::find($id);
         $genders = DB::table('genders')->select('*')->where('status', 'open')->get();
@@ -83,6 +111,11 @@ class UserController extends Controller
 
     public function storage(Request $request)
     {
+        $role = auth()->user()->role;
+
+        if($role != '1'){
+            abort(403);
+        }
 
         $validator = \Validator::make(
             $request->all(),
@@ -205,6 +238,12 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
 
+        $role = auth()->user()->role;
+
+        if($role != '1'){
+            abort(403);
+        }
+
 
         $validator = \Validator::make(
             $request->all(),
@@ -298,6 +337,11 @@ class UserController extends Controller
 
     public function destroy(Request $request)
     {
+        $role = auth()->user()->role;
+
+        if($role != '1'){
+            abort(403);
+        }
 
         $data = User::where('id', $request->id)->first();
 
@@ -325,6 +369,14 @@ class UserController extends Controller
 
     public function search(Request $request)
     {
+
+        $role = auth()->user()->role;
+
+        if($role != '1'){
+            abort(403);
+        }
+
+
         $folderPath = url('storage/images/users/');
 
         $output = "";

@@ -38,18 +38,25 @@
                  data-accordion="false">
 
                  <li class="nav-header">Management</li>
-                 <li class="nav-item">
-                     <a href="{{ route('dashboard') }}" class="nav-link">
-                         <i class="nav-icon fas fa-chart-line"></i>
-                         <p>Dashboard</p>
-                     </a>
-                 </li>
+                 @if ( Auth::user()->role != '3' )
+                    <li class="nav-item">
+                        <a href="{{ route('dashboard') }}" class="nav-link">
+                            <i class="nav-icon fas fa-chart-line"></i>
+                            <p>Dashboard</p>
+                        </a>
+                    </li>
+                 @endif
+
+                 @if ( Auth::user()->role == '1' )
                  <li class="nav-item">
                      <a href="{{ route('users') }}" class="nav-link">
                          <i class="nav-icon fas fa-users"></i>
                          <p>Users</p>
                      </a>
-                 </li>
+                 </li>   
+                 @endif
+
+                 @if ( Auth::user()->role == '1' or Auth::user()->role == '2' )
                  <li class="nav-item">
                      <a href="{{ route('posts') }}" class="nav-link">
                          {{-- <i class="nav-icon fas fa-users"></i> --}}
@@ -58,6 +65,7 @@
                          <p>Announce</p>
                      </a>
                  </li>
+                 @endif
 
              </ul>
          </nav>
