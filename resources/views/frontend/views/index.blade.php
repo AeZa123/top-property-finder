@@ -32,22 +32,23 @@
     <div class="container bg-primary mb-5 wow fadeIn" data-wow-delay="0.1s"
         style="padding: 35px; z-index: 999!important; position: relative; margin-top: -180px; border-radius: 12px;">
         <div class="container">
-            <form action="">
+            <form action="{{ route('search.property') }}" method="get">
+                
                 <div class="row g-2">
                     <div class="col-md-10">
                         <div class="row g-2">
                             <div class="col-md-4">
-                                <input type="text" class="form-control border-0 py-3" placeholder="Search Keyword">
+                                <input type="text" name="keyword" class="form-control border-0 py-3" placeholder="Search Keyword">
                             </div>
                             <div class="col-md-4">
-                                <select class="form-select border-0 py-3">
-                                    <option selected>Property Type</option>
+                                <select name="property_type_id" class="form-select border-0 py-3">
+                                    <option value="" selected>Property Type</option>
                                     <?php echo $data_html_proper_type; ?>
                                 </select>
                             </div>
                             <div class="col-md-4">
-                                <select class="form-select border-0 py-3">
-                                    <option selected>จังหวัด</option>
+                                <select name="provinces_id" class="form-select border-0 py-3">
+                                    <option value="" selected>จังหวัด</option>
                                     <?php echo $data_html_thai_provinces; ?>
                                 </select>
                             </div>
@@ -161,11 +162,15 @@
                                             class="bg-white rounded-top text-primary position-absolute start-0 bottom-0 mx-4 pt-1 px-3">
                                             {{ $data->name_property_type }}</div>
                                     </div>
+
+                                   
                                     <div class="p-4 pb-0">
-                                        <h5 class="text-primary mb-3">{{ $data->price }} THB</h5>
+                                        <h5 class="text-primary mb-3">{{ $data->price_format }} THB</h5>
                                         <a class="d-block h5 mb-2"
-                                            href="{{ url('detail/property/' . $data->id) }}">{{ $data->title }}</a>
-                                        <span>{{ $data->property_name }}</span>
+                                            href="{{ url('detail/property/' . $data->id) }}" title="{{$data->title}}">{{ Str::limit($data->title, 30, '...') }}</a>
+                                            {{-- href="{{ url('detail/property/' . $data->id) }}">{{ str_limit($data->title, 50, '...') }}</a> --}}
+                                        <span title="{{ $data->property_name }}">{{ Str::limit($data->property_name, 80, '...') }}</span>
+                                        {{-- <span>{{ $data->property_name }}</span> --}}
                                         <p></p>
                                         {{-- <p><i class="fa fa-map-marker-alt text-primary me-2"></i>123 Street, New York, USA
                                         </p> --}}
