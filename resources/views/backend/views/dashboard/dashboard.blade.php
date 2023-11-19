@@ -6,6 +6,8 @@
         <div class="container-fluid mt-4">
             <!-- Small boxes (Stat box) -->
             <div class="row">
+
+                @if ( Auth::user()->role == '1' )
                 <div class="col-lg-6 col-6">
                     <!-- small box -->
                     <div class="small-box bg-info">
@@ -19,6 +21,9 @@
                         <a href="#" class="small-box-footer">More info<i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
+                    
+                @endif
+
                 <!-- ./col -->
                 <div class="col-lg-6 col-6">
                     <!-- small box -->

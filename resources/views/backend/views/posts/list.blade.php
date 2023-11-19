@@ -47,9 +47,9 @@
                                                 <tr>
                                                     <th scope="row">{{ $data->id }}</th>
                                                     {{-- <td><a href="{{url('showBlog/'.$user->id)}}" target="_bank">Test </a></td> --}}
-                                                    <td>{{ $data->property_name }}</td>
-                                                    <td>{{ $data->title }}</td>
-                                                    <td>{{ $data->price }}</td>
+                                                    <td>{{ Str::limit($data->property_name, 20, '...') }}</td>
+                                                    <td>{{ Str::limit($data->title, 30, '...') }}</td>
+                                                    <td>{{ number_format($data->price) }} </td>
                                                     <td>{{ $data->amount }}</td>
                                                     <td>{{ $data->fname }} {{ $data->lname }}</td>
                                                     <td>{{ \Carbon\Carbon::parse($data->created_at)->format('d/m/Y') }}</td>

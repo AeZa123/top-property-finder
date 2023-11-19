@@ -51,7 +51,7 @@ class LoginController extends Controller
             return redirect('/dashboard');
         } elseif ($user->role == '2') {
             // ถ้าเป็นบทบาท 'user' ให้ redirect ไปที่ URL สำหรับ user
-            return redirect('/user/dashboard');
+            return redirect('/dashboard');
         } else {
             // ถ้าไม่มีบทบาทหรือบทบาทอื่น ๆ ที่คุณต้องการจัดการ
             return redirect($this->redirectTo);

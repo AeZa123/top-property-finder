@@ -9,17 +9,63 @@
         <div class="container-xxl py-5">
             <div class="container">
 
+
+                <!-- Search Start -->
+                <h1 class="text-center" style="margin-top: 10%;">ค้นหา</h1>
+                <div class="container bg-primary mb-5"
+                    style="padding: 35px; border-radius: 12px;">
+                    
+                    <div class="container">
+                        <form action="{{ route('search.property') }}" method="get">
+                       
+                            <div class="row g-2">
+                                <div class="col-md-10">
+                                    <div class="row g-2">
+                                        <div class="col-md-4">
+                                            <input type="text" name="keyword" class="form-control border-0 py-3"
+                                                placeholder="Search Keyword">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <select name="property_type_id" class="form-select border-0 py-3">
+                                                <option value="" selected>Property Type</option>
+                                                <?php echo $data_html_proper_type; ?>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <select name="provinces_id" class="form-select border-0 py-3">
+                                                <option value="" selected>จังหวัด</option>
+                                                <?php echo $data_html_thai_provinces; ?>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <button class="btn btn-dark border-0 w-100 py-3">Search</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <!-- Search End -->
+
+
+
+
+
+
+
+
                 <div class="row g-0 gx-5 align-items-end" style="margin-top:10%;">
                     <div class="col-lg-6">
                         <div class="text-start mx-auto mb-5 wow slideInLeft" data-wow-delay="0.1s">
-                            <h1 class="mb-3">สินทรัพย์ {{ $name_property_type->name_property_type }}</h1>
+                            <h1 class="mb-3">ผลการค้นหา</h1>
                             {{-- <h1 class="mb-3">Property Listing</h1> --}}
                             {{-- <p>Eirmod sed ipsum dolor sit rebum labore magna erat. Tempor ut dolore lorem kasd vero ipsum
                                 sit
                                 eirmod sit diam justo sed rebum.</p> --}}
                         </div>
                     </div>
-                    <div class="col-lg-6 text-start text-lg-end wow slideInRight" data-wow-delay="0.1s">
+                    {{-- <div class="col-lg-6 text-start text-lg-end wow slideInRight" data-wow-delay="0.1s">
                         <ul class="nav nav-pills d-inline-flex justify-content-end mb-5">
                             <li class="nav-item me-2">
                                 <a class="btn btn-outline-primary active" data-bs-toggle="pill" href="#tab-1">Featured</a>
@@ -31,14 +77,14 @@
                                 <a class="btn btn-outline-primary" data-bs-toggle="pill" href="#tab-3">For Rent</a>
                             </li>
                         </ul>
-                    </div>
+                    </div> --}}
                 </div>
 
                 <div class="tab-content">
                     <div id="tab-1" class="tab-pane fade show p-0 active">
                         <div class="row g-4">
                             @foreach ($datas as $data)
-                                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
                                     <div class="property-item rounded overflow-hidden">
                                         <div class="position-relative overflow-hidden">
                                             <a href="{{ url('detail/property/' . $data->id) }}"><img class="img-fluid"
@@ -54,9 +100,10 @@
                                         </div>
                                         <div class="p-4 pb-0">
                                             <h5 class="text-primary mb-3">{{ $data->price_format }} THB</h5>
-                                            <a class="d-block h5 mb-2"
-                                                href="{{ url('detail/property/' . $data->id) }}" title="{{$data->title}}">{{ Str::limit($data->title, 30, '...') }}</a>
-                                            <span title="{{ $data->property_name }}">{{ Str::limit($data->property_name, 80, '...') }}</span>
+                                            <a class="d-block h5 mb-2" href="{{ url('detail/property/' . $data->id) }}"
+                                                title="{{ $data->title }}">{{ Str::limit($data->title, 40, '...') }}</a>
+                                            <span
+                                                title="{{ $data->property_name }}">{{ Str::limit($data->property_name, 50, '...') }}</span>
                                             <p></p>
                                             {{-- <p><i class="fa fa-map-marker-alt text-primary me-2"></i>123 Street, New York, USA
                                             </p> --}}
@@ -66,7 +113,8 @@
                                                     class="fa fa-ruler-combined text-primary me-2"></i>{{ $data->area }}
                                                 ตรม.</small>
                                             <small class="flex-fill text-center border-end py-2"><i
-                                                    class="fa fa-bed text-primary me-2"></i>{{ $data->bedroom }} Bed</small>
+                                                    class="fa fa-bed text-primary me-2"></i>{{ $data->bedroom }}
+                                                Bed</small>
                                             <small class="flex-fill text-center py-2"><i
                                                     class="fa fa-bath text-primary me-2"></i>{{ $data->bathroom }}
                                                 Bath</small>
@@ -431,7 +479,10 @@
                         </div>
                     </div>
                 </div>
+
+
                 {{-- {{ $datas->links() }} --}}
+
 
 
             </div>

@@ -29,12 +29,12 @@
                         </div>
                     </div>
                     <div class="col-lg-6 wow fadeIn" data-wow-delay="0.5s">
-                        <h1 class="mb-4">{{ $data->property_name }}</h1>
-                        <p class="mb-4">{{ $data->body }}</p>
+                        <h3 class="mb-2">{{ $data->title }}</h3>
+                        <h5 class="mb-2">{{ $data->property_name }}</h5>
                         <p><i class="fa fa-check text-primary me-3"></i>Tempor erat elitr rebum at clita</p>
                         <p><i class="fa fa-check text-primary me-3"></i>Aliqu diam amet diam et eos</p>
                         <p><i class="fa fa-check text-primary me-3"></i>Clita duo justo magna dolore erat amet</p>
-                        <a class="btn btn-primary py-3 px-5 mt-3" href="">Read More</a>
+                        {{-- <a class="btn btn-primary py-3 px-5 mt-3" href="">Read More</a> --}}
                     </div>
                 </div>
             </div>
@@ -42,17 +42,31 @@
         <!-- About End -->
 
 
+        <div class="container-fluid mt-5">
+
+            <div class="container">
+                <div class="row">
+                    <h1>รายละเอียด</h1>
+                    <hr>
+                    <div class="col-md-6">
+                        <p class="mb-3">{{ $data->body }}</p>
+                        
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
         <!-- gallery Start -->
-        <div class="container-fluid py-5">
+        <div class="container-fluid mt-5">
             <div class="container">
 
                 <div class="row">
-                    <div class="col-md-12">
-                        <h3>Gallery</h3>
-                        <hr>
-                    </div>
-                </div>
+                    <h1>รูปภาพ</h1>
+                    <hr>
 
+                </div>
 
                 <div class="bg-light rounded p-3">
                     <div class="bg-white rounded p-4" style="border: 1px dashed rgba(0, 185, 142, .3)">
@@ -80,24 +94,29 @@
         <!-- gallery End -->
 
         <!-- Call to Action Start -->
-        <div class="container-xxl py-5">
+        <div class="container-fluid py-5">
             <div class="container">
                 <div class="bg-light rounded p-3">
                     <div class="bg-white rounded p-4" style="border: 1px dashed rgba(0, 185, 142, .3)">
                         <div class="row g-5 align-items-center">
-                            <div class="col-lg-6 wow fadeIn" data-wow-delay="0.1s">
-                                <img class="img-fluid rounded w-100" src="img/call-to-action.jpg" alt="">
+                            <div class="col-lg-4 text-center wow fadeIn" data-wow-delay="0.1s">
+                                <img class="img-fluid rounded-circle" src="{{ asset('storage/images/users/' . $data->avatar) }}" alt="avatar">
+                                {{-- <img class="img-fluid rounded w-100" src="img/call-to-action.jpg" alt=""> --}}
                             </div>
-                            <div class="col-lg-6 wow fadeIn" data-wow-delay="0.5s">
+                            <div class="col-lg-8 wow fadeIn" data-wow-delay="0.5s">
                                 <div class="mb-4">
-                                    <h1 class="mb-3">Contact With Our Certified Agent</h1>
-                                    <p>Eirmod sed ipsum dolor sit rebum magna erat. Tempor lorem kasd vero ipsum sit sit
-                                        diam justo sed vero dolor duo.</p>
+                                    <h1 class="mb-3">ติดต่อเอเจ้นท์ที่ "จริงใจ"</h1>
+                                    <i class="fas fa-user-check text-primary"></i> : {{ $data->fname }} {{ $data->lname }} <br>
+                                    <i class="fas fa-phone-square-alt text-primary"></i> : {{ $data->tel }}  <br>
+                                    <i class="fas fa-envelope text-primary"></i> : {{ $data->email }} <br>
+                                    <i class="fab fa-line text-primary"></i> :  <br>
+                                    <i class="fab fa-facebook-square text-primary"></i>  :
+                                    
                                 </div>
-                                <a href="" class="btn btn-primary py-3 px-4 me-2"><i
+                                {{-- <a href="" class="btn btn-primary py-3 px-4 me-2"><i
                                         class="fa fa-phone-alt me-2"></i>Make A Call</a>
                                 <a href="" class="btn btn-dark py-3 px-4"><i class="fa fa-calendar-alt me-2"></i>Get
-                                    Appoinment</a>
+                                    Appoinment</a> --}}
                             </div>
                         </div>
                     </div>

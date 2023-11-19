@@ -34,6 +34,9 @@ Auth::routes();
 Route::get('/', [IndexController::class, 'index'])->name('home');
 Route::get('/detail/property/{id}', [IndexController::class, 'detail_property']);
 Route::get('/type/propertys/{id}', [IndexController::class, 'getListPropertyInType']);
+Route::get('/search/property', [IndexController::class, 'search_property'])->name('search.property');
+
+
 
 
 

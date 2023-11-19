@@ -26,29 +26,56 @@ class PostController extends Controller
     {
 
         // $datas = DB::table('posts')->where('delete_post', '=', null)->paginate(10);
-        $datas = DB::table('posts')
-            ->join('users', 'posts.user_id', '=', 'users.id', 'left')
-            ->where('delete_post', '=', null)
-            ->orWhere('delete_post', '=', '')
-            ->select('posts.*', 'users.fname', 'users.lname')
-            ->paginate(10);
-        return view('backend.views.posts.list', compact('datas'));
+        $role = auth()->user()->role;
+        if($role == '1'){
+            $datas = DB::table('posts')
+                ->join('users', 'posts.user_id', '=', 'users.id', 'left')
+                ->where('delete_post', '=', null)
+                ->orWhere('delete_post', '=', '')
+                ->select('posts.*', 'users.fname', 'users.lname')
+                ->paginate(10);
+            return view('backend.views.posts.list', compact('datas'));
+            
+        }elseif($role == '2'){
+            $datas = DB::table('posts')
+                ->join('users', 'posts.user_id', '=', 'users.id', 'left')
+                ->where('user_id', '=', auth()->user()->id)
+                ->where('delete_post', '=', null)
+                ->orWhere('delete_post', '=', '')
+                ->select('posts.*', 'users.fname', 'users.lname')
+                ->paginate(10);
+            return view('backend.views.posts.list', compact('datas'));
+            
+        }else{
+            abort(403);
+        }
+
     }
 
 
     public function create()
     {
 
-        $property_type = DB::table('property_type')->select('*')->get();
-        $sales_type = DB::table('sales_type')->select('*')->get();
-        $thai_provinces = DB::table('thai_provinces')->select('*')->get();
+        $role = auth()->user()->role;
+        if($role == '1' or $role == '2'){
+            $property_type = DB::table('property_type')->select('*')->get();
+            $sales_type = DB::table('sales_type')->select('*')->get();
+            $thai_provinces = DB::table('thai_provinces')->select('*')->get();
+            return view('backend.views.posts.create', compact('property_type', 'sales_type', 'thai_provinces'));
+            
+        }else{
+            abort(403);
+        }
 
-        return view('backend.views.posts.create', compact('property_type', 'sales_type', 'thai_provinces'));
     }
 
 
     public function storage(Request $request)
     {
+        $role = auth()->user()->role;
+        if($role != '1' and $role != '2'){
+            abort(403);
+        }
 
         // dd($request->all());
         $validator = \Validator::make(
@@ -188,54 +215,15 @@ class PostController extends Controller
     }
 
 
-    // public function uploadImage($data_base64)
-    // {
-    //     // $folderPath = public_path('storage/images/property_image/image_cover/');
-    //     // if (!file_exists($folderPath)) {
-    //     //     // ถ้าโฟลเดอร์ไม่มีอยู่ ให้สร้างขึ้นมา
-    //     //     mkdir($folderPath, 0777, true);
-    //     // }
-
-
-
-        
-    //     // แปลง JSON เป็นโครงสร้างข้อมูล
-    //     // $data = json_decode($data_base64, true);
-
-    //     // dd($data_base64);
-    //     // เข้าถึงค่าของ "image"
-    //     // $image_data = $data[0]['image'];
-
-    //     // ตัดสตริงออกมาโดยใช้ substr
-    //     // $start = strpos($image_data, "data:image/png;base64,");
-    //     // if ($start !== false) {
-    //     //     $image_data = substr($image_data, $start);
-    //     // }
-
-
-
-    //     // $image_parts = explode(";base64,", $image_data);
-    //     // $image_parts = explode(";base64,", $data_base64);
-    //     // $image_parts = explode(";base64,", $request->image);
-    //     // $image_type_aux = explode("image/", $image_parts[0]);
-    //     // $image_type = $image_type_aux[1];
-    //     // $image_base64 = base64_decode($image_parts[1]);
-       
-    //     // $photo = $request->file('images')
-    //     // $photo = $request->file('image_cover');
-    //     // $imageName =  uniqid() . '-' . date('Y-m-d') . time() . '.' . $photo->getClientOriginalExtension();;
-    //     // $imageFullPath = $folderPath . $imageName;
-    //     // file_put_contents($imageFullPath, $image_base64);
-
-    //     // return $imageName;
-    // }
-
-
-
+  
 
     public function edit($id)
     {
 
+        $role = auth()->user()->role;
+        if($role != '1' and $role != '2'){
+            abort(403);
+        }
 
 
         $data = Post::find($id);
@@ -282,6 +270,13 @@ class PostController extends Controller
 
     public function delete_image($idPostImage, $imageId, $nameImage)
     {
+
+        $role = auth()->user()->role;
+        if($role != '1' and $role != '2'){
+            abort(403);
+        }
+
+
         if (!empty($idPostImage) and !empty($imageId) and !empty($nameImage)) {
             // ImagePost::
             unlink('storage/images/property_image/' . $nameImage);
@@ -301,7 +296,10 @@ class PostController extends Controller
 
     public function update(Request $request, $id)
     {
-
+        $role = auth()->user()->role;
+        if($role != '1' and $role != '2'){
+            abort(403);
+        }
 
         // dd($request->file('image'));
 
@@ -461,6 +459,11 @@ class PostController extends Controller
     public function destroy(Request $request)
     {
 
+        $role = auth()->user()->role;
+        if($role != '1' and $role != '2'){
+            abort(403);
+        }
+
         // dd($request->id);
         $id = $request->id;
         $data = array(
@@ -485,29 +488,85 @@ class PostController extends Controller
     public function search(Request $request)
     {
 
+        $role = auth()->user()->role;
+
+        // dd($role);
+        if($role != '1' and $role != '2'){
+            abort(403);
+        }
+
+        $datas ='';
+        if($role == '1'){
+
+            $datas = DB::table('posts')
+                ->join('users', 'posts.user_id', '=', 'users.id', 'left')
+                ->where('title', 'LIKE', '%' . $request->search . "%")
+                ->orWhere('price', 'LIKE', '%' . $request->search . "%")
+                ->orWhere('property_name', 'LIKE', '%' . $request->search . "%")
+                ->orWhere('fname', 'LIKE', '%' . $request->search . "%")
+                ->orWhere('lname', 'LIKE', '%' . $request->search . "%")
+                // ->orWhere('sale_type_id', 'LIKE', '%' . $request->search . "%")
+                // ->orWhere('property_type_id', 'LIKE', '%' . $request->search . "%")
+    
+                ->where('delete_post', '=', null)
+                ->orWhere('delete_post', '=', '')
+                ->select('posts.*', 'users.fname', 'users.lname')
+                ->paginate(15);
+                
+                
+            }elseif($role == '2'){
+
+                if($request->search != ''){
+                    // $datas = DB::table('posts')
+                    //     ->join('users', 'posts.user_id', '=', 'users.id', 'left')
+
+                        
+                    //     ->where('title', 'LIKE', '%' . $request->search . "%")
+                    //     ->orWhere('price', 'LIKE', '%' . $request->search . "%")
+                    //     ->orWhere('property_name', 'LIKE', '%' . $request->search . "%")
+                    //     ->orWhere('fname', 'LIKE', '%' . $request->search . "%")
+                    //     ->orWhere('lname', 'LIKE', '%' . $request->search . "%")
+                        
+                    //     // ->orWhere('sale_type_id', 'LIKE', '%' . $request->search . "%")
+                    //     // ->orWhere('property_type_id', 'LIKE', '%' . $request->search . "%")
+            
+                    //     ->where('delete_post', '=', null)
+                    //     ->orWhere('delete_post', '=', '')
+                    //     ->where('posts.user_id', '=', auth()->user()->id)
+                    //     ->select('posts.*', 'users.fname', 'users.lname')
+                    //     ->paginate(15);
+
+
+
+                    $datas = DB::table('posts')
+                        ->join('users', 'posts.user_id', '=', 'users.id', 'left')
+                        ->where(function ($query) use ($request) {
+                            $query->where('title', 'LIKE', '%' . $request->search . "%")
+                                ->orWhere('price', 'LIKE', '%' . $request->search . "%")
+                                ->orWhere('property_name', 'LIKE', '%' . $request->search . "%")
+                                ->orWhere('fname', 'LIKE', '%' . $request->search . "%")
+                                ->orWhere('lname', 'LIKE', '%' . $request->search . "%");
+                        })
+                        ->where(function ($query) {
+                            $query->where('delete_post', '=', null)
+                                ->orWhere('delete_post', '=', '');
+                        })
+                        ->where('posts.user_id', '=', auth()->user()->id)
+                        ->select('posts.*', 'users.fname', 'users.lname')
+                        ->paginate(15);
+
+                }
+                
+
+            }
 
         // dd($request->all());
 
-        $datas = DB::table('posts')
-            ->join('users', 'posts.user_id', '=', 'users.id', 'left')
-            ->where('title', 'LIKE', '%' . $request->search . "%")
-            ->orWhere('price', 'LIKE', '%' . $request->search . "%")
-            ->orWhere('property_name', 'LIKE', '%' . $request->search . "%")
-            ->orWhere('fname', 'LIKE', '%' . $request->search . "%")
-            ->orWhere('lname', 'LIKE', '%' . $request->search . "%")
-            // ->orWhere('sale_type_id', 'LIKE', '%' . $request->search . "%")
-            // ->orWhere('property_type_id', 'LIKE', '%' . $request->search . "%")
-
-            ->where('delete_post', '=', null)
-            ->orWhere('delete_post', '=', '')
-            ->select('posts.*', 'users.fname', 'users.lname')
-            ->paginate(15);
      
 
-        $output = "";
-   
 
-        if ($datas) {
+        $output = "";
+        if (!empty($datas)) {
             foreach ($datas as $key => $data) {
 
 
