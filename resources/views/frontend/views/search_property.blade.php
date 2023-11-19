@@ -101,9 +101,9 @@
                                         <div class="p-4 pb-0">
                                             <h5 class="text-primary mb-3">{{ $data->price_format }} THB</h5>
                                             <a class="d-block h5 mb-2" href="{{ url('detail/property/' . $data->id) }}"
-                                                title="{{ $data->title }}">{{ Str::limit($data->title, 30, '...') }}</a>
+                                                title="{{ $data->title }}">{{ Str::limit($data->title, 40, '...') }}</a>
                                             <span
-                                                title="{{ $data->property_name }}">{{ Str::limit($data->property_name, 80, '...') }}</span>
+                                                title="{{ $data->property_name }}">{{ Str::limit($data->property_name, 50, '...') }}</span>
                                             <p></p>
                                             {{-- <p><i class="fa fa-map-marker-alt text-primary me-2"></i>123 Street, New York, USA
                                             </p> --}}
