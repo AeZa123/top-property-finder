@@ -120,37 +120,22 @@ class IndexController extends Controller
         }
 
 
-
-        // $datas = DB::table('posts')
-        //         ->join('property_type', 'posts.property_type_id', '=', 'property_type.id')
-        //         ->join('sales_type', 'posts.sale_type_id', '=', 'sales_type.id')
-        //         ->where('posts.delete_post', '=',  null)
-        //         // ->Where('posts.delete_post', '=',  '')
-
-        //         ->where('posts.thai_provinces_id', 'like', '%' . $request->provinces_id . '%')
-        //         ->where('posts.property_type_id', 'like', '%' . $request->property_type_id . '%')
-        //         ->where('posts.title', 'like', '%' . $request->keyword . '%')
-        //         ->orWhere('posts.property_name', 'like', '%' . $request->keyword . '%')
-
-        //         ->select('posts.*', DB::raw('FORMAT(price, 0) as price_format'), 'sales_type.name_sale_type', 'property_type.name_property_type')
-        //         ->orderBy('posts.id', 'desc') 
-        //         ->paginate(20);
-
-
         $datas = DB::table('posts')
             ->join('property_type', 'posts.property_type_id', '=', 'property_type.id')
             ->join('sales_type', 'posts.sale_type_id', '=', 'sales_type.id')
             ->whereNull('posts.delete_post')
             ->where(function ($query) use ($request) {
                 $query->where('posts.thai_provinces_id', 'like', '%' . $request->provinces_id . '%')
-                    ->orWhere('posts.property_type_id', 'like', '%' . $request->property_type_id . '%')
-                    ->orWhere('posts.title', 'like', '%' . $request->keyword . '%')
+                    ->Where('posts.property_type_id', 'like', '%' . $request->property_type_id . '%')
+                    ->Where('posts.title', 'like', '%' . $request->keyword . '%')
                     ->orWhere('posts.property_name', 'like', '%' . $request->keyword . '%');
             })
             ->select('posts.*', DB::raw('FORMAT(price, 0) as price_format'), 'sales_type.name_sale_type', 'property_type.name_property_type')
             ->orderBy('posts.id', 'desc')
             ->paginate(20);
 
+
+            // dd($datas, $request->keyword, $request->property_type_id, $request->provinces_id);
 
 
         // dd($datas, $request->keyword, $request->property_type_id, $request->provinces_id);
