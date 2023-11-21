@@ -39,7 +39,6 @@ class UserController extends Controller
     public function index()
     {
         $role = auth()->user()->role;
-
         if($role != '1'){
             abort(403);
         }
@@ -47,11 +46,8 @@ class UserController extends Controller
         $users = DB::table('users')
             ->join('roles', 'users.role', '=', 'roles.id', 'left')
             ->select('users.*', 'roles.role_name')->paginate(10);
-
         return view('backend.views.users.list', compact('users'));
     }
-
-
 
 
     public function create()

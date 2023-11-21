@@ -32,6 +32,8 @@ Auth::routes();
 *********************************/
 // Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/', [IndexController::class, 'index'])->name('home');
+Route::get('/about', [IndexController::class, 'about'])->name('about');
+Route::get('/contact', [IndexController::class, 'contact'])->name('contact');
 Route::get('/detail/property/{id}', [IndexController::class, 'detail_property']);
 Route::get('/type/propertys/{id}', [IndexController::class, 'getListPropertyInType']);
 Route::get('/search/property', [IndexController::class, 'search_property'])->name('search.property');
