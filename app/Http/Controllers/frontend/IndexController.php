@@ -52,6 +52,18 @@ class IndexController extends Controller
         return view('frontend.views.index', compact('datas', 'data_html_proper_type', 'data_html_thai_provinces', 'property_types'));
     }
 
+    public function about(){
+
+        return view('frontend.views.about');
+
+    }
+
+    public function contact(){
+
+        return view('frontend.views.contact');
+
+    }
+
 
     public function getListPropertyInType($id)
     {
