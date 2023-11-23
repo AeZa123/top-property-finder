@@ -47,7 +47,8 @@ class DashboardController extends Controller
 
             return view('backend.views.dashboard.dashboard', compact('response'));
         }else{
-            abort(403);
+            // abort(403);
+            return view('error');
         }
 
         

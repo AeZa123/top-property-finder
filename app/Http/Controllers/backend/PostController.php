@@ -47,7 +47,8 @@ class PostController extends Controller
             return view('backend.views.posts.list', compact('datas'));
             
         }else{
-            abort(403);
+            // abort(403);
+            return view('error');
         }
 
     }
@@ -64,7 +65,8 @@ class PostController extends Controller
             return view('backend.views.posts.create', compact('property_type', 'sales_type', 'thai_provinces'));
             
         }else{
-            abort(403);
+            // abort(403);
+            return view('error');
         }
 
     }
@@ -74,7 +76,8 @@ class PostController extends Controller
     {
         $role = auth()->user()->role;
         if($role != '1' and $role != '2'){
-            abort(403);
+            // abort(403);
+            return view('error');
         }
 
         // dd($request->all());
@@ -222,15 +225,37 @@ class PostController extends Controller
 
         $role = auth()->user()->role;
         if($role != '1' and $role != '2'){
-            abort(403);
+            // abort(403);
+            return view('error');
         }
 
+        
+        // $data = Post::find($id);
+        
+        
+        $user_id = Auth::user()->id;
+        $data = '';
+        if($role == '2'){
+            $data = Post::where('user_id', $user_id)->find($id);
 
-        $data = Post::find($id);
+        }elseif($role == '1'){
+            $data = Post::find($id);
+        }
+
+        // $data = Post::where('user_id', $user_id)->find($id);
         $imagePosts = ImagePost::where('post_id', $id)
             ->join('images', 'image_posts.image_id', '=', 'images.id')
             ->select('images.id as image_id', 'images.image_name', 'post_id', 'image_posts.id as image_post_id')
             ->get();
+
+        if(empty($data)){
+            // abort(404);
+
+            return view('error');
+
+
+        }    
+
 
         // dd($imagePosts);
         $property_type = DB::table('property_type')->select('*')->get();
@@ -298,7 +323,8 @@ class PostController extends Controller
     {
         $role = auth()->user()->role;
         if($role != '1' and $role != '2'){
-            abort(403);
+            // abort(403);
+            return view('error');
         }
 
         // dd($request->file('image'));
@@ -461,11 +487,19 @@ class PostController extends Controller
 
         $role = auth()->user()->role;
         if($role != '1' and $role != '2'){
-            abort(403);
+            // abort(403);
+            return view('error');
         }
 
         // dd($request->id);
+        $user_id = auth()->user()->id;
         $id = $request->id;
+        $data = Post::where('user_id', $user_id)->find($id);
+
+        if(empty($data)){
+            return view('error');
+        }
+
         $data = array(
             'delete_post' => 'del',
         );
@@ -492,7 +526,8 @@ class PostController extends Controller
 
         // dd($role);
         if($role != '1' and $role != '2'){
-            abort(403);
+            // abort(403);
+            return view('error');
         }
 
         $datas ='';
