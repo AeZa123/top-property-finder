@@ -129,6 +129,14 @@ class PostController extends Controller
 
         // dd($request->sale_type_id);
 
+        
+        // dd($request->sale_type_id);
+        // $text = str_replace('\n', '<br>\n', $request->body); 
+        // $escaped_text = mysqli_real_escape_string($connection, $input_text);
+        // $escaped_text_with_newline = str_replace('\n', '<br>', $request->body);
+
+
+
         $data = array(
             'title' => $request->title,
             'body' => $request->body,
@@ -144,6 +152,8 @@ class PostController extends Controller
             'thai_provinces_id' => $request->thai_provinces_id,
             'user_id' => Auth::user()->id,
         );
+
+
 
 
        
@@ -378,6 +388,9 @@ class PostController extends Controller
 
 
         // dd($request->sale_type_id);
+        // $text = str_replace('\n', '<br>\n', $request->body); 
+        // $escaped_text = mysqli_real_escape_string($connection, $input_text);
+        // $escaped_text_with_newline = str_replace("\n", "<br>\n", $request->body);
 
         $data = array(
             'title' => $request->title,

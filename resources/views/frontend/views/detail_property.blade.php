@@ -49,8 +49,8 @@
                     <h1>รายละเอียด</h1>
                     <hr>
                     <div class="col-md-6">
-                        <p class="mb-3">{{ $data->body }}</p>
-                        
+                        <p class="mb-3"><?php echo nl2br($data->body) ?></p>
+                        {{-- <p class="mb-3">{{ $data->body }} </p> --}}
                     </div>
                 </div>
             </div>
