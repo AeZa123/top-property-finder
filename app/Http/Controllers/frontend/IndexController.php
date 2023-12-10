@@ -44,7 +44,7 @@ class IndexController extends Controller
             ->select('posts.*', DB::raw('FORMAT(price, 0) as price_format'), 'users.fname', 'users.lname', 'sales_type.name_sale_type', 'property_type.name_property_type')
             ->where('posts.delete_post', '=',  null)
             ->orWhere('posts.delete_post', '=',  '')
-            ->paginate(3);
+            ->paginate(9);
 
 
         // โหลดข้อมูลมาใส่ในไฟล์ data.blade.php เก็บในตัวแปร $view จะได้เป็น html ออกมา
