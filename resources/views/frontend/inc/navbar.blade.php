@@ -48,7 +48,7 @@
                             <a href="404.html" class="dropdown-item">404 Error</a>
                         </div>
                     </div> --}}
-                    <a href="{{ route('contact') }}" class="nav-item nav-link">Contact</a>
+                    {{-- <a href="{{ route('contact') }}" class="nav-item nav-link">Contact</a> --}}
 
 
 

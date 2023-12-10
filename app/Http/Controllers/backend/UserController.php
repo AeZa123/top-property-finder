@@ -29,7 +29,8 @@ class UserController extends Controller
     
             // Check if the user has the required role
             if ($role != '1') {
-                abort(403);
+                // abort(403);
+                return view('error');
             }
         }
     }
@@ -40,7 +41,8 @@ class UserController extends Controller
     {
         $role = auth()->user()->role;
         if($role != '1'){
-            abort(403);
+            // abort(403);
+            return view('error');
         }
 
         $users = DB::table('users')
@@ -55,7 +57,8 @@ class UserController extends Controller
         $role = auth()->user()->role;
 
         if($role != '1'){
-            abort(403);
+            // abort(403);
+            return view('error');
         }
 
         $genders = DB::table('genders')->select('*')->where('status', 'open')->get();
@@ -68,7 +71,8 @@ class UserController extends Controller
         $role = auth()->user()->role;
 
         if($role != '1'){
-            abort(403);
+            // abort(403);
+            return view('error');
         }
 
         $data = User::find($id);
@@ -110,7 +114,8 @@ class UserController extends Controller
         $role = auth()->user()->role;
 
         if($role != '1'){
-            abort(403);
+            // abort(403);
+            return view('error');
         }
 
         $validator = \Validator::make(
@@ -237,7 +242,8 @@ class UserController extends Controller
         $role = auth()->user()->role;
 
         if($role != '1'){
-            abort(403);
+            // abort(403);
+            return view('error');
         }
 
 
@@ -336,7 +342,8 @@ class UserController extends Controller
         $role = auth()->user()->role;
 
         if($role != '1'){
-            abort(403);
+            // abort(403);
+            return view('error');
         }
 
         $data = User::where('id', $request->id)->first();
@@ -369,7 +376,8 @@ class UserController extends Controller
         $role = auth()->user()->role;
 
         if($role != '1'){
-            abort(403);
+            // abort(403);
+            return view('error');
         }
 
 

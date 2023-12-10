@@ -13,10 +13,8 @@ class IndexController extends Controller
 
 
 
-    public function index()
+    public function index(Request $request)
     {
-
-
 
         $property_types = DB::table('property_type')->select('*')->get();
         $thai_provinces = DB::table('thai_provinces')->select('name_th', 'id')->get();
@@ -46,22 +44,35 @@ class IndexController extends Controller
             ->select('posts.*', DB::raw('FORMAT(price, 0) as price_format'), 'users.fname', 'users.lname', 'sales_type.name_sale_type', 'property_type.name_property_type')
             ->where('posts.delete_post', '=',  null)
             ->orWhere('posts.delete_post', '=',  '')
-            ->limit(9)
-            ->get();
+            ->paginate(9);
+
+
+        // โหลดข้อมูลมาใส่ในไฟล์ data.blade.php เก็บในตัวแปร $view จะได้เป็น html ออกมา
+        if ($request->ajax()) {
+            $view = view('frontend.views.load-data', compact('datas'))->render();
+
+            // dd($view);
+
+
+            return response()->json(['html' => $view]);
+        }
+
+
+
 
         return view('frontend.views.index', compact('datas', 'data_html_proper_type', 'data_html_thai_provinces', 'property_types'));
     }
 
-    public function about(){
+    public function about()
+    {
 
         return view('frontend.views.about');
-
     }
 
-    public function contact(){
+    public function contact()
+    {
 
         return view('frontend.views.contact');
-
     }
 
 
@@ -147,7 +158,7 @@ class IndexController extends Controller
             ->paginate(20);
 
 
-            // dd($datas, $request->keyword, $request->property_type_id, $request->provinces_id);
+        // dd($datas, $request->keyword, $request->property_type_id, $request->provinces_id);
 
 
         // dd($datas, $request->keyword, $request->property_type_id, $request->provinces_id);
