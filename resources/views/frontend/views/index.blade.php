@@ -33,12 +33,13 @@
         style="padding: 35px; z-index: 999!important; position: relative; margin-top: -180px; border-radius: 12px;">
         <div class="container">
             <form action="{{ route('search.property') }}" method="get">
-                
+
                 <div class="row g-2">
                     <div class="col-md-10">
                         <div class="row g-2">
                             <div class="col-md-4">
-                                <input type="text" name="keyword" class="form-control border-0 py-3" placeholder="Search Keyword">
+                                <input type="text" name="keyword" class="form-control border-0 py-3"
+                                    placeholder="Search Keyword">
                             </div>
                             <div class="col-md-4">
                                 <select name="property_type_id" class="form-select border-0 py-3">
@@ -76,18 +77,20 @@
 
 
                 @foreach ($property_types as $property_type)
-                <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.1s">
-                    <a class="cat-item d-block bg-light text-center rounded p-3" href="{{ url('type/propertys/' . $property_type->id) }}">
-                        <div class="rounded p-4">
-                            <div class="icon mb-3">
-                                <img class="img-fluid" src="{{ asset('template/img/'.$property_type->icon) }}" alt="Icon">
-                                {{-- <img class="img-fluid" src="{{ asset('template/img/icon-apartment.png') }}" alt="Icon"> --}}
+                    <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.1s">
+                        <a class="cat-item d-block bg-light text-center rounded p-3"
+                            href="{{ url('type/propertys/' . $property_type->id) }}">
+                            <div class="rounded p-4">
+                                <div class="icon mb-3">
+                                    <img class="img-fluid" src="{{ asset('template/img/' . $property_type->icon) }}"
+                                        alt="Icon">
+                                    {{-- <img class="img-fluid" src="{{ asset('template/img/icon-apartment.png') }}" alt="Icon"> --}}
+                                </div>
+                                <h6>{{ $property_type->name_property_type }}</h6>
+                                {{-- <span>123 Properties</span> --}}
                             </div>
-                            <h6>{{ $property_type->name_property_type }}</h6>
-                            {{-- <span>123 Properties</span> --}}
-                        </div>
-                    </a>
-                </div>
+                        </a>
+                    </div>
                 @endforeach
             </div>
         </div>
@@ -126,8 +129,10 @@
                 <div class="col-lg-6">
                     <div class="text-start mx-auto mb-5 wow slideInLeft" data-wow-delay="0.1s">
                         <h1 class="mb-3">Property Listing</h1>
-                        <p>Eirmod sed ipsum dolor sit rebum labore magna erat. Tempor ut dolore lorem kasd vero ipsum sit
-                            eirmod sit diam justo sed rebum.</p>
+                        {{-- <p>Eirmod sed ipsum dolor sit rebum labore magna erat. Tempor ut dolore lorem kasd vero ipsum sit
+                            eirmod sit diam justo sed rebum.</p> --}}
+                        <p>"ลงทุนทรัพย์สินที่ใช่ ที่ทำเลทองคำ! ที่ดินขนาดใหญ่พร้อมสร้างบ้านตามใจคุณ
+                            ใกล้สถานที่สำคัญและมีความติดต่อง่าย"</p>
                     </div>
                 </div>
                 <div class="col-lg-6 text-start text-lg-end wow slideInRight" data-wow-delay="0.1s">
@@ -146,15 +151,23 @@
             </div>
             <div class="tab-content">
                 <div id="tab-1" class="tab-pane fade show p-0 active">
-                    <div class="row g-4">
-                        @foreach ($datas as $data)
+                    <div class="row g-4" id="post-data">
+
+                        {{-- <div id="post-data"> --}}
+                        @include('frontend.views.load-data')
+                        {{-- </div> --}}
+
+
+
+
+                        {{-- @foreach ($datas as $data)
                             <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
                                 <div class="property-item rounded overflow-hidden">
                                     <div class="position-relative overflow-hidden">
                                         <a href="{{ url('detail/property/' . $data->id) }}"><img class="img-fluid"
                                                 src="{{ asset('storage/images/property_image/image_cover/' . $data->image_cover) }}"
                                                 alt=""></a>
-                                        {{-- <a href=""><img class="img-fluid" src="{{ asset('template/img/property-1.jpg') }}" alt=""></a> --}}
+                                        
                                         <div
                                             class="bg-primary rounded text-white position-absolute start-0 top-0 m-4 py-1 px-3">
                                             {{ $data->name_sale_type }}</div>
@@ -168,12 +181,11 @@
                                         <h5 class="text-primary mb-3">{{ $data->price_format }} THB</h5>
                                         <a class="d-block h5 mb-2"
                                             href="{{ url('detail/property/' . $data->id) }}" title="{{$data->title}}">{{ Str::limit($data->title, 30, '...') }}</a>
-                                            {{-- href="{{ url('detail/property/' . $data->id) }}">{{ str_limit($data->title, 50, '...') }}</a> --}}
+                                           
                                         <span title="{{ $data->property_name }}">{{ Str::limit($data->property_name, 80, '...') }}</span>
-                                        {{-- <span>{{ $data->property_name }}</span> --}}
+                                       
                                         <p></p>
-                                        {{-- <p><i class="fa fa-map-marker-alt text-primary me-2"></i>123 Street, New York, USA
-                                        </p> --}}
+                                      
                                     </div>
                                     <div class="d-flex border-top">
                                         <small class="flex-fill text-center border-end py-2"><i
@@ -185,8 +197,17 @@
                                     </div>
                                 </div>
                             </div>
-                        @endforeach
+                        @endforeach --}}
 
+                    </div>
+                    <br>
+
+
+
+                    <div class="ajax-load text-center" style="display: none;">
+                        <p><img src="{{ asset('assets/images/loader/loader1.gif') }}" width="50" height="50"
+                                alt="">
+                            รอสักครู่</p>
                     </div>
                 </div>
                 <div id="tab-2" class="tab-pane fade show p-0">
@@ -535,6 +556,16 @@
 
 
 
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-12 text-center">
+                    <button class="btn btn-primary" id="load-data">More</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
 
     <!-- Testimonial Start -->
@@ -623,4 +654,74 @@
         </div>
     </div>
     <!-- Testimonial End -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <script>
+        function loadMoreData(page) {
+            $.ajax({
+                    url: '?page=' + page,
+                    type: 'get',
+                    beforeSend: function() {
+                        $(".ajax-load").show();
+                    }
+                })
+                .done(function(data) {
+                    if (data.html == "") {
+                        $('.ajax-load').html("ไม่มีเนื้อหาที่จะแสดงแล้ว");
+                        $('#load-data').hide();
+                        return;
+                    } else {
+
+                        // setTimeout(() => {
+
+
+                        //     $('.ajax-load').hide();
+
+                        //     $('#post-data').append(data.html);
+                        // }, 1000);
+
+                        $('.ajax-load').hide();
+    
+                        $('#post-data').append(data.html);
+                    }
+
+                })
+                .fail(function(jqXHR, ajaxOptions, thrownError) {
+                    alert('Server not responding...');
+                });
+        }
+
+        var page = 1;
+        $('#load-data').click(function() {
+            page++;
+            // console.log(page);
+            loadMoreData(page);
+        });
+
+
+        // $(window).scroll(function(){
+        //     var a = $(window).scrollTop() + $(window).height() + 10;
+        //     var b = $(document).height();
+        //     console.log(a);
+        //     console.log(b);
+
+        //     if($(window).scrollTop() + $(window).height() + 10 >= $(document).height()){
+        //         // alert('ahahahah')
+        //         page++;
+        //         loadMoreData(page);
+        //     }
+        // });
+    </script>
 @endsection
